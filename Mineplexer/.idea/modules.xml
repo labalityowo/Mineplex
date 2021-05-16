@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Mineplex.Bungee.Mineplexer/Mineplex.Bungee.Mineplexer.iml" filepath="$PROJECT_DIR$/Mineplex.Bungee.Mineplexer/Mineplex.Bungee.Mineplexer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Mineplex.Cache/Mineplex.Cache.iml" filepath="$PROJECT_DIR$/Mineplex.Cache/Mineplex.Cache.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Mineplex.ServerData/Mineplex.ServerData.iml" filepath="$PROJECT_DIR$/Mineplex.ServerData/Mineplex.ServerData.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Mineplexer.iml" filepath="$PROJECT_DIR$/.idea/Mineplexer.iml" />
+    </modules>
+  </component>
+</project>

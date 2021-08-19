@@ -1,0 +1,71 @@
+﻿@model IEnumerable<LOC.Core.Model.PvpServer.Skill>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm())
+{
+<p>
+    Find by name: @Html.TextBox("SearchString") &nbsp;
+    <input type="submit" value="Search" /></p>
+}
+
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Level
+        </th>
+        <th>
+            Tokens
+        </th>
+        <th>
+            Credits
+        </th>
+        <th>
+            Points
+        </th>
+        <th>
+            Free
+        </th> 
+        <th></th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Level)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SalesPackage.Tokens)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SalesPackage.Credits)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SalesPackage.Points)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SalesPackage.Free)
+        </td>
+        <td>
+            @Html.ActionLink("Refund Accounts", "RefundAccounts", "Skills", new { skillId = item.SkillId }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.SkillId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.SkillId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.SkillId })
+        </td>
+    </tr>
+}
+
+</table>

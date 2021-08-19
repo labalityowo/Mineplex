@@ -1,0 +1,1 @@
+ALTER TABLE Account.reportResults MODIFY reason VARCHAR(256);

@@ -1,0 +1,24 @@
+@model List<LOC.Core.Model.Sales.Transaction>
+
+@{
+    ViewBag.Title = "Payment Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>@Html.ActionLink("Back to List", "Index")</legend>
+    
+    <div class="row">
+        <div class="span12">
+            <ul class="thumbnails">
+                @foreach (var transaction in Model)
+                {
+                    @Html.Partial("_WriteTransaction", transaction)
+                }
+            </ul>
+        </div>
+    </div>
+</fieldset>
+
+

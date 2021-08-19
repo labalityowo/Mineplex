@@ -1,0 +1,44 @@
+@model LOC.Core.Model.Account.Account
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Account</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">@Model.Name</div>
+
+    <div class="display-label">Banned</div>
+    <div class="display-field">@Model.Banned</div>
+
+    <div class="display-label">BanMessage</div>
+    <div class="display-field">@Model.BanMessage</div>
+
+    <div class="display-label">Rank</div>
+    <div class="display-field">@(Model.Rank == null ? "None" : Model.Rank.Name)</div>
+
+    <div class="display-label">Expires</div>
+    <div class="display-field">@Model.Expires</div>
+
+    <div class="display-label">Logins</div>
+    <div class="display-field">@(Model.Logins == null ? "None" : Model.Logins.Count.ToString())</div>
+
+    <div class="display-label">IpAddresses</div>
+    <div class="display-field">@(Model.IpAddresses == null ? "None" : Model.IpAddresses.Count.ToString())</div>
+
+    <div class="display-label">HungerGameClasses</div>
+    <div class="display-field">@(Model.HungerGameClasses == null ? "None" : Model.HungerGameClasses.Count.ToString())</div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}
+
+

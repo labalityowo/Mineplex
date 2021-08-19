@@ -1,0 +1,952 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Classes";
+}
+
+@helper WriteCategories()
+    {
+    <div class="span2" style="border-right: gray solid thin;">                
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Wiki/iron_sword.jpg") alt="Iron Sword"/>
+        </div>
+        <h6>Sword</h6>
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Wiki/iron_axe.jpg") alt="Iron Axe"/>
+        </div>
+        <h6>Axe</h6>
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Wiki/bow.jpg") alt="Iron Axe"/>
+        </div>
+        <h6>Bow</h6>
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Wiki/red_dye.jpg") alt="Class Slot A"/>
+        </div>
+        <h6>Class Slot A</h6>
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Wiki/orange_dye.jpg") alt="Class Slot B"/>
+        </div>
+        <h6>Class Slot B</h6>
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Wiki/yellow_dye.jpg") alt="Global Slot A"/>
+        </div>
+        <h6>Global Slot A</h6>
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Wiki/green_dye.jpg") alt="Global Slot B"/>
+        </div>
+        <h6>Global Slot B</h6>
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Wiki/blue_dye.jpg") alt="Global Slot C"/>
+        </div>
+        <h6>Global Slot C</h6>
+    </div>
+}
+
+@helper WriteGlobals()
+{
+    <tr>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/yellow_dye.jpg") alt="Global Slot A"/>
+            </div>
+            <h6>Global Slot A</h6>
+        </td>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Break Fall"/>
+            </div>
+            <h6>Break Fall</h6>
+        </td>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Resistance"/>
+            </div>
+            <h6>Resistance</h6>
+        </td>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Stamina"/>
+            </div>
+            <h6>Stamina</h6>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/green_dye.jpg") alt="Global Slot B"/>
+            </div>
+            <h6>Global Slot B</h6>
+        </td>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Fitness"/>
+            </div>
+            <h6>Fitness</h6>
+        </td>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Quick Recovery"/>
+            </div>
+            <h6>Quick Recovery</h6>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/blue_dye.jpg") alt="Global Slot C"/>
+            </div>
+            <h6>Global Slot C</h6>
+        </td>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Swim"/>
+            </div>
+            <h6>Swim</h6>
+        </td>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Jump"/>
+            </div>
+            <h6>Jump</h6>
+        </td>
+        <td>
+            <div class="item">
+                <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Rations"/>
+            </div>
+            <h6>Rations</h6>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+}
+
+<style type="text/css">
+div.span2.slotNormal 
+{
+    border-right:black solid thin;
+    border-left:black solid thin;
+}
+
+.table td 
+{
+    text-align: center;
+    vertical-align: middle;
+    width: 108px;
+    padding: 4px;
+    border: 1px solid #dddddd;
+}
+
+h6 
+{
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 0px;    
+}
+</style>
+
+<div class="row" style="text-align: center;">
+    <br/>
+    <ul class="nav nav-tabs" id="classTab">
+        <li class="active" style="width: 190px">
+            <a href="#brute">
+                <img src=@Url.Content("~/Content/Images/Wiki/Brute.png") alt="Brute"/>
+                <h4>Brute</h4>
+            </a>
+        </li>
+        <li style="width: 190px">
+            <a href="#knight">
+                <div class="item">
+                    <img src=@Url.Content("~/Content/Images/Wiki/Knight.png") alt="Knight"/>
+                </div>
+                <h4>Knight</h4>
+            </a>
+        </li>
+        <li style="width: 190px">
+            <a href="#mage">
+                <div class="item">
+                    <img src=@Url.Content("~/Content/Images/Wiki/Mage.png") alt="Mage"/>
+                </div>
+                <h4>Mage</h4>
+            </a>
+        </li>
+        <li style="width: 190px">
+            <a href="#assassin">
+                <div class="item">
+                    <img src=@Url.Content("~/Content/Images/Wiki/Assassin.png") alt="Assassin"/>
+                </div>
+                <h4>Assassin</h4>
+            </a>
+        </li>
+        <li style="width: 190px">
+            <a href="#ranger">
+                <div class="item">
+                    <img src=@Url.Content("~/Content/Images/Wiki/Ranger.png") alt="Ranger"/>
+                </div>
+                <h4>Ranger</h4>
+            </a>
+        </li>
+    </ul>
+    
+    <div class="tab-content">
+        <div class="tab-pane active" id="brute">
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/iron_sword.jpg") alt="Iron Sword"/>
+                        </div>
+                        <h6>Sword</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Dwarf Toss"/>
+                        </div>
+                        <h6>Dwarf Toss</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Flesh Hook"/>
+                        </div>
+                        <h6>Flesh Hook</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Block Toss"/>
+                        </div>
+                        <h6>Block Toss</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/iron_axe.jpg") alt="Iron Axe"/>
+                        </div>
+                        <h6>Axe</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Seismic Slam"/>
+                        </div>
+                        <h6>Seismic Slam</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Rampage"/>
+                        </div>
+                        <h6>Rampage</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Takedown"/>
+                        </div>
+                        <h6>Takedown</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/bow.jpg") alt="Bow"/>
+                        </div>
+                        <h6>Bow</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/red_dye.jpg") alt="Class Slot A"/>
+                        </div>
+                        <h6>Class Slot A</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Stampede"/>
+                        </div>
+                        <h6>Stampede</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Bloodlust"/>
+                        </div>
+                        <h6>Bloodlust</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Intimidation"/>
+                        </div>
+                        <h6>Intimidation</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/orange_dye.jpg") alt="Class Slot B"/>
+                        </div>
+                        <h6>Class Slot B</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Crippling Blow"/>
+                        </div>
+                        <h6>Crippling Blow</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Colossus"/>
+                        </div>
+                        <h6>Colossus</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Overwhelm"/>
+                        </div>
+                        <h6>Overwhelm</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @WriteGlobals()
+            </table>
+        </div>
+        <div class="tab-pane" id="knight">
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/iron_sword.jpg") alt="Iron Sword"/>
+                        </div>
+                        <h6>Sword</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Hilt Smash"/>
+                        </div>
+                        <h6>Hilt Smash</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Riposte"/>
+                        </div>
+                        <h6>Riposte</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Defensive Stance"/>
+                        </div>
+                        <h6>Defensive Stance</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/iron_axe.jpg") alt="Iron Axe"/>
+                        </div>
+                        <h6>Axe</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Bulls Charge"/>
+                        </div>
+                        <h6>Bulls Charge</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Hold Position"/>
+                        </div>
+                        <h6>Hold Position</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Power Chop"/>
+                        </div>
+                        <h6>Power Chop</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/bow.jpg") alt="Bow"/>
+                        </div>
+                        <h6>Bow</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/red_dye.jpg") alt="Class Slot A"/>
+                        </div>
+                        <h6>Class Slot A</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Cleave"/>
+                        </div>
+                        <h6>Cleave</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Swordsmanship"/>
+                        </div>
+                        <h6>Swordsmanship</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Deflection"/>
+                        </div>
+                        <h6>Deflection</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/orange_dye.jpg") alt="Class Slot B"/>
+                        </div>
+                        <h6>Class Slot B</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Vengeance"/>
+                        </div>
+                        <h6>Vengeance</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Fortitude"/>
+                        </div>
+                        <h6>Fortitude</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Level Field"/>
+                        </div>
+                        <h6>Level Field</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @WriteGlobals()
+            </table>
+        </div>
+        <div class="tab-pane" id="mage">
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/iron_sword.jpg") alt="Iron Sword"/>
+                        </div>
+                        <h6>Sword</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Blizzard"/>
+                        </div>
+                        <h6>Blizzard</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Inferno"/>
+                        </div>
+                        <h6>Inferno</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Energize"/>
+                        </div>
+                        <h6>Energize</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Rupture"/>
+                        </div>
+                        <h6>Rupture</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/iron_axe.jpg") alt="Iron Axe"/>
+                        </div>
+                        <h6>Axe</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Freezing Blast"/>
+                        </div>
+                        <h6>Freezing Blast</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Fire Blast"/>
+                        </div>
+                        <h6>Fire Blast</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Lightning Orb"/>
+                        </div>
+                        <h6>Lightning Orb</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Fissure"/>
+                        </div>
+                        <h6>Fissure</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/bow.jpg") alt="Bow"/>
+                        </div>
+                        <h6>Bow</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/red_dye.jpg") alt="Class Slot A"/>
+                        </div>
+                        <h6>Class Slot A</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Arctic Armor"/>
+                        </div>
+                        <h6>Arctic Armor</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Immolate"/>
+                        </div>
+                        <h6>Immolate</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Void"/>
+                        </div>
+                        <h6>Void</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Life Bonds"/>
+                        </div>
+                        <h6>Life Bonds</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/orange_dye.jpg") alt="Class Slot B"/>
+                        </div>
+                        <h6>Class Slot B</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Glacial Blade"/>
+                        </div>
+                        <h6>Glacial Blade</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Magma Blade"/>
+                        </div>
+                        <h6>Magma Blade</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Null Blade"/>
+                        </div>
+                        <h6>Null Blade</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Rooting Axe"/>
+                        </div>
+                        <h6>Rooting Axe</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @WriteGlobals()
+            </table>
+        </div>
+        <div class="tab-pane" id="assassin">
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/iron_sword.jpg") alt="Iron Sword"/>
+                        </div>
+                        <h6>Sword</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Evade"/>
+                        </div>
+                        <h6>Evade</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/iron_axe.jpg") alt="Iron Axe"/>
+                        </div>
+                        <h6>Axe</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Blink"/>
+                        </div>
+                        <h6>Blink</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Flash"/>
+                        </div>
+                        <h6>Flash</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Leap"/>
+                        </div>
+                        <h6>Leap</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/bow.jpg") alt="Bow"/>
+                        </div>
+                        <h6>Bow</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Marked for Death"/>
+                        </div>
+                        <h6>Marked for Death</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Toxic Arrow"/>
+                        </div>
+                        <h6>Toxic Arrow</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Silencing Arrow"/>
+                        </div>
+                        <h6>Silencing Arrow</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/red_dye.jpg") alt="Class Slot A"/>
+                        </div>
+                        <h6>Class Slot A</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Smoke Bomb"/>
+                        </div>
+                        <h6>Smoke Bomb</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Stealth"/>
+                        </div>
+                        <h6>Stealth</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Recall"/>
+                        </div>
+                        <h6>Recall</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/orange_dye.jpg") alt="Class Slot B"/>
+                        </div>
+                        <h6>Class Slot B</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Shocking Strikes"/>
+                        </div>
+                        <h6>Shocking Strikes</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Repeated Strikes"/>
+                        </div>
+                        <h6>Repeated Strikes</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Wounding Strikes"/>
+                        </div>
+                        <h6>Wounding Strikes</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Backstab"/>
+                        </div>
+                        <h6>Backstab</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @WriteGlobals()
+            </table>
+        </div>
+        <div class="tab-pane" id="ranger">
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/iron_sword.jpg") alt="Iron Sword"/>
+                        </div>
+                        <h6>Sword</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Disengage"/>
+                        </div>
+                        <h6>Disengage</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Wolfs Pounce"/>
+                        </div>
+                        <h6>Wolfs Pounce</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/iron_axe.jpg") alt="Iron Axe"/>
+                        </div>
+                        <h6>Axe</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Agility"/>
+                        </div>
+                        <h6>Agility</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Wolfs Fury"/>
+                        </div>
+                        <h6>Wolfs Fury</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/bow.jpg") alt="Bow"/>
+                        </div>
+                        <h6>Bow</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Healing Shot"/>
+                        </div>
+                        <h6>Healing Shot</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Incendiary Shot"/>
+                        </div>
+                        <h6>Incendiary Shot</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Napalm Shot"/>
+                        </div>
+                        <h6>Napalm Shot</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Pin Down"/>
+                        </div>
+                        <h6>Pin Down</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Roped Arrow"/>
+                        </div>
+                        <h6>Roped Arrow</h6>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/red_dye.jpg") alt="Class Slot A"/>
+                        </div>
+                        <h6>Class Slot A</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Barrage"/>
+                        </div>
+                        <h6>Barrage</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Overcharge"/>
+                        </div>
+                        <h6>Overcharge</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Vitality Spores"/>
+                        </div>
+                        <h6>Vitality Spores</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/orange_dye.jpg") alt="Class Slot B"/>
+                        </div>
+                        <h6>Class Slot B</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Barbed Arrows"/>
+                        </div>
+                        <h6>Barbed Arrows</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Heavy Arrows"/>
+                        </div>
+                        <h6>Heavy Arrows</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Shadowmeld"/>
+                        </div>
+                        <h6>Shadowmeld</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Longshot"/>
+                        </div>
+                        <h6>Longshot</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Sharpshooter"/>
+                        </div>
+                        <h6>Sharpshooter</h6>
+                    </td>
+                    <td>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/Wiki/SkillBook.png") alt="Fletcher"/>
+                        </div>
+                        <h6>Fletcher</h6>
+                    </td>
+                </tr>
+                @WriteGlobals()
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('body').popover({
+            selector: '[data-toggle="popover"]',
+            html: 'true'
+        });
+
+        $('body').tooltip({
+            selector: 'a[rel="tooltip"], [data-toggle="tooltip"]'
+        });
+    });
+
+    $('#classTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+</script>

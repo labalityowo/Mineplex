@@ -1,0 +1,57 @@
+﻿@model LOC.Core.Model.Sales.GameSalesPackage
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>GameSalesPackage</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Tokens)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Tokens)
+            @Html.ValidationMessageFor(model => model.Tokens)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Credits)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Credits)
+            @Html.ValidationMessageFor(model => model.Credits)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Points)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Points)
+            @Html.ValidationMessageFor(model => model.Points)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Free)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Free)
+            @Html.ValidationMessageFor(model => model.Free)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

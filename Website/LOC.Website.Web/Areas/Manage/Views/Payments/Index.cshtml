@@ -1,0 +1,138 @@
+﻿@using LOC.Core.Model.Sales
+@model IEnumerable<LOC.Core.Model.Sales.Transaction>
+           
+@{
+    ViewBag.Title = "Nautilus Studios, LLC Payment Stats";
+    var week = GetWeek(Model, 0);
+}
+
+<h2>Payment Stats</h2>
+
+@helper Diff(decimal before, decimal after)
+{
+    <span>@after.ToString("$0.00")</span>
+    
+    if(before > 0)
+    {
+    var diff = (after / before) - 1;
+    var color = diff >= 0 ? "green" : "red";
+         <span style="color: @color;">@diff.ToString("+00%;-00%")</span>
+    }
+}
+
+@functions{
+    public decimal[] GetWeek(IEnumerable<Transaction> payments, int x)
+    {
+        decimal sum = 0;
+        decimal[] days = new decimal[9];
+
+        DateTime start = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1).AddDays(x * -7);
+
+        for (int i = 0; i < 7; i++)
+        {
+            days[i] = payments.Where(c => c.Time.Date == start.AddDays(i)).Sum(c => (decimal?)c.Profit) ?? 0m;
+        }
+
+        days[7] = days.Sum();
+        var now = DateTime.Now.AddDays(x * -7);
+        days[8] = payments.Where(c => c.Time.Date == now.Date && c.Time < now).Sum(c => (decimal?)c.Profit) ?? 0m;
+
+        return days;
+
+    }
+    
+}
+
+<div>
+<small>@DateTime.Now</small>
+    <h2>Weekly Stats</h2>
+    <table class="table table-striped table-bordered table-condensed">
+        <thead>
+            <tr>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Today</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 1; i < 12; i++)
+            {
+                DateTime start = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1).AddDays((i - 1) * -7);
+                var end = DateTime.Now.AddDays((i) * -7);
+                var next = GetWeek(Model, i);
+                <tr>
+                <td>@start.ToString("MM/dd")</td>
+                @if(i == 1)
+                {
+                    var last = Model.Where(c => c.Time >= start.AddDays(-7) && c.Time < end).Sum(c => (decimal?)c.Profit) ?? 0m;
+                    <td style="text-align:right;">@last.ToString("$0.00") | @Diff(last, week[7])</td>
+                }
+                else
+                {
+                    <td style="text-align:right;">@Diff(next[7], week[7])</td>
+                }
+                <td style="text-align:right;">@Diff(next[8], week[8])</td>
+
+                @for (int j = 0; j < 7; j++)
+                {
+                    <td style="text-align:right;">@Html.ActionLink(@week[j].ToString("$0.00"), "Details", new { dayOfYear = DateTime.Now.AddDays((i - 1) * -7).DayOfYear })</td>
+                }
+
+                </tr>
+                
+                week = next;
+            }
+        </tbody>
+    </table>
+    
+    Last 7 Days: @((Model.Where(c => c.Time > DateTime.Now.AddDays(-7)).Sum(c => c.Profit)).ToString("$0.00"))<br />
+    Two Weeks ago: @((Model.Where(c => c.Time > DateTime.Now.AddDays(-14) && c.Time <= DateTime.Now.AddDays(-7)).Sum(c => c.Profit)).ToString("$0.00"))
+    <h2>Monthly Income:</h2>
+    @for (int i = 0; i < 3; i++)
+    {
+        var date = DateTime.Today.AddMonths(-i);
+        var list = Model.Where(c => c.Time.Month == date.Month && c.Time.Year == date.Year);
+        var old = Model.Where(c => c.Time.Month < date.Month && c.Time.Year == date.Year || c.Time.Year < date.Year);
+        var amount = list.Sum(c => (decimal?)c.Profit) ?? 0;
+
+        var last = Model.Where(c => c.Time.Month == date.AddMonths(-1).Month && c.Time.Year == date.AddMonths(-1).Year);
+
+        if (i == 0)
+        {
+            last = last.Where(c => c.Time.Day <= date.Day);
+        }
+
+        var lastTotal = last.Sum(c => (decimal?)c.Profit) ?? 0;
+
+        var recurringPayments = list.Where(c => old.Any(d => d.Account.AccountId == c.Account.AccountId)).Sum(c => (decimal?)c.Profit) ?? 0;
+        
+        
+        <b>@date.ToString("MMMM yyyy")</b><br />
+        
+        <div>@amount.ToString("$#,##0.00")
+            @if (lastTotal > 0)
+            {
+                var diff = (amount / lastTotal) - 1;
+                var color = diff >= 0 ? "green" : "red";
+                <span style="color: @color;">@diff.ToString("+0%;-0%")</span>
+            }
+        </div>
+        if (amount > 0 && lastTotal > 0)
+        {
+            <span>Recurring: @recurringPayments.ToString("$#,##0.00") @((recurringPayments / lastTotal).ToString("0%"))</span>
+        }
+        <br />
+        <br />
+    }
+    <br />
+    <hr />
+    <br />
+
+</div>

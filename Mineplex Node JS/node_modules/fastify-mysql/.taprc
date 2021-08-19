@@ -1,0 +1,5 @@
+jobs: 1
+jsx: false
+esm: false
+ts: false
+flow: false

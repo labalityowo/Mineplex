@@ -1,0 +1,85 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "BetterMc Servers";
+}
+
+<script type="text/javascript">
+    var fullPath = '@HttpContext.Current.Request.Url.Scheme://@HttpContext.Current.Request.Url.Authority';
+    function GetPath(url) {
+        return fullPath + url;
+    }
+</script>
+
+<script type="text/javascript" src=@Url.Content("~/Scripts/jquery-1.8.2.js")></script>
+<script type="text/javascript" src=@Url.Content("~/Scripts/jquery.flot.min.js")></script>
+<script type="text/javascript">
+    $(function () {
+        setInterval(function () {
+            $.post(
+                "/Servers/GetServers",
+                null,
+                function (data) {
+                    //WriteServerStatus("Dominate", "dom.bettermc.com", null, null, false);
+                    //WriteServerStatus("Dominate2", "dom2.bettermc.com", null, null, false);
+                    WriteServerStatus("BetterMC Hub", "bettermc.com", null, null, false);
+                    //WriteServerStatus("Tutorial", "tut.bettermc.com", null, null, false);
+                                      
+                    if (data == "[]") {
+                        //WriteServerStatus("Dominate", "dom.bettermc.com", null, null, true);
+                        //WriteServerStatus("Dominate2", "dom2.bettermc.com", null, null, true);
+                        WriteServerStatus("BetterMC Hub", "bettermc.com", null, null, true);
+                        //("Tutorial", "tut.bettermc.com", null, null, true);
+                    }
+                    else {
+                        $.each(data, function (index, value) {
+                            var name = value['Name'];
+                            var ipAddress = value['IpAddress'];
+                            var online = value['Success'];
+                            var players = value['Players'];
+                            var maxPlayers = value['MaxPlayers'];
+
+                            WriteServerStatus(name, ipAddress, players, maxPlayers, online);
+                        });
+                    }
+                });
+        }, 5000);
+    });
+
+    function WriteServerStatus(serverName, address, players, playerLimit, online) {
+        if (online) {
+            $('#' + serverName + '_Status').html("<div style='margin-top: 7px;'><span class='label label-success'>Online</span></div>");
+            $('#' + serverName + '_Address').html("<div style='margin-top: 7px;'><span class='label label-info'>" + address + "</span></div>");
+            $('#' + serverName + '_Players').html("<div style='margin-top: 7px;'><span class='label label-success'>" + players + " / " + playerLimit + "</span></div>");
+        } else {
+            $('#' + serverName + '_Status').html("<div style='margin-top: 7px;'><span class='label label-important'>Offline</span></div>");
+            $('#' + serverName + '_Address').html("<div style='margin-top: 7px;'><span class='label label-info'>" + address + "</span></div>");
+            $('#' + serverName + '_Players').html("<div style='margin-top: 7px;'><span class='label label-important'>? / ?</span></div>");
+        }
+    }
+
+</script>
+
+<div class="row" style="text-align: center;">
+    <br/>
+    <div id="Servers">
+        <div class='span6' id='BeterMC Hub'>
+            <br>
+            <div class='item'>";
+                <img src=@Url.Content("~/Content/Images/Pvp.png") alt='Pvp'/>
+            </div>
+            <h3>Pvp</h3>
+            <div class='row' style='text-align: left;'>
+                <div class='span1 offset2'>
+                    <div style='margin-top: 7px;'><span class='label'>Status</span></div>
+                    <div style='margin-top: 7px;'><span class='label'>IP</span></div>
+                    <div style='margin-top: 7px;'><span class='label'>Players</span></div>
+                </div>
+                <div class='span1'>
+                    <div style='margin-top: 7px;' id="Pvp_Status"><span class='label label-warning'>Retrieving...</span></div>
+                    <div style='margin-top: 7px;' id="Pvp_Address"><span class='label label-info'>bettermc.com</span></div>
+                    <div style='margin-top: 7px;' id="Pvp_Players"><span class='label label-warning'>? / ?</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+﻿@model LOC.Core.Model.Sales.GameSalesPackage
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>GameSalesPackage</legend>
+    
+    <div class="display-label">Id</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.GameSalesPackageId)
+    </div>
+
+    <div class="display-label">Tokens</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Tokens)
+    </div>
+
+    <div class="display-label">Credits</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Credits)
+    </div>
+
+    <div class="display-label">Points</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Points)
+    </div>
+
+    <div class="display-label">Free</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Free)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.GameSalesPackageId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

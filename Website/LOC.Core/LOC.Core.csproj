@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A994B28E-8AAA-4A53-BDFE-0E72F1B0F4AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LOC.Core</RootNamespace>
+    <AssemblyName>LOC.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqKit">
+      <HintPath>..\Libraries\LinqKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.4.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\ContextExtensions.cs" />
+    <Compile Include="Model\Account\Account.cs" />
+    <Compile Include="Model\Account\OwnedPet.cs" />
+    <Compile Include="Model\Account\Punishment.cs" />
+    <Compile Include="Model\Account\MacAddress.cs" />
+    <Compile Include="Model\Account\RemovedPunishment.cs" />
+    <Compile Include="Model\Sales\AccountTransaction.cs" />
+    <Compile Include="Model\Sales\CoinTransaction.cs" />
+    <Compile Include="Model\Sales\GemTransaction.cs" />
+    <Compile Include="Model\Server\GameServer\CaptureThePig\Stats\CaptureThePigGameStatsToken.cs" />
+    <Compile Include="Model\Server\GameServer\CaptureThePig\Stats\CaptureThePigPlayerStatsToken.cs" />
+    <Compile Include="Model\Server\GameServer\Dominate\Stats\DominatePlayerStatsToken.cs" />
+    <Compile Include="Model\Server\GameServer\Dominate\Stats\DominateGameStatsToken.cs" />
+    <Compile Include="Model\Server\GameServer\MineKart\KartArmor.cs" />
+    <Compile Include="Model\Server\GameServer\MineKart\MineKart.cs" />
+    <Compile Include="Model\Server\GameServer\MineKart\MineKartStats.cs" />
+    <Compile Include="Model\Server\PvpServer\Weapon.cs" />
+    <Compile Include="SearchConf.cs" />
+    <Compile Include="Tokens\AccountBatchToken.cs" />
+    <Compile Include="Tokens\AccountNameToken.cs" />
+    <Compile Include="Tokens\AccountTask.cs" />
+    <Compile Include="Tokens\Client\AccountTransactionToken.cs" />
+    <Compile Include="Tokens\Client\CoinTransactionToken.cs" />
+    <Compile Include="Tokens\Client\RankUpdateToken.cs" />
+    <Compile Include="Tokens\Client\DonationBenefitToken.cs" />
+    <Compile Include="Model\Server\PetExtra.cs" />
+    <Compile Include="Model\Server\FilteredWord.cs" />
+    <Compile Include="Model\Server\GameServer\CaptureThePig\Stats\CaptureThePigPlayerStats.cs" />
+    <Compile Include="Model\Server\Pet.cs" />
+    <Compile Include="Model\Server\PvpServer\Clan\Clan.cs" />
+    <Compile Include="Model\Server\PvpServer\Clan\ClanRole.cs" />
+    <Compile Include="Model\Server\PvpServer\Clan\Territory.cs" />
+    <Compile Include="Model\Server\PvpServer\Clan\Alliance.cs" />
+    <Compile Include="Model\Server\PvpServer\Clan\War.cs" />
+    <Compile Include="Model\Server\PvpServer\FieldMonster.cs" />
+    <Compile Include="Model\Server\PvpServer\CustomBuild.cs" />
+    <Compile Include="Model\Server\PvpServer\FieldOre.cs" />
+    <Compile Include="Model\Server\PvpServer\FieldBlock.cs" />
+    <Compile Include="Model\Server\PvpServer\FishCatch.cs" />
+    <Compile Include="Model\Server\PvpServer\BenefitItem.cs" />
+    <Compile Include="Model\Server\GameServer\Dominate\Stats\DominatePlayerStats.cs" />
+    <Compile Include="Model\Sales\Transaction.cs" />
+    <Compile Include="Model\Sales\GameTransaction.cs" />
+    <Compile Include="Model\Sales\SalesPackage.cs" />
+    <Compile Include="Data\ContentType.cs" />
+    <Compile Include="Data\IRestCallJsonWrapper.cs" />
+    <Compile Include="Data\RestCallJsonWrapper.cs" />
+    <Compile Include="Data\RestCallType.cs" />
+    <Compile Include="DependencyResolution\IoC.cs" />
+    <Compile Include="DependencyResolution\IResolver.cs" />
+    <Compile Include="DependencyResolution\Resolver.cs" />
+    <Compile Include="DependencyResolution\SmDependencyResolver.cs" />
+    <Compile Include="Model\Server\PvpServer\Item.cs" />
+    <Compile Include="Model\Server\PvpServer\PvpClass.cs" />
+    <Compile Include="Model\Server\Server.cs" />
+    <Compile Include="Model\Server\ServerHistory.cs" />
+    <Compile Include="Model\Server\ServerStatus.cs" />
+    <Compile Include="Model\Server\ServerUpdate.cs" />
+    <Compile Include="Model\Sales\GameSalesPackage.cs" />
+    <Compile Include="Model\Server\PvpServer\Skill.cs" />
+    <Compile Include="LogEntry.cs" />
+    <Compile Include="JsonModelBinder.cs" />
+    <Compile Include="Model\Account\Login.cs" />
+    <Compile Include="Model\Account\LoginAddress.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Model\Account\Rank.cs" />
+    <Compile Include="PunishmentType.cs" />
+    <Compile Include="TimeUtil.cs" />
+    <Compile Include="Tokens\Clan\ClanGeneratorToken.cs" />
+    <Compile Include="Tokens\Clan\ClanMemberToken.cs" />
+    <Compile Include="Tokens\Clan\AllianceToken.cs" />
+    <Compile Include="Tokens\Clan\ClanTerritoryToken.cs" />
+    <Compile Include="Tokens\Clan\ClanToken.cs" />
+    <Compile Include="Tokens\Clan\ClanWarRechargeToken.cs" />
+    <Compile Include="Tokens\Clan\WarToken.cs" />
+    <Compile Include="Tokens\Client\AccountToken.cs" />
+    <Compile Include="Tokens\Client\ClientIgnoreToken.cs" />
+    <Compile Include="Tokens\Client\DamageToken.cs" />
+    <Compile Include="Tokens\Client\DeathStatToken.cs" />
+    <Compile Include="Tokens\Client\PlayerSetupToken.cs" />
+    <Compile Include="Tokens\Client\PunishToken.cs" />
+    <Compile Include="Tokens\Client\ClientClanToken.cs" />
+    <Compile Include="Tokens\Client\ClientToken.cs" />
+    <Compile Include="Tokens\Client\CustomBuildToken.cs" />
+    <Compile Include="Tokens\Client\DonorToken.cs" />
+    <Compile Include="Tokens\Client\FishToken.cs" />
+    <Compile Include="Tokens\Client\LoginRequestToken.cs" />
+    <Compile Include="Tokens\Client\PetChangeToken.cs" />
+    <Compile Include="Tokens\Client\PetToken.cs" />
+    <Compile Include="Tokens\Client\GemRewardToken.cs" />
+    <Compile Include="Tokens\Client\SlotToken.cs" />
+    <Compile Include="Tokens\Client\RemovePunishmentToken.cs" />
+    <Compile Include="Tokens\Client\UpdateTaskToken.cs" />
+    <Compile Include="Tokens\UnknownPurchaseToken.cs" />
+    <Compile Include="Tokens\PurchaseToken.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

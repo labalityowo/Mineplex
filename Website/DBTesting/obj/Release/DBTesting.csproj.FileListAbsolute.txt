@@ -1,0 +1,4 @@
+C:\Work\Nautilus\Minecraft\Website\DBTesting\bin\Release\DBTesting.dll
+C:\Work\Nautilus\Minecraft\Website\DBTesting\bin\Release\DBTesting.pdb
+C:\Work\Nautilus\Minecraft\Website\DBTesting\obj\Release\DBTesting.dll
+C:\Work\Nautilus\Minecraft\Website\DBTesting\obj\Release\DBTesting.pdb

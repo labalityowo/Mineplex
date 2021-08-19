@@ -1,0 +1,57 @@
+﻿@model IEnumerable<LOC.Core.Model.Sales.GameSalesPackage>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            Tokens
+        </th>
+        <th>
+            Credits
+        </th>
+        <th>
+            Points
+        </th>
+        <th>
+            Free
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.GameSalesPackageId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tokens)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Credits)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Points)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Free)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.GameSalesPackageId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.GameSalesPackageId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.GameSalesPackageId })
+        </td>
+    </tr>
+}
+
+</table>

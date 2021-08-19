@@ -1,0 +1,28 @@
+@model LOC.Core.LogEntry
+
+@* This partial view defines form fields that will appear when creating and editing entities *@
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Date)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Date)
+    @Html.ValidationMessageFor(model => model.Date)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Category)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Category)
+    @Html.ValidationMessageFor(model => model.Category)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Message)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Message)
+    @Html.ValidationMessageFor(model => model.Message)
+</div>
+

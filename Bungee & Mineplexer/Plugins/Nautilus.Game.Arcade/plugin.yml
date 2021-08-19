@@ -1,0 +1,4 @@
+name: Arcade
+main: nautilus.game.arcade.Arcade
+version: 0.1
+loadbefore: [MineplexAnticheat]

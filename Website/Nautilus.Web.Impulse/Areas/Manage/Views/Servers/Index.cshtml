@@ -1,0 +1,281 @@
+﻿@{
+    ViewBag.Title = "Servers";
+}
+
+<h2>Servers</h2>
+
+<style type="text/css">
+	
+/* Resets */
+.graph-container,
+.graph-container div,
+.graph-container a,
+.graph-container span {
+    margin: 0;
+    padding: 0;
+}
+
+/* Gradinet and Rounded Corners */
+.graph-container, #tooltip, .graph-info a {
+    background: #ffffff;
+    background: -moz-linear-gradient(top, #ffffff 0%, #f9f9f9 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f9f9f9));
+    background: -webkit-linear-gradient(top, #ffffff 0%,#f9f9f9 100%);
+    background: -o-linear-gradient(top, #ffffff 0%,#f9f9f9 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%,#f9f9f9 100%);
+    background: linear-gradient(to bottom, #ffffff 0%,#f9f9f9 100%);
+ 
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+/* Graph Container */
+.graph-container {
+    position: relative;
+    width: 550px;
+    height: 300px;
+    padding: 20px;
+ 
+    -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,.1);
+    -moz-box-shadow: 0px 1px 2px rgba(0,0,0,.1);
+    box-shadow: 0px 1px 2px rgba(0,0,0,.1);
+}
+ 
+.graph-container > div {
+    position: relative;
+    width: inherit;
+    height: 150px;
+    top: 10px;
+    left: 25px;
+}
+ 
+.graph-info {
+    width: 590px;
+    margin-bottom: 10px;
+}
+
+.graph-info a {
+    position: relative;
+    display: inline-block;
+    float: left;
+    height: 20px;
+    padding: 7px 10px 5px 30px;
+    margin-right: 10px;
+    text-decoration: none;
+    cursor: default;
+}
+
+/* Color Circles */
+.graph-info a:before {
+    position: absolute;
+    display: block;
+    content: '';
+    width: 8px;
+    height: 8px;
+    top: 13px;
+    left: 13px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+ 
+.graph-info .visitors { border-bottom: 2px solid #71c73e; }
+.graph-info .returning { border-bottom: 2px solid #77b7c5; }
+ 
+.graph-info .visitors:before { background: #71c73e; }
+.graph-info .returning:before { background: #77b7c5; }
+
+/* Clear Floats */
+.graph-info:before, .graph-info:after,
+.graph-container:before, .graph-container:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+#tooltip, .graph-info a {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 20px;
+    color: #646464;
+}
+ 
+.tickLabel {
+    font-weight: bold;
+    font-size: 12px;
+    color: #666;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.yAxis .tickLabel:first-child,
+.yAxis .tickLabel:last-child { display: none; }
+
+#tooltip {
+    position: absolute;
+    display: none;
+    padding: 5px 10px;
+    border: 1px solid #e1e1e1;
+}
+
+</style>
+
+<script type="text/javascript" src=@Url.Content("~/Scripts/jquery-1.8.2.js")></script>
+<script type="text/javascript" src=@Url.Content("~/Scripts/jquery.flot.min.js")></script>
+<script type="text/javascript">
+    $(function () {
+        setInterval(function () {
+            $.post(
+            "/Manage/Servers/UpdateServerStatuses",
+            null,
+            function (data) {
+                $("#Servers").empty();
+                
+                if (data == "[]") {
+                    $('#Servers').append("<div>No servers runnning...</div>");
+                }
+                else {
+                    $.each(data, function (index, value) {
+                        $('#Servers').append(WriteServerStatus(value['Name'], value['Address'], value['PlayerLimit'], value['TimeStarted'], value['LastUpdate'], value['TicksPerSecond'], value['MemoryUsage']));
+                        WriteServerGraph(value['Name'], value['TicksPerSecond'], value['MemoryUsage']);
+                    });
+                }
+            });
+        }, 15000);
+    });
+
+    function WriteServerStatus(serverName, address, playerLimit, timeStarted, lastUpdate) {
+        var htmlMarkup = '';
+        htmlMarkup += "<div>";
+        htmlMarkup += "<div>Name:" + serverName + "</div>";
+        htmlMarkup += "<div>IpAddress:" + address + "</div>";
+        htmlMarkup += "<div>PlayerLimit:" + playerLimit + "</div>";
+        htmlMarkup += "<div>Started:" + new Date(timeStarted) + "</div>";
+        htmlMarkup += "<div>Duration:" + new Date(lastUpdate-timeStarted) + "</div>";
+        htmlMarkup += "<div id='graph-wrapper-" + serverName + "'>";
+        htmlMarkup += "<div class='graph-info'>";
+        htmlMarkup += "<a href='javascript:void(0)' class='tps'>TPS</a>";
+        htmlMarkup += "<a href='javascript:void(0)' class='memusage'>Memory Usage</a>";
+        htmlMarkup += "</div>";
+        htmlMarkup += "<div class='graph-container'>";
+        htmlMarkup += "<div id='graph-tps-lines-" + serverName + "'></div>";
+        htmlMarkup += "<div id='graph-mem-lines-" + serverName + "'></div>";
+        htmlMarkup += "</div>";
+        htmlMarkup += "</div>";
+        htmlMarkup += "</div>"; 
+
+        return htmlMarkup;
+    }
+
+    function showTooltip(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css({
+            top: y - 16,
+            left: x + 20
+        }).appendTo('body').fadeIn();
+    }
+
+    function WriteServerGraph(serverName, tps, memoryUsage) {
+        var tpsData = [{
+            // TPS
+            data: tps,
+            color: '#71c73e'
+        }];
+
+        var memData = [{
+            // Memory Usage
+            data: memoryUsage,
+            color: '#77b7c5',
+            points: { radius: 4, fillColor: '#77b7c5' }
+        }];
+
+        // Lines
+        $.plot($('#graph-tps-lines-' + serverName + ''), tpsData, {
+            series: {
+                points: {
+                    show: true,
+                    radius: 5
+                },
+                lines: {
+                    show: true
+                },
+                shadowSize: 0
+            },
+            grid: {
+                color: '#646464',
+                borderColor: 'transparent',
+                borderWidth: 20,
+                hoverable: true
+            },
+            xaxis: {
+                tickColor: 'transparent',
+                tickSize: 15
+            },
+            yaxis: {
+                tickSize: 10
+            }
+        });
+
+        // Lines
+        $.plot($('#graph-mem-lines-' + serverName + ''), memData, {
+            series: {
+                points: {
+                    show: true,
+                    radius: 5
+                },
+                lines: {
+                    show: true
+                },
+                shadowSize: 0
+            },
+            grid: {
+                color: '#646464',
+                borderColor: 'transparent',
+                borderWidth: 20,
+                hoverable: true
+            },
+            xaxis: {
+                tickColor: 'transparent',
+                tickSize: 15
+            },
+            yaxis: {
+                tickSize: 10
+            }
+        });
+
+        var previousPoint = null;
+
+        $('#graph-tps-lines-' + serverName + '').bind('plothover', function (event, pos, item) {
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+                    $('#tooltip').remove();
+                    var x = item.datapoint[0],
+                y = item.datapoint[1];
+                    showTooltip(item.pageX, item.pageY, y + ' tps at ' + x + ' seconds');
+                }
+            } else {
+                $('#tooltip').remove();
+                previousPoint = null;
+            }
+        });
+
+        $('#graph-mem-lines-' + serverName + '').bind('plothover', function (event, pos, item) {
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+                    $('#tooltip').remove();
+                    var x = item.datapoint[0],
+                y = item.datapoint[1];
+                    showTooltip(item.pageX, item.pageY, y + ' MB at ' + x + ' seconds');
+                }
+            } else {
+                $('#tooltip').remove();
+                previousPoint = null;
+            }
+        });
+    }
+
+</script>
+
+<div id="Servers">Going to update this in a few seconds...</div>

@@ -1,0 +1,50 @@
+﻿@model LOC.Core.Model.PvpServer.Skill
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Skill</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Level</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Level)
+    </div>
+
+    <div class="display-label">Id</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SalesPackage.GameSalesPackageId)
+    </div>
+
+    <div class="display-label">Tokens</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SalesPackage.Tokens)
+    </div>
+
+    <div class="display-label">Credits</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SalesPackage.Credits)
+    </div>
+
+    <div class="display-label">Points</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SalesPackage.Points)
+    </div>
+
+    <div class="display-label">Free</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SalesPackage.Free)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.SkillId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

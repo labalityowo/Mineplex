@@ -1,0 +1,36 @@
+@model LOC.Core.Model.Account.Account
+
+@* This partial view defines form fields that will appear when creating and editing entities *@
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Name)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Banned)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Banned)
+    @Html.ValidationMessageFor(model => model.Banned)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Reason)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Reason)
+    @Html.ValidationMessageFor(model => model.Reason)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Expires)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Expires)
+    @Html.ValidationMessageFor(model => model.Expires)
+</div>
+

@@ -1,0 +1,15 @@
+﻿@model LOC.Core.Model.Sales.SalesPackage
+
+<div class="span2">
+    <div class="span2" style="text-align: center">
+        <form id="@(Model.PaypalButtonId)" class="salesPackage" action="https://www.paypal.com/cgi-bin/webscr" method="post" onsubmit="submitPackage('@Model.PaypalButtonId')">
+            <input type="hidden" name="cmd" value="_s-xclick" />
+            <input type="hidden" name="hosted_button_id" value=@Model.PaypalButtonId />
+            <input type="hidden" name="on1" value="Name" />
+            <input type="hidden" name="os1" class="playerName" value="" maxlength="200" />
+            <input type="image" class="salesPackageButton" src=@Url.Content(Model.Image) value="Buy Now"/>
+        </form>
+        <h5>@Model.Name - @Model.Price.ToString("$0.00")</h5>
+        <p>@Model.Description</p>
+    </div>
+</div>

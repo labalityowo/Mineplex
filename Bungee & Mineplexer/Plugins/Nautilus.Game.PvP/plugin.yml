@@ -1,0 +1,3 @@
+name: PvP
+main: nautilus.game.pvp.PvP
+version: 0.1

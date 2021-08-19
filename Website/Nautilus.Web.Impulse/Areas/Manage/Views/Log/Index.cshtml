@@ -1,0 +1,43 @@
+@model IEnumerable<LOC.Core.LogEntry>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table>
+    <tr>
+        <th></th>
+        <th>
+            Date
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Message
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id=item.LogEntryId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.LogEntryId })
+        </td>
+        <td>
+			@String.Format("{0:g}", item.Date)
+        </td>
+        <td>
+			@item.Category
+        </td>
+        <td>
+			@item.Message
+        </td>
+    </tr>
+}
+
+</table>
+
+

@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B112BCCF-A0E9-497C-9821-FF408F1D0A76}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LOC.Website.Common</RootNamespace>
+    <AssemblyName>LOC.Website.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqKit">
+      <HintPath>..\Libraries\LinqKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Contexts\IRepository.cs" />
+    <Compile Include="Contexts\IRepositoryFactory.cs" />
+    <Compile Include="Contexts\Repository.cs" />
+    <Compile Include="Contexts\RepositoryFactory.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Models\AccountPetToken.cs" />
+    <Compile Include="PingResult.cs" />
+    <Compile Include="PunishmentResponse.cs" />
+    <Compile Include="CaptureThePigStatsDisplay.cs" />
+    <Compile Include="Data\INautilusRepositoryFactory.cs" />
+    <Compile Include="Models\CaptureThePigAdministrator.cs" />
+    <Compile Include="Models\ICaptureThePigAdministrator.cs" />
+    <Compile Include="Models\IPetAdministrator.cs" />
+    <Compile Include="Models\IPvpAdministrator.cs" />
+    <Compile Include="Models\NautilusRepositoryFactory.cs" />
+    <Compile Include="DisplayServer.cs" />
+    <Compile Include="DominateStatsDisplay.cs" />
+    <Compile Include="GameServerMonitor.cs" />
+    <Compile Include="Models\AccountAdministrator.cs" />
+    <Compile Include="Contexts\ILOCDatabaseUpdater.cs" />
+    <Compile Include="Contexts\LOCContext.cs" />
+    <Compile Include="Contexts\LOCContextConfiguration.cs" />
+    <Compile Include="Contexts\LOCDatabaseUpdater.cs" />
+    <Compile Include="IGameServerMonitor.cs" />
+    <Compile Include="Models\ClanAdministrator.cs" />
+    <Compile Include="Models\IClanAdministrator.cs" />
+    <Compile Include="Models\IGameSalesPackageAdministrator.cs" />
+    <Compile Include="Models\GameSalesPackageAdministrator.cs" />
+    <Compile Include="Models\DominateAdministrator.cs" />
+    <Compile Include="Models\IDominateAdministrator.cs" />
+    <Compile Include="Models\ISalesPackageAdministrator.cs" />
+    <Compile Include="Models\IServerAdministrator.cs" />
+    <Compile Include="Models\IAccountAdministrator.cs" />
+    <Compile Include="Models\PetAdministrator.cs" />
+    <Compile Include="Models\PvpAdministrator.cs" />
+    <Compile Include="Models\SalesPackageAdministrator.cs" />
+    <Compile Include="Models\ServerAdministrator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerStatus.cs" />
+    <Compile Include="ServerStatusManager.cs" />
+    <Compile Include="TransactionResponse.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="App.config" />
+    <None Include="CodeTemplates\Scaffolders\EntityMetadata\ControllerWithEntityMetadata.ps1" />
+    <None Include="CodeTemplates\Scaffolders\EntityMetadata\EF.Utility.CS.ttinclude" />
+    <None Include="CodeTemplates\Scaffolders\EntityMetadata\EntityMetadata.ps1" />
+    <None Include="CodeTemplates\Scaffolders\EntityMetadata\EntityMetadataHelperTemplate.cs.t4" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LOC.Core\LOC.Core.csproj">
+      <Project>{A994B28E-8AAA-4A53-BDFE-0E72F1B0F4AD}</Project>
+      <Name>LOC.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,71 @@
+﻿@model LOC.Core.Model.Account.Account
+
+@{
+    ViewBag.Title = @Model.Name + "'s Profile";
+
+    int gamesPlayed = Model.PlayerStats.Count();
+    int wins = Model.PlayerStats.Count(x => x.Died == 0);
+    int deaths = Model.PlayerStats.Count(x => x.Died != 0);
+    int kills = 0;
+
+    foreach (var stat in Model.PlayerStats)
+    {
+        if (stat.Kills != null)
+        {
+            kills += stat.Kills.Count;
+        }
+    }
+
+    decimal winPercent = deaths == 0 ? 100 : kills / deaths * 100;
+}
+
+<h2>@(Model.Name)'s Profile</h2>
+
+<table>
+    <tr>
+        <th>
+            Rank
+        </th>
+        <th>
+            Winning Percentage
+        </th>
+        <th>
+            Wins
+        </th>
+        <th>
+            Losses
+        </th>
+        <th>
+            K:D Ratio
+        </th>
+        <th>
+            Kills
+        </th>
+        <th>
+            Deaths
+        </th>
+    </tr>
+    <tr>
+        <td>
+			Test
+        </td>
+        <th>
+            @(wins / gamesPlayed * 100)%
+        </th>
+        <th>
+            @wins
+        </th>
+        <th>
+            @deaths
+        </th>
+        <th>
+            @winPercent%
+        </th>
+        <th>
+            @kills
+        </th>
+        <th>
+            @deaths
+        </th>
+    </tr>
+</table>

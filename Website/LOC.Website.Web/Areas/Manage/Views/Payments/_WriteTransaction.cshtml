@@ -1,0 +1,11 @@
+﻿@model LOC.Core.Model.Sales.Transaction
+
+<div class="span4">
+    <div class="span4">
+        <h4>@Model.Account.Name</h4>
+        <h4>@Model.SalesPackage.Name</h4>
+        <p>@Model.Profit.ToString("$0.00")</p>
+        <p>@Model.Fee.ToString("$0.00")</p>
+        <p>@Model.Time</p>
+    </div>
+</div>

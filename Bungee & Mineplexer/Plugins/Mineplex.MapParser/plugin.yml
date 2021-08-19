@@ -1,0 +1,3 @@
+name: MapParser
+main: mineplex.mapparser.MapParser
+version: 1

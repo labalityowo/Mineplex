@@ -1,0 +1,604 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="Repositories" priority="0" />
+      <Item value="public" priority="76" />
+      <Item value="using" priority="11" />
+      <Item value="var" priority="47" />
+      <Item value="LOCContext`0" priority="3" />
+      <Item value="return" priority="21" />
+      <Item value="context" priority="51" />
+      <Item value="string" priority="34" />
+      <Item value="int" priority="14" />
+      <Item value="DbSet`0" priority="6" />
+      <Item value="Account`0" priority="30" />
+      <Item value="LocContext`0" priority="4" />
+      <Item value="private" priority="15" />
+      <Item value="readonly" priority="8" />
+      <Item value="AccountAdministrator`0" priority="3" />
+      <Item value="IAccountRepository`0" priority="0" />
+      <Item value="accountRepository" priority="3" />
+      <Item value="_accountRepository" priority="7" />
+      <Item value="PlayerAccountController`0" priority="0" />
+      <Item value="IAccountAdministrator`0" priority="3" />
+      <Item value="accountAdministrator" priority="1" />
+      <Item value="_accountAdministrator" priority="3" />
+      <Item value="Content`0" priority="0" />
+      <Item value="json" priority="0" />
+      <Item value="contentType" priority="0" />
+      <Item value="void" priority="13" />
+      <Item value="Core" priority="0" />
+      <Item value="Data" priority="1" />
+      <Item value="DependencyResolution" priority="1" />
+      <Item value="if" priority="8" />
+      <Item value="new" priority="42" />
+      <Item value="newAccount" priority="2" />
+      <Item value="List&lt;string&gt;" priority="0" />
+      <Item value="name" priority="2" />
+      <Item value="bool" priority="0" />
+      <Item value="long" priority="1" />
+      <Item value="Core.Data" priority="0" />
+      <Item value="LOC" priority="0" />
+      <Item value="AccountRepo`0" priority="1" />
+      <Item value="ResolveEventArgs`0" priority="0" />
+      <Item value="textBox1" priority="0" />
+      <Item value="null" priority="1" />
+      <Item value="label1" priority="1" />
+      <Item value="else" priority="5" />
+      <Item value="resolver" priority="0" />
+      <Item value="ILOCDatabaseUpdater`0" priority="0" />
+      <Item value="locDatabaseUpdater" priority="0" />
+      <Item value="LOCDatabaseUpdater`0" priority="0" />
+      <Item value="account" priority="27" />
+      <Item value="protected" priority="0" />
+      <Item value="override" priority="0" />
+      <Item value="static" priority="0" />
+      <Item value="KeyNotFoundException`0" priority="0" />
+      <Item value="List" priority="4" />
+      <Item value="base" priority="1" />
+      <Item value="double" priority="3" />
+      <Item value="HungerGameKit`0" priority="7" />
+      <Item value="hungerGameKit" priority="7" />
+      <Item value="IHungerGameRepository`0" priority="0" />
+      <Item value="returnKit" priority="0" />
+      <Item value="kitFromDB" priority="1" />
+      <Item value="kitFromDb" priority="1" />
+      <Item value="IHungerGameAdministrator`0" priority="2" />
+      <Item value="HungerGameAdministrator`0" priority="0" />
+      <Item value="hungerGameAdministrator" priority="1" />
+      <Item value="_hungerGameRepository" priority="5" />
+      <Item value="this" priority="3" />
+      <Item value="switch" priority="1" />
+      <Item value="RouteData" priority="0" />
+      <Item value="case" priority="1" />
+      <Item value="default" priority="0" />
+      <Item value="View`0" priority="7" />
+      <Item value="IDependencyResolver`0" priority="1" />
+      <Item value="UrlParameter`0" priority="0" />
+      <Item value="for" priority="1" />
+      <Item value="ua" priority="0" />
+      <Item value="u" priority="0" />
+      <Item value="modelBuilder" priority="0" />
+      <Item value="m" priority="0" />
+      <Item value="_gameAdministrator" priority="0" />
+      <Item value="_hungerGameAdministrator" priority="2" />
+      <Item value="Payment`0" priority="1" />
+      <Item value="PaymentSource`0" priority="2" />
+      <Item value="PaymentType`0" priority="1" />
+      <Item value="Authorize" priority="1" />
+      <Item value="ActionResult`0" priority="5" />
+      <Item value="DataSetDateTime`0" priority="0" />
+      <Item value="Local" priority="0" />
+      <Item value="MultiSelectList`0" priority="0" />
+      <Item value="accounts" priority="0" />
+      <Item value="object" priority="0" />
+      <Item value="false" priority="0" />
+      <Item value="Index`0" priority="1" />
+      <Item value="indexAccountList" priority="0" />
+      <Item value="payment" priority="9" />
+      <Item value="Payment" priority="0" />
+      <Item value="x" priority="6" />
+      <Item value="Request" priority="4" />
+      <Item value="OrdinalIgnoreCase" priority="0" />
+      <Item value="Account" priority="0" />
+      <Item value="transactionID" priority="0" />
+      <Item value="DateTime`0" priority="2" />
+      <Item value="kit" priority="0" />
+      <Item value="transactionType" priority="0" />
+      <Item value="subItemName" priority="4" />
+      <Item value="amount" priority="0" />
+      <Item value="itemName" priority="4" />
+      <Item value="String`0" priority="2" />
+      <Item value="salesPackage" priority="6" />
+      <Item value="SalesPackage`0" priority="3" />
+      <Item value="ISalesPackageAdministrator`0" priority="3" />
+      <Item value="salesPackageType" priority="1" />
+      <Item value="SalesPackageAdministrator`0" priority="2" />
+      <Item value="ISalesPackageRepository`0" priority="1" />
+      <Item value="salesPackageRepository" priority="1" />
+      <Item value="_salesPackageRepository" priority="3" />
+      <Item value="foreach" priority="5" />
+      <Item value="in" priority="7" />
+      <Item value="salesPackages" priority="5" />
+      <Item value="salesPackageFactory" priority="1" />
+      <Item value="_salesPackageFactory" priority="1" />
+      <Item value="ISalesPackageFactory`0" priority="0" />
+      <Item value="HungerGameClassesPackage`0" priority="0" />
+      <Item value="_salesPackage" priority="3" />
+      <Item value="AppDomainSetup`0" priority="1" />
+      <Item value="HungerGameClass`0" priority="1" />
+      <Item value="HungerGameClassPackage`0" priority="7" />
+      <Item value="ISalesPackage`0" priority="6" />
+      <Item value="hungerGameClassPackage" priority="1" />
+      <Item value="SalesCategories" priority="0" />
+      <Item value="salesCategories" priority="1" />
+      <Item value="HungerGameClass" priority="3" />
+      <Item value="Accounts" priority="1" />
+      <Item value="package" priority="1" />
+      <Item value="System" priority="1" />
+      <Item value="Entity" priority="0" />
+      <Item value="List&lt;ISalesPackage&gt;" priority="0" />
+      <Item value="ISalesPackageAdministrator" priority="0" />
+      <Item value="PaypalController`0" priority="0" />
+      <Item value="OutOfMemoryException`0" priority="0" />
+      <Item value="Logger" priority="0" />
+      <Item value="LogEntry" priority="2" />
+      <Item value="Category" priority="2" />
+      <Item value="Message" priority="2" />
+      <Item value="message" priority="2" />
+      <Item value="param" priority="1" />
+      <Item value="try" priority="2" />
+      <Item value="ex" priority="3" />
+      <Item value="Date" priority="1" />
+      <Item value="playerName" priority="0" />
+      <Item value="ILogger`0" priority="4" />
+      <Item value="Logger`0" priority="2" />
+      <Item value="LOCContext" priority="0" />
+      <Item value="_logger" priority="4" />
+      <Item value="Modified" priority="3" />
+      <Item value="Exception`0" priority="0" />
+      <Item value="_salesPackageRepo" priority="2" />
+      <Item value="Mock`0" priority="0" />
+      <Item value="GetSalesPackageAdministrator`0" priority="0" />
+      <Item value="SalesCategory" priority="0" />
+      <Item value="hungerGameClassPackages" priority="1" />
+      <Item value="HungerGameClassId" priority="0" />
+      <Item value="Name" priority="2" />
+      <Item value="SalesCategory`0" priority="0" />
+      <Item value="salesCategory" priority="0" />
+      <Item value="hungerGameClass" priority="0" />
+      <Item value="List&lt;HungerGameClass&gt;" priority="0" />
+      <Item value="hungerGameClasses" priority="1" />
+      <Item value="SalesPackageAdministrator" priority="0" />
+      <Item value="salesPackageAdministrator" priority="1" />
+      <Item value="_salesPackageAdministrator" priority="1" />
+      <Item value="hungergamekit" priority="1" />
+      <Item value="XmlReadMode`0" priority="1" />
+      <Item value="GameStats`0" priority="0" />
+      <Item value="PlayerStats`0" priority="0" />
+      <Item value="accountName" priority="0" />
+      <Item value="RedirectToAction`0" priority="0" />
+      <Item value="HungerGameStats`0" priority="6" />
+      <Item value="true" priority="0" />
+      <Item value="HungerGamePlayerStats`0" priority="5" />
+      <Item value="hungerGameStats" priority="2" />
+      <Item value="stats" priority="4" />
+      <Item value="List&lt;HungerGamePlayerStats&gt;" priority="3" />
+      <Item value="playerStats" priority="3" />
+      <Item value="statsToken" priority="8" />
+      <Item value="playerStat" priority="2" />
+      <Item value="HungerGameStats" priority="0" />
+      <Item value="logger" priority="0" />
+      <Item value="bans" priority="0" />
+      <Item value="virtual" priority="0" />
+      <Item value="AdminId" priority="0" />
+      <Item value="_accountRepo" priority="4" />
+      <Item value="txtAdmin" priority="0" />
+      <Item value="DataGridViewBand`0" priority="0" />
+      <Item value="ban" priority="7" />
+      <Item value="adminAccount" priority="0" />
+      <Item value="userAccount" priority="2" />
+      <Item value="txtReason" priority="0" />
+      <Item value="lblBanMessage" priority="0" />
+      <Item value="List&lt;Ban&gt;" priority="0" />
+      <Item value="EnvironmentVariableTarget`0" priority="0" />
+      <Item value="cmbKillerClass" priority="1" />
+      <Item value="classes" priority="0" />
+      <Item value="HungerGameStatsToken`0" priority="0" />
+      <Item value="txtGameStarted" priority="0" />
+      <Item value="txtGameLength" priority="0" />
+      <Item value="killerStatToken" priority="3" />
+      <Item value="txtKillerName" priority="0" />
+      <Item value="victimStatToken" priority="1" />
+      <Item value="continue" priority="0" />
+      <Item value="Unchanged" priority="0" />
+      <Item value="UserId" priority="0" />
+      <Item value="stat" priority="0" />
+      <Item value="IQueryable" priority="1" />
+      <Item value="rvbClass" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Data.Entity.DbSet`1">
+      <Item value="First`1" priority="2" />
+      <Item value="Add`0" priority="7" />
+      <Item value="Select`2" priority="0" />
+      <Item value="Include`0" priority="3" />
+      <Item value="AddOrUpdate`1" priority="2" />
+      <Item value="Remove`0" priority="1" />
+      <Item value="Where`1" priority="1" />
+      <Item value="FirstOrDefault`1" priority="2" />
+      <Item value="ToList`1" priority="1" />
+      <Item value="Contains`1" priority="0" />
+      <Item value="Attach`0" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Common.Account">
+      <Item value="Name" priority="2" />
+      <Item value="HungerGameKits" priority="0" />
+      <Item value="Rank" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.String">
+      <Item value="Equals`0" priority="7" />
+      <Item value="Empty" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Common.Data.IAccountRepository">
+      <Item value="GetAccounts`0" priority="0" />
+      <Item value="GetAccountByName`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Common.IAccountAdministrator">
+      <Item value="GetAllAccounts`0" priority="0" />
+      <Item value="GetAccountByName`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Common.Data.LocContext">
+      <Item value="Accounts" priority="1" />
+      <Item value="SaveChanges`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Linq.IQueryable`1">
+      <Item value="Count`1" priority="0" />
+      <Item value="ToList`1" priority="1" />
+      <Item value="Include`2" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.DependencyResolution.IResolver">
+      <Item value="GetService`1" priority="3" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOCTester.AccountRepo">
+      <Item value="GetAccountByName`0" priority="2" />
+      <Item value="BanAccount`0" priority="0" />
+      <Item value="GetHungerGameClasses`0" priority="0" />
+      <Item value="UploadStats`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.TextBox">
+      <Item value="Text" priority="3" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.Label">
+      <Item value="Text" priority="3" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.Contexts.ILOCDatabaseUpdater">
+      <Item value="Update`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.Account">
+      <Item value="AccountId" priority="10" />
+      <Item value="Rank" priority="0" />
+      <Item value="RankId" priority="0" />
+      <Item value="HungerGameKits" priority="2" />
+      <Item value="IPAddresses" priority="0" />
+      <Item value="Name" priority="5" />
+      <Item value="Banned" priority="3" />
+      <Item value="HungerGameClassPackages" priority="1" />
+      <Item value="HungerGameClasses" priority="4" />
+      <Item value="GameStats" priority="0" />
+      <Item value="BanMessage" priority="0" />
+      <Item value="PlayerStats" priority="3" />
+      <Item value="Bans" priority="6" />
+      <Item value="HungerGamePlayerStats" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.Contexts.LocContext">
+      <Item value="Accounts" priority="0" />
+      <Item value="Ranks" priority="0" />
+      <Item value="HungerGameKits" priority="4" />
+      <Item value="SaveChanges`0" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.Rank">
+      <Item value="Name" priority="0" />
+      <Item value="RankId" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Data.Entity.Infrastructure.DbQuery`1">
+      <Item value="Include`0" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.Data.IHungerGameRepository">
+      <Item value="HungerGameKits`0" priority="0" />
+      <Item value="AddHungerGameKit`0" priority="1" />
+      <Item value="UpdateHungerGameKit`0" priority="0" />
+      <Item value="DeleteHungerGameKit`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Web.Controllers.ManageController">
+      <Item value="HungerGames`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.Routing.RouteData">
+      <Item value="Values" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Object">
+      <Item value="ToString`0" priority="4" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Web.Mvc.UrlParameter">
+      <Item value="Optional" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.HungerGameKit">
+      <Item value="Free" priority="1" />
+      <Item value="Accounts" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.List`1">
+      <Item value="Contains`0" priority="4" />
+      <Item value="Add`0" priority="15" />
+      <Item value="ConvertAll`1" priority="1" />
+      <Item value="Count" priority="1" />
+      <Item value="ElementAt`1" priority="2" />
+      <Item value="Remove`0" priority="0" />
+      <Item value="First`1" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Data.Entity.ModelConfiguration.Configuration.ManyNavigationPropertyConfiguration`2">
+      <Item value="WithMany`0" priority="0" />
+      <Item value="WithRequired`0" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Data.Entity.DbContext">
+      <Item value="OnModelCreating`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.IHungerGameAdministrator">
+      <Item value="HungerGameKits`0" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.Contexts.LOCContext">
+      <Item value="Accounts" priority="10" />
+      <Item value="SaveChanges`0" priority="7" />
+      <Item value="PaymentSources" priority="0" />
+      <Item value="PaymentTypes" priority="0" />
+      <Item value="Payments" priority="0" />
+      <Item value="SalesPackages" priority="0" />
+      <Item value="HungerGameClassPackages" priority="3" />
+      <Item value="SalesCategories" priority="2" />
+      <Item value="LogEntries" priority="2" />
+      <Item value="HungerGameKits" priority="1" />
+      <Item value="Entry`0" priority="3" />
+      <Item value="HungerGameStats" priority="0" />
+      <Item value="Bans" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.Payment">
+      <Item value="PaymentSource" priority="0" />
+      <Item value="PaymentType" priority="0" />
+      <Item value="Account" priority="1" />
+      <Item value="Amount" priority="0" />
+      <Item value="DateTime" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.PaymentSource">
+      <Item value="Name" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.PaymentType">
+      <Item value="Name" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Double">
+      <Item value="Parse`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.DateTime">
+      <Item value="Now" priority="2" />
+      <Item value="UtcNow" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.Data.ISalesPackageRepository">
+      <Item value="GetSalesPackages`0" priority="0" />
+      <Item value="GetHungerGameClassPackages`0" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.SalesPackage">
+      <Item value="PackageType" priority="0" />
+      <Item value="Name" priority="0" />
+      <Item value="ItemIdList" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.HungerGameClass">
+      <Item value="Name" priority="0" />
+      <Item value="HungerGameClassId" priority="3" />
+      <Item value="Accounts" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.SalesPackages.HungerGameClassPackage">
+      <Item value="Accounts" priority="1" />
+      <Item value="HungerGameClass" priority="2" />
+      <Item value="SalesCategory" priority="3" />
+      <Item value="Name" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.ISalesPackageAdministrator">
+      <Item value="GetSalesPackages`0" priority="1" />
+      <Item value="ApplySalesPackageByNameAndTypeToAccount`0" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.HttpRequestBase">
+      <Item value="ToString`0" priority="0" />
+      <Item value="Params" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Exception">
+      <Item value="Message" priority="1" />
+      <Item value="StackTrace" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.String">
+      <Item value="ToLower`0" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.SalesCategory">
+      <Item value="Name" priority="1" />
+      <Item value="SalesCategoryId" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.ILogger">
+      <Item value="Log`0" priority="3" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.SalesPackageAdministrator">
+      <Item value="ToString`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.SalesPackages.ISalesPackage">
+      <Item value="Name" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Data.Entity.Infrastructure.DbEntityEntry`1">
+      <Item value="State" priority="3" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Moq.Mock`1">
+      <Item value="Setup`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.IAccountAdministrator">
+      <Item value="GetAccountByName`0" priority="1" />
+      <Item value="UpdateAccount`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.Routing.RouteCollection">
+      <Item value="Add`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.HungerGamePlayerStats">
+      <Item value="Kills" priority="6" />
+      <Item value="HungerGamePlayerStatsId" priority="0" />
+      <Item value="Killers" priority="1" />
+      <Item value="Account" priority="3" />
+      <Item value="Died" priority="0" />
+      <Item value="Class" priority="0" />
+      <Item value="UserId" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.HungerGameStats">
+      <Item value="Length" priority="0" />
+      <Item value="Started" priority="0" />
+      <Item value="PlayerCount" priority="0" />
+      <Item value="HungerGamePlayerStats" priority="4" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.HungerGameStatsToken">
+      <Item value="Length" priority="0" />
+      <Item value="PlayerCount" priority="1" />
+      <Item value="HungerGamePlayerStats" priority="0" />
+      <Item value="Started" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.HungerGamePlayerStatsToken">
+      <Item value="Account" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.Tokens.HungerGamePlayerStatsToken">
+      <Item value="Kills" priority="1" />
+      <Item value="Account" priority="4" />
+      <Item value="Class" priority="0" />
+      <Item value="AccountId" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Website.Common.Data.IAccountRepository">
+      <Item value="GetAccountByName`0" priority="1" />
+      <Item value="GetAccounts`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.IEnumerable`1">
+      <Item value="Count`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:LOC.Core.Ban">
+      <Item value="Reason" priority="1" />
+      <Item value="BanId" priority="1" />
+      <Item value="Account" priority="1" />
+      <Item value="AdminId" priority="0" />
+      <Item value="Admin" priority="1" />
+      <Item value="DateTime" priority="0" />
+      <Item value="UserId" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Data.Entity.ModelConfiguration.EntityTypeConfiguration`1">
+      <Item value="HasMany`1" priority="0" />
+      <Item value="HasRequired`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Data.Entity.ModelConfiguration.Configuration.DependentNavigationPropertyConfiguration`1">
+      <Item value="HasForeignKey`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Data.Entity.ModelConfiguration.Configuration.CascadableNavigationPropertyConfiguration">
+      <Item value="WillCascadeOnDelete`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.DateTime">
+      <Item value="ToLongTimeString`0" priority="0" />
+      <Item value="ToFileTime`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Boolean">
+      <Item value="ToString`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Data.Entity.ModelConfiguration.Configuration.RequiredNavigationPropertyConfiguration`2">
+      <Item value="WithOptional`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.ComboBox">
+      <Item value="DataSource" priority="0" />
+      <Item value="SelectedItem" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Int64">
+      <Item value="Parse`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Data.EntityState">
+      <Item value="Modified" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="A994B28E-8AAA-4A53-BDFE-0E72F1B0F4AD/f:RVBPlayerStats.cs" caret="346" fromTop="13" />
+      <File id="A994B28E-8AAA-4A53-BDFE-0E72F1B0F4AD/d:Tokens/f:RVBPlayerStatsToken.cs" caret="69" fromTop="3" />
+      <File id="A994B28E-8AAA-4A53-BDFE-0E72F1B0F4AD/d:Tokens/f:RVBStatsToken.cs" caret="120" fromTop="6" />
+      <File id="A994B28E-8AAA-4A53-BDFE-0E72F1B0F4AD/d:Tokens/f:HungerGameStatsToken.cs" caret="109" fromTop="5" />
+      <File id="B112BCCF-A0E9-497C-9821-FF408F1D0A76/d:Data/f:IRVBRepository.cs" caret="138" fromTop="6" />
+      <File id="B112BCCF-A0E9-497C-9821-FF408F1D0A76/d:Data/f:RVBRepository.cs" caret="165" fromTop="5" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Controllers/f:HungerGamesController.cs" caret="2729" fromTop="70" />
+      <File id="B112BCCF-A0E9-497C-9821-FF408F1D0A76/f:IRVBAdministrator.cs" caret="136" fromTop="6" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Views/d:RVB/f:_WriteClass.cshtml" caret="650" fromTop="6" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Views/d:RVB/f:Classes.cshtml" caret="57" fromTop="0" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Views/d:RVB/f:Index.cshtml" caret="1123" fromTop="8" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Controllers/f:RVBController.cs" caret="641" fromTop="18" />
+      <File id="B112BCCF-A0E9-497C-9821-FF408F1D0A76/f:RVBAdministrator.cs" caret="1051" fromTop="38" />
+      <File id="B112BCCF-A0E9-497C-9821-FF408F1D0A76/d:Data/f:AccountRepository.cs" caret="757" fromTop="15" />
+      <File id="B112BCCF-A0E9-497C-9821-FF408F1D0A76/d:Contexts/f:LOCContext.cs" caret="199" fromTop="8" />
+      <File id="A994B28E-8AAA-4A53-BDFE-0E72F1B0F4AD/f:Account.cs" caret="575" fromTop="15" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:ManageControllerBase.cs" caret="185" fromTop="6" />
+      <File id="B112BCCF-A0E9-497C-9821-FF408F1D0A76/f:SalesPackageAdministrator.cs" caret="724" fromTop="11" />
+      <File id="A994B28E-8AAA-4A53-BDFE-0E72F1B0F4AD/f:SalesCategory.cs" caret="0" fromTop="0" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="2889" fromTop="50" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Create.cshtml" caret="24" fromTop="0" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:_CreateOrEdit.cshtml" caret="125" fromTop="3" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Delete.cshtml" caret="133" fromTop="8" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Details.cshtml" caret="548" fromTop="18" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Edit.cshtml" caret="369" fromTop="13" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Index.cshtml" caret="822" fromTop="14" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Views/d:Manage/f:Index.cshtml" caret="286" fromTop="9" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/f:Web.config" caret="1371" fromTop="15" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:ViewModels/f:AccountViewModel.cs" caret="378" fromTop="6" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Controllers/f:AccountController.cs" caret="2608" fromTop="16" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="228" fromTop="9" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="668" fromTop="23" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="1052" fromTop="21" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="494" fromTop="9" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="1162" fromTop="22" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="1308" fromTop="21" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="1506" fromTop="23" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="1801" fromTop="23" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="1972" fromTop="27" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="1688" fromTop="19" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="2144" fromTop="20" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="2548" fromTop="11" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="2678" fromTop="10" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Controllers/f:HungerGameClassesController.cs" caret="2907" fromTop="16" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Create.cshtml" caret="19" fromTop="0" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Create.cshtml" caret="396" fromTop="15" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:_CreateOrEdit.cshtml" caret="24" fromTop="0" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Delete.cshtml" caret="24" fromTop="0" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Delete.cshtml" caret="162" fromTop="10" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Details.cshtml" caret="24" fromTop="0" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Details.cshtml" caret="116" fromTop="9" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Details.cshtml" caret="781" fromTop="24" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Edit.cshtml" caret="24" fromTop="0" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Edit.cshtml" caret="448" fromTop="16" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Index.cshtml" caret="36" fromTop="0" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Areas/d:Manage/d:Views/d:RVBClasses/f:Index.cshtml" caret="739" fromTop="18" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Views/d:Manage/f:Index.cshtml" caret="234" fromTop="8" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/f:Web.config" caret="1902" fromTop="21" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Controllers/f:AccountController.cs" caret="2597" fromTop="19" />
+      <File id="DE6A8208-57CD-495D-8A25-5CE1293B7483/d:Controllers/f:AccountController.cs" caret="2409" fromTop="12" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir IsNull="False">
+    </NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+</Configuration>

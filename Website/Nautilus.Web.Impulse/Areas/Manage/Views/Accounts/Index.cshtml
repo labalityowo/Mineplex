@@ -1,0 +1,57 @@
+@model IEnumerable<LOC.Core.Model.Account.Account>
+
+@{
+    ViewBag.Title = "Manage Accounts";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+<p>
+    Find by name: @Html.TextBox("SearchString") &nbsp;
+    <input type="submit" value="Search" /></p>
+}
+
+@if (Model.Count() != 0)
+{
+    <table>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Banned
+            </th>
+            <th>
+                Rank
+            </th>
+            <th>
+                Expires
+            </th>
+        </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+			    @Html.ActionLink(item.Name, "Details", new { id = item.AccountId })
+            </td>
+            <td>
+			    @if (!item.Banned)
+                {
+                    @("False")
+                }
+            </td>
+            <td>
+			    @(item.Rank == null ? "None" : item.Rank.Name)
+            </td>
+            <td>
+			    @(item.Expires == 0 ? "Never" : new DateTime(item.Expires, DateTimeKind.Local).ToString())
+            </td>
+        </tr>
+    }
+</table>
+}
+
+

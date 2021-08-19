@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Mineplex.ServerData:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Mineplex_ServerData_jar</output-path>
+    <root id="archive" name="Mineplex.ServerData.jar">
+      <element id="module-output" name="Mineplex.ServerData" />
+    </root>
+  </artifact>
+</component>

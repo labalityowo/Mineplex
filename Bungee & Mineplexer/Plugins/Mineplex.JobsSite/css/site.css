@@ -1,0 +1,44 @@
+body {
+    background-color: rgba(43, 177, 217, 0.44);
+}
+
+#content {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#header {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 85px;
+    background-color: #2aabd2;
+    padding-top: 5px;
+    border-bottom: solid 2px #216f8d;
+}
+
+#info {
+    padding-top: 5px;
+    padding-bottom: 10px;
+    background-color: rgba(51, 180, 226, 0.41);
+    color: rgb(34, 120, 151);
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+#info p {
+    font-size: 20px;
+}
+
+#content {
+    padding-bottom: 25px;
+}
+
+.job {
+    background-color: #216f8d;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 1px;
+    padding-bottom: 5px;
+    color: white;
+}

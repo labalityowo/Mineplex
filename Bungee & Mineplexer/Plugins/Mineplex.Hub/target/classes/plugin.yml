@@ -1,0 +1,4 @@
+name: Hub
+main: mineplex.hub.Hub
+version: 0.1
+loadbefore: [MineplexAnticheat]

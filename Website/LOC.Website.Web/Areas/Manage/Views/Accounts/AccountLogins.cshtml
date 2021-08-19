@@ -1,0 +1,28 @@
+﻿@model IEnumerable<LOC.Core.Model.Account.Login>
+
+@{
+    ViewBag.Title = "Account Logins";
+}
+
+<h2>Account Logins</h2>
+
+<fieldset>
+    <legend>Logins | @Html.ActionLink("Back to Account", "Details", new { id = Model.First().Account.AccountId })</legend>
+    
+    <table>
+        <tr>
+            <th>IpAddress</th>
+            <th>Server</th>
+            <th>Date</th>
+        </tr>
+                
+        @foreach (var login in @Model)
+        {
+            <tr class=@(login.LoginId % 2 == 0 ? "alt" : "none")>
+                <td>@(login.IpAddress.Address)</td>
+                <td>@(login.ServerId)</td>
+                <td>@(new DateTime().AddTicks(login.Time))</td>
+            </tr>
+        }
+    </table>
+</fieldset>

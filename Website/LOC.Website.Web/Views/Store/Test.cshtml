@@ -1,0 +1,105 @@
+﻿<h2>Test</h2>
+@{
+    ViewBag.Title = "Sales Packages";
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.post(
+            "/Store/GetSalesPackages",
+            null,
+            function (data) {
+                $("#SalesPackages").empty();
+
+                if (data == "[]") {
+                    $('#SalesPackages').append("<div>No salespackages defined.</div>");
+                }
+                else {
+                    $.each(data, function (index, value) {
+                        $('#SalesPackages').append(WriteSalesPackage(value['PaypalButtonId'], value['Image']));
+                    });
+                }
+            });
+    });
+
+    function WriteSalesPackage(buttonId, buttonImage) {
+        var htmlMarkup = '';
+        htmlMarkup += "<div class='span4'>";
+        htmlMarkup += "<form action='https://www.paypal.com/cgi-bin/webscr' method='post'>";
+        htmlMarkup += "<input type='hidden' name='cmd' value='_s-xclick' />";
+        htmlMarkup += "<input type='hidden' name='hosted_button_id' value='" + buttonId + "' />";
+        htmlMarkup += "<input type='hidden' name='on1' value='Name' />";
+        htmlMarkup += "<input type='hidden' name='os1' class='playerName' value='' maxlength='200' />";
+        htmlMarkup += "<input type='image' class='salesPackageButton' src='" + window.location.hostname + "/" + buttonImage + "' value='Buy Now'/>";
+        htmlMarkup += "</form>";
+        htmlMarkup += "</div>";
+
+        return htmlMarkup;
+    }
+</script>
+
+<script type="text/javascript">
+    function PlayerNameBlur() {
+
+        $("input.playerName").val($("#PlayerName").val());
+
+        $("#PlayerName").next().removeAttr("style");
+
+        $.post(
+            "/PlayerAccount/AccountExists/",
+            { name: $("#PlayerName").val() },
+            function (result) {
+                if (result != null && result == true) {
+                    $("#PlayerName").next().text("Validated");
+                } else if ($.trim($("#PlayerName").val()).length == 0) {
+                    $("#PlayerName").next().text("Please enter your player name");
+                } else {
+                    $("#PlayerName").next().text("New Player! You will be added to the system when you purchase a pack below.");
+                }
+            }
+            );
+    }
+    </script>
+
+<script type="text/javascript">
+    $(function () {
+        PlayerNameBlur();
+
+        setTimeout(function () {
+            window.location = "/Home";
+        }, 1000 * 60 * 60 * 23);
+    });
+</script>
+
+<div>
+    <div class="row">
+        <p>
+            All purchasable benefits, such as class skills, are in a constant state of balance, ensuring our plugins are of the highest quality possible.
+            <br/>
+            If a benefit you have purchased is modified, you may be entitled a refund.  If you are unhappy with a change, message us for a refund. 
+            <br/>
+            Deleted benefits will be automatically refunded.
+            <br/><br/>
+            Thank you for supporting us!!
+        </p>
+    </div>
+    <h3>Minecraft Player Name:</h3>
+    <div class="input-append"><input id="PlayerName" type="text" class="span2" placeholder="Player Name"
+                                     onblur="PlayerNameBlur(this);" style="margin-bottom: 0px;" /><label class="add-on label-warning">Please enter your player name</label>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="span12">
+        <ul class="thumbnails" id="SalesPackages">
+        </ul>
+    </div>
+</div>
+<div id="globalParameters">
+    <input name="weight_unit" value="lb" type="hidden" />
+    <input name="currency_code" value="USD" type="hidden" />
+    <input name="merchant_id" value="7KGDE7AUDCSNC" type="hidden" />
+</div>

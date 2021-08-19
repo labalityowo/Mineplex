@@ -1,0 +1,112 @@
+﻿@model LOC.Website.Common.DominateStatsDisplay
+
+@{
+    ViewBag.Title = "Stats";
+}
+
+<div class="row">
+    <div class="span12">
+        <h2>Stats</h2>
+
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#mostpoints">Most Points</a></li>
+            <li><a href="#mostkills">Most Kills</a></li>
+            <li><a href="#mostassists">Most Assists</a></li>
+            <li><a href="#mostdeaths">Most Deaths</a></li>
+        </ul>
+ 
+        <div class="tab-content">
+            <div class="tab-pane active" id="mostpoints">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th width="10%">Place</th>
+                            <th>Name</th>
+                            <th width="10%">Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var playerStats in Model.MostPoints)
+                        {
+                            <tr>
+                                <td>@(Model.MostPoints.IndexOf(playerStats)+1)</td>
+                                <td>@playerStats.Account.Name</td>
+                                <td>@playerStats.Points</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="mostkills">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th width="10%">Place</th>
+                            <th>Name</th>
+                            <th width="10%">Kills</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var playerStats in Model.MostKills)
+                        {
+                            <tr>
+                                <td>@(Model.MostKills.IndexOf(playerStats)+1)</td>
+                                <td>@playerStats.Account.Name</td>
+                                <td>@playerStats.Kills</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="mostassists">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th width="10%">Place</th>
+                            <th>Name</th>
+                            <th width="10%">Assists</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var playerStats in Model.MostAssists)
+                        {
+                            <tr>
+                                <td>@(Model.MostAssists.IndexOf(playerStats)+1)</td>
+                                <td>@playerStats.Account.Name</td>
+                                <td>@playerStats.Assists</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>            
+            </div>
+            <div class="tab-pane" id="mostdeaths">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th width="10%">Place</th>
+                            <th>Name</th>
+                            <th width="10%">Deaths</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var playerStats in Model.MostDeaths)
+                        {
+                            <tr>
+                                <td>@(Model.MostDeaths.IndexOf(playerStats)+1)</td>
+                                <td>@playerStats.Account.Name</td>
+                                <td>@playerStats.Deaths</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        $('#myTab a').click(function(e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+    </script>

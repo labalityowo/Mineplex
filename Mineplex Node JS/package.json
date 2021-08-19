@@ -1,0 +1,15 @@
+{
+  "name": "mineplex-node",
+  "version": "1.0.0",
+  "description": "Replacement for mineplex server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "labalityowo",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^3.20.1",
+    "fastify-mysql": "^2.1.0"
+  }
+}

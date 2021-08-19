@@ -1,0 +1,85 @@
+@model LOC.Core.Model.Account.Account
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Account | @Html.ActionLink("Edit", "Edit", new { id=Model.AccountId }) | @Html.ActionLink("Back to List", "Index")</legend>
+    
+    <div style="color: darkgrey">
+        <div><div style="float: left"><b>Name:</b></div><div style="float: left; position:absolute; padding-left: 100px">@Model.Name</div></div>
+        <br />
+        <div><div style="float: left"><b>Status:</b></div><div style="float: left; position:absolute; padding-left: 100px">
+            @if (Model.Banned)
+            {
+                <span style="color: red">Banned</span>
+            }
+            else
+            {
+                <span style="color: green">In Good Standing</span>
+            }
+        </div>
+        </div>
+        <br />
+        <div><div style="float: left"><b>Rank:</b></div><div style="float: left; position:absolute; padding-left: 100px">@(Model.Rank == null ? "None" : Model.Rank.Name)</div></div>
+        <div>
+            @if (Model.Rank != null && (Model.Rank.Name == "SILVER" || Model.Rank.Name == "GOLD"))
+            {
+                <br />
+                <div style="float: left"><b>Rank Expires:</b></div>
+                <div style="float: left; position:absolute; padding-left: 100px">@(Model.RankExpire)</div>
+            }
+        </div>
+        <br />
+        <div><div style="float: left"><b>Web Sales Transactions:</b></div>
+            @if (Model.Transactions != null && Model.Transactions.Count > 0)
+            {
+                foreach (var transaction in Model.Transactions)
+                {
+                    <br />
+                    <div style="padding-left: 10px">@transaction.Time</div>
+                    <div style="padding-left: 10px">@transaction.SalesPackage.Name</div>
+                    <div style="padding-left: 10px">@transaction.SalesPackage.Price</div>
+                }
+            }
+            else
+            {
+                <div style="float: left; position:absolute; padding-left: 100px">None</div>
+            }
+        </div>
+        <div><div style="float: left"><b>Game Ttem Transactions:</b></div>
+            @if (Model.PvpTransactions != null && Model.PvpTransactions.Count > 0)
+            {
+                foreach (var transaction in Model.PvpTransactions)
+                {
+                    <br />
+                    <div style="padding-left: 10px">@transaction.GameSalesPackageId</div>
+                }
+            }
+            else
+            {
+                <div style="float: left; position:absolute; padding-left: 100px">None</div>
+            }
+        </div>
+        <div><div style="float: left"><b>IpAddresses:</b></div>
+            @if (Model.IpAddresses != null && Model.IpAddresses.Count > 0)
+            {
+                foreach (var ipAddress in Model.IpAddresses)
+                {
+                    <br />
+                    <div style="padding-left: 10px">@ipAddress.Address</div>
+                }
+            }
+            else
+            {
+                <div style="float: left; position:absolute; padding-left: 100px">None</div>
+            }
+        </div>
+
+    </div>
+</fieldset>
+
+

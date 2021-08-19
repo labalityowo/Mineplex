@@ -1,0 +1,152 @@
+﻿<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ include file="EF.Utility.CS.ttinclude"#>
+<#@ output extension=".cs"#>
+<#
+CodeGenerationTools code = new CodeGenerationTools(this);
+MetadataLoader loader = new MetadataLoader(this);
+CodeRegion region = new CodeRegion(this, 1);
+MetadataTools ef = new MetadataTools(this);
+
+// create our item collection from the specified edmx
+EdmItemCollection ItemCollection = loader.CreateEdmItemCollection(Model.InputFileName);
+
+// find our entity from the pool
+var entity = ItemCollection.GetItems<EntityType>().Where(e => e.Name == Model.EntityName).First();
+	
+#>
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace <#=code.EscapeNamespace(Model.Namespace)#>
+{
+[MetadataType(typeof(<#=code.Escape(entity)#>Metadata))]
+<#=Accessibility.ForType(entity)#> <#=code.SpaceAfter(code.AbstractOption(entity))#>partial class <#=code.Escape(entity)#><#=code.StringBefore(" : ", code.Escape(entity.BaseType))#> { }
+
+<#=Accessibility.ForType(entity)#> <#=code.SpaceAfter(code.AbstractOption(entity))#>partial class <#=code.Escape(entity)#>Metadata<#=code.StringBefore(" : ", code.Escape(entity.BaseType))#>
+    {
+<#
+    var propertiesWithDefaultValues = entity.Properties.Where(p => p.TypeUsage.EdmType is PrimitiveType && p.DeclaringType == entity && p.DefaultValue != null);
+    var collectionNavigationProperties = entity.NavigationProperties.Where(np => np.DeclaringType == entity && np.ToEndMember.RelationshipMultiplicity == RelationshipMultiplicity.Many);
+    var complexProperties = entity.Properties.Where(p => p.TypeUsage.EdmType is ComplexType && p.DeclaringType == entity);
+
+    var primitiveProperties = entity.Properties.Where(p => p.TypeUsage.EdmType is PrimitiveType && p.DeclaringType == entity);
+    if (primitiveProperties.Any())
+    {
+        foreach (var edmProperty in primitiveProperties)
+        {
+            WriteProperty(code, edmProperty);
+        }
+    }
+
+    if (complexProperties.Any())
+    {
+#>
+
+<#
+        foreach(var complexProperty in complexProperties)
+        {
+            WriteProperty(code, complexProperty);
+        }
+    }
+
+    var navigationProperties = entity.NavigationProperties.Where(np => np.DeclaringType == entity);
+    if (navigationProperties.Any())
+    {
+#>
+
+<#
+        foreach (var navigationProperty in navigationProperties)
+        {
+            WriteNavigationProperty(code, navigationProperty);
+        }
+    }
+#>
+    }
+}
+
+<#+ 
+	void WriteProperty(CodeGenerationTools code, EdmProperty edmProperty)
+{	
+    WriteProperty(Accessibility.ForProperty(edmProperty),
+                  code.Escape(edmProperty.TypeUsage),
+                  code.Escape(edmProperty),
+                  edmProperty.Nullable,
+                  GetMaxLengthValue(edmProperty),
+                  code.SpaceAfter(Accessibility.ForGetter(edmProperty)),
+                  code.SpaceAfter(Accessibility.ForSetter(edmProperty)));
+}
+
+void WriteNavigationProperty(CodeGenerationTools code, NavigationProperty navigationProperty)
+{
+    var endType = code.Escape(navigationProperty.ToEndMember.GetEntityType());
+    WriteProperty(PropertyVirtualModifier(Accessibility.ForProperty(navigationProperty)),
+                  navigationProperty.ToEndMember.RelationshipMultiplicity == RelationshipMultiplicity.Many ? ("ICollection<" + endType + ">") : endType,
+                  code.Escape(navigationProperty),
+                  true,
+                  0,
+                  code.SpaceAfter(Accessibility.ForGetter(navigationProperty)),
+                  code.SpaceAfter(Accessibility.ForSetter(navigationProperty)));
+    
+}
+
+int GetMaxLengthValue (EdmProperty property)
+{
+    foreach (Facet facet in property.TypeUsage.Facets)
+    {
+        if (facet.Name == "MaxLength" && facet.Value != null  && facet.IsUnbounded == false)
+        {
+            return (int)facet.Value;
+        }
+    }
+    return 0;
+}
+
+void WriteProperty(string accessibility, string type, string name, bool nullableField, int maxLength, string getterAccessibility, string setterAccessibility)
+{
+    string displayName = AddSpacesToSentence(name.Replace("ID",""));
+#>  
+    [DisplayName("<#=displayName#>")]<#=GetRequiredText(nullableField)#><#=GetMaxLengthText(maxLength)#>
+    <#=accessibility#> <#=type#> <#=name#> { <#=getterAccessibility#>get; <#=setterAccessibility#>set; }	
+<#+
+}
+
+string GetMaxLengthText(int maxLength)
+{
+    return maxLength > 0 ? string.Format("{0}    [MaxLength({1})]", Environment.NewLine, maxLength) : string.Empty;
+}
+
+string GetRequiredText(bool nullableField)
+{
+    return !nullableField ? string.Format("{0}    [Required]", Environment.NewLine) : string.Empty;
+}
+
+string AddSpacesToSentence(string titleString)
+{
+        if (string.IsNullOrEmpty(titleString))  
+            return string.Empty;
+        
+        StringBuilder sb = new StringBuilder(titleString.Length * 2);
+        
+        // add the first char to the string
+        sb.Append(titleString[0].ToString().ToUpper());
+        
+        for (int i = 1; i < titleString.Length; i++)
+        {
+            if (char.IsUpper(titleString[i]))
+                sb.Append(' ');
+            sb.Append(titleString[i]);
+        }
+        
+        return sb.ToString();
+}
+
+string PropertyVirtualModifier(string accessibility)
+{
+    return accessibility + (accessibility != "private" ? " virtual" : "");
+}
+
+
+#>

@@ -1,0 +1,4 @@
+name: NanoGames
+main: mineplex.game.nano.NanoGames
+version: 0.1
+loadbefore: [MineplexAnticheat]

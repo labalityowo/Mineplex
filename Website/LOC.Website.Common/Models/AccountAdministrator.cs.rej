@@ -1,0 +1,17 @@
+--- AccountAdministrator.cs
++++ AccountAdministrator.cs
+@@ -187,6 +190,6 @@
+                 {
+                     UserId = account.AccountId,
+                     AdminId = repository.Where<Account>(x => x.Name == punish.Admin).First().AccountId,
+-                    PunishmentType = punish.PunishType,
+-                    Time = DateTime.Now,
++                    Category = punish.Category,
++                    Date = punish.Time,
+                     Reason = punish.Reason,
+@@ -192,4 +195,4 @@
+                     Reason = punish.Reason,
+-                    Duration = punish.Hours,
++                    Level = punish.Level,
+                 };
+ 

@@ -1,0 +1,38 @@
+﻿@model LOC.Core.Model.Sales.GameSalesPackage
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>GameSalesPackage</legend>
+
+    <div class="display-label">Tokens</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Tokens)
+    </div>
+
+    <div class="display-label">Credits</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Credits)
+    </div>
+
+    <div class="display-label">Points</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Points)
+    </div>
+
+    <div class="display-label">Free</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Free)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

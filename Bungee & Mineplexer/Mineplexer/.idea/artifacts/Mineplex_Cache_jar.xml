@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Mineplex.Cache:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Mineplex_Cache_jar</output-path>
+    <root id="archive" name="Mineplex.Cache.jar">
+      <element id="module-output" name="Mineplex.Cache" />
+      <element id="module-output" name="Mineplex.ServerData" />
+    </root>
+  </artifact>
+</component>

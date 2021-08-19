@@ -1,0 +1,67 @@
+﻿@model LOC.Core.Model.PvpServer.Skill
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Skill</legend>
+
+        @Html.HiddenFor(model => model.SkillId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Level)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Level)
+            @Html.ValidationMessageFor(model => model.Level)
+        </div>
+
+        <div class="editor-label">Tokens</div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SalesPackage.Tokens)
+            @Html.ValidationMessageFor(model => model.SalesPackage.Tokens)
+        </div>
+
+        <div class="editor-label">Credits</div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SalesPackage.Credits)
+            @Html.ValidationMessageFor(model => model.SalesPackage.Credits)
+        </div>
+
+        <div class="editor-label">Points</div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SalesPackage.Points)
+            @Html.ValidationMessageFor(model => model.SalesPackage.Points)
+        </div>
+
+        <div class="editor-label">Free</div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SalesPackage.Free)
+            @Html.ValidationMessageFor(model => model.SalesPackage.Free)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

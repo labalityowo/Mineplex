@@ -1,0 +1,99 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "BetterMc";
+}
+
+<div class="row">
+    <div class="span12">
+        <ul class="thumbnails" style="text-align: center; width: 100%; margin: 0px auto;">
+            <li>
+                <div id="myCarousel" class="carousel slide" style ="width: 100%; margin: 0px auto; text-align:center;">
+                    <!-- Carousel items -->
+                    <div class="carousel-inner">
+                        <div class="active item">
+                            <img src=@Url.Content("~/Content/Images/dom1.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom2.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom3.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom4.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom5.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom6.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom7.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom8.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom9.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom10.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom11.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom12.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom13.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom14.png") />
+                        </div>
+                        <div class="item">
+                            <img src=@Url.Content("~/Content/Images/dom15.png") />
+                        </div>
+                    </div>
+                    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                    <h3>BetterMC</h3>
+                    <p>Its simply better.</p>
+                    <br>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="row" style="text-align: center">
+    <div class="span4">
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Customization.png") alt="Customization Picture" />
+        </div>
+        <h3>Customization</h3>
+        Any way you want it. That's the way you need it. Any way you want it...
+    </div>
+    <div class="span4">
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Gamemodes.png") alt="Gamemodes Picture" />
+        </div>
+        <h3>Gamemodes</h3>
+        Dive into Dominate and soon Capture the Pig!
+    </div>
+    <div class="span4">
+        <div class="item">
+            <img src=@Url.Content("~/Content/Images/Bosses.png") alt="Bosses Picture" />
+        </div>
+        <h3>Bosses</h3>
+        Enjoy fighting various bosses on our clan survival server.
+    </div>
+</div>
+<hr/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#myCarousel").carousel({
+            interval: 3500
+        });
+    });
+</script>

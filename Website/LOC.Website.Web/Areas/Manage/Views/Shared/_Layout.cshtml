@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>@ViewBag.Title</title>
+<meta name="keywords" content="minecraft gaming nautilus pvp hunger games build ctf zombies" />
+<meta name="description" content="Nautilus Gaming is a minecraft community for all players." />
+<link href="http://www.gamingminecraft.com/Content/themes/techno/css/templatemo_style.css" rel="stylesheet" type="text/css" />
+
+<script language="javascript" type="text/javascript">
+function clearText(field)
+{
+    if (field.defaultValue == field.value) field.value = '';
+    else if (field.value == '') field.value = field.defaultValue;
+}
+</script>
+
+<link rel="stylesheet" type="text/css" href="http://www.gamingminecraft.com/Content/themes/techno/css/ddsmoothmenu.css" />
+
+<script type="text/javascript" src="http://www.gamingminecraft.com/Scripts/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.gamingminecraft.com/Scripts/ddsmoothmenu.js">
+
+/***********************************************
+* Smooth Navigational Menu- (c) Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+***********************************************/
+
+</script>
+
+<script type="text/javascript">
+
+ddsmoothmenu.init({
+	mainmenuid: "templatemo_menu", //menu DIV id
+	orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+	classname: 'ddsmoothmenu', //class added to menu's outer DIV
+	//customtheme: ["#1c5a80", "#18374a"],
+	contentsource: "markup" //"markup" or ["container_id", "path_to_menu_file"]
+})
+
+</script>
+
+</head>
+<body id="subpage">
+
+<div id="templatemo_wrapper">
+	<div id="templatemo_menu" class="ddsmoothmenu">
+        <ul id="menu">
+                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <li>@Html.ActionLink("About", "About", "Home")</li>
+        </ul>
+        <br style="clear: left" />
+    </div> <!-- end of menu -->
+	<div id="templatemo_header_sp">
+    	<div id="site_title"><h1><a href="">Captain Nemo</a></h1></div>
+    </div> <!-- end of header -->
+
+    <div id="templatemo_main">
+    	
+  	<div id="content">
+				@RenderBody()
+              <div class="cleaner"></div>
+        </div>
+        
+        <div id="sidebar">
+        	<h3>Services</h3>
+            <ul class="templatemo_list">
+                <li>Augue felis pharetra felis</li>
+                <li>Condimentum et vulputate</li>
+                <li>Dolor vel condimentum</li>
+                <li>Felis pharetra felis sed</li>
+                <li>Integer placerat dolor vel</li>
+                <li>Tortor mi in massa donec</li>
+                <li>Vulputate tortor mi in massa</li>
+            </ul>	
+            <div class="cleaner h40"></div>	
+            <h3>Testimonials</h3>
+            <p class="testimonial">Nunc iaculis porta quam. Ut molestie hendrerit commodo.</p>
+            <cite>Johny <a href="#"><span>- Senior Webmaster</span></a></cite>    
+            <div class="cleaner h30"></div>
+            <p class="testimonial">Aenean orci odio, iaculis sed luctus non, luctus elit nec quam.</p>
+            <cite>Smith <a href="#"><span>- Database Designer</span></a></cite>   
+        </div>
+        
+        <div class="cleaner"></div>
+    </div> <!-- end of main -->
+</div> <!-- end of wrapper -->
+
+<div id="templatemo_footer_wrapper">
+	<div id="templatemo_footer">
+    
+    	<a href="#templatemo_header" class="goto_top"></a>
+    	<div class="col_4">
+        	<h5>Pages</h5>
+            <ul class="footer_list">
+                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <li>@Html.ActionLink("About", "About", "Home")</li>
+			</ul>
+        </div>
+        
+        <div class="col_4">
+        	<h5>Partners</h5>
+            <ul class="footer_list">
+			</ul>             
+        </div>
+        
+        <div class="col_4">
+        	<h5>Twitter</h5>
+            <ul class="twitter_post">
+	            <li>Suspendisse at scelerisque urna. Aenean tincidunt massa in tellus varius ultricies. <a href="#">http://bit.ly/13IwZO</a></li>
+			</ul>
+        </div>
+        
+        <div class="col_4 no_margin_right">
+        	<h5>Follow Us</h5>
+            <div class="footer_social_button">
+                <a href="#"><img src="http://www.gamingminecraft.com/Content/themes/techno/images/facebook.png" title="facebook" alt="facebook" /></a>
+                <a href="#"><img src="http://www.gamingminecraft.com/Content/themes/techno/images/twitter.png" title="twitter" alt="twitter" /></a>
+                <a href="#"><img src="http://www.gamingminecraft.com/Content/themes/techno/images/youtube.png" title="youtube" alt="youtube" /></a>
+			</div>
+            
+            <div class="cleaner h20"></div>
+            
+            <p>Copyright © 2048 <br /> Nautilus Studios</p>
+        
+		</div>
+        
+        <div class="cleaner"></div>
+    </div> <!-- end of footer -->
+</div> <!-- end of footer wrapper -->
+</body>
+</html>

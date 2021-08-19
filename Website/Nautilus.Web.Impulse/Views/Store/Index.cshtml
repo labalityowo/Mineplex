@@ -1,0 +1,66 @@
+﻿@model List<LOC.Core.Model.Sales.SalesPackage>
+
+@{
+    ViewBag.Title = "Sales Packages";
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+<script type="text/javascript">
+    function PlayerNameBlur() {
+        
+        $("input.playerName").val($("#PlayerName").val());
+
+        $("#PlayerName").next().removeAttr("style");
+
+        $.post(
+            "/impulse/PlayerAccount/AccountExists/", 
+            { name: $("#PlayerName").val() },
+            function (result) {
+                    if (result != null && result == true) {
+                        $("#PlayerName").next().text("Validated");
+                    } else if ($.trim($("#PlayerName").val()).length == 0) {
+                        $("#PlayerName").next().text("Please enter your player name");
+                    } else {
+                        $("#PlayerName").next().text("New Player! You will be added to the system when you purchase a pack below.");
+                    }
+                }
+            );
+    }
+    </script>
+
+<script type="text/javascript">
+    $(function () 
+    {
+        PlayerNameBlur();
+
+        setTimeout(function () 
+        {
+            window.location = "/Index";
+        }, 1000 * 60 * 60 * 23);
+    });
+</script>
+
+<div>
+    <h3>Minecraft Player Name:</h3>
+    <div class="input-append"><input id="PlayerName" type="text" class="span2" placeholder="Player Name"
+        onblur="PlayerNameBlur(this);" style="margin-bottom: 0px;" /><span class="add-on">Please enter your player name</span>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="span12">
+        <ul class="thumbnails">
+            @foreach (var salesPackage in Model)
+            {
+                @Html.Partial("_WritePackage", salesPackage)
+            }
+        </ul>
+    </div>
+</div>
+<div id="globalParameters">
+    <input name="weight_unit" value="lb" type="hidden" />
+    <input name="currency_code" value="USD" type="hidden" />
+    <input name="merchant_id" value="7KGDE7AUDCSNC" type="hidden" />
+</div>

@@ -1,0 +1,130 @@
+@font-face {
+    font-family: 'Minecraftia';
+    src: url('Minecraftia.ttf');
+}
+
+h2,h3,h4,h5,h6 {
+    font-family: 'Oswald', sans-serif;
+}
+
+#wrapper {
+
+}
+
+#header {
+    padding-top: 20px;
+    padding-left: 20%;
+    padding-right: 20%;
+    background-color: #fa8144;
+    height: 175px;
+    text-align: center;
+    font-family: 'Crete Round', serif;
+    background-image: url("../img/bg.png");
+    background-position: -40px -40px;
+}
+
+#header h1 {
+    font-size: 55px;
+    text-shadow: 4px 3px 0px rgba(255, 255, 255, 0.55), 9px 8px 0px rgba(0,0,0,0.15);
+}
+
+#search {
+    padding: 5px 30%;
+    background-color: rgb(186, 85, 28);
+}
+
+#content {
+    padding-top: 10px;
+    padding-left: 20%;
+    padding-right: 20%;
+    min-height: 500px;
+}
+
+#chat {
+    padding-bottom: 1rem;
+}
+
+#footer {
+    border-top: solid 2px rgba(204, 204, 204, 0.64);
+    padding-left: 20%;
+    padding-right: 20%;
+    background-color: rgba(243, 243, 243, 0.64);
+    height: 100px;
+    padding-top: 20px;
+}
+
+#footer img {
+    opacity: 0.35;
+
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    /* ...and now for the proper property */
+    transition:.5s;
+}
+
+#footer img:hover {
+    opacity: 0.7;
+}
+
+#footer a:hover {
+    text-decoration: none;
+}
+
+.name {
+    font-family: 'Minecraftia';
+}
+
+.label-staff {
+    background-color: #FFAA00;
+}
+
+.label-ultra {
+    background-color: #55FFFF;
+}
+
+#log {
+    font-family: 'Minecraftia';
+    font-size: 14px;
+}
+
+#log .label {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.black {
+    color: black;
+}
+
+.chat {
+    font-size: 13px;
+}
+
+.pm {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.suspect {
+    color: #ED9898;
+}
+
+#test-bar {
+    align-content: center;
+    padding-top: 20px;
+    background-image: url("../img/bg.png");
+    min-height: 750px;
+    font-family: 'Crete Round', serif;
+}
+
+#test-bar h1 {
+    font-size: 48px;
+    text-shadow: 4px 3px 0px rgba(255, 255, 255, 0.55), 9px 8px 0px rgba(0,0,0,0.15);
+}
+
+.error-oh-no {
+    text-shadow: 4px 3px 0px rgba(255, 255, 255, 0.55), 9px 8px 0px rgba(0,0,0,0.15);
+    color: #d9534f;
+    font-family: Minecraftia;
+}

@@ -349,7 +349,8 @@
             {
                 var account = repository.Where<Account>(x => x.Name == punish.Target).OrderByDescending(x => x.LastLogin).Include(x => x.Rank).FirstOrDefault();
 
-                if (account == null) return PunishmentResponse.AccountDoesNotExist;
+                if (account == null)
+                    return PunishmentResponse.AccountDoesNotExist;
 
                 if (!String.Equals(punish.Admin, "Mineplex Enjin Server"))
                 {

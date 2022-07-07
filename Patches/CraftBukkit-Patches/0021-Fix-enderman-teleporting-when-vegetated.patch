@@ -1,0 +1,25 @@
+From 967ca8d8c01a90f93d52bd9aa2bbe1e9d2fd7a66 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Fri, 29 Jan 2016 16:59:12 +1300
+Subject: [PATCH] Fix enderman teleporting when vegetated
+
+
+diff --git a/src/main/java/net/minecraft/server/EntityEnderman.java b/src/main/java/net/minecraft/server/EntityEnderman.java
+index a250062..5ad2d07 100644
+--- a/src/main/java/net/minecraft/server/EntityEnderman.java
++++ b/src/main/java/net/minecraft/server/EntityEnderman.java
+@@ -157,6 +157,11 @@ public class EntityEnderman extends EntityMonster {
+     }
+ 
+     protected boolean k(double d0, double d1, double d2) {
++        if (isVegetated())
++        {
++            return false;
++        }
++
+         double d3 = this.locX;
+         double d4 = this.locY;
+         double d5 = this.locZ;
+-- 
+2.7.4
+

@@ -1,0 +1,21 @@
+From 0c6ede1fb4e6dbaac8d8acf4fa72aa28ca6d9dc7 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Wed, 30 Dec 2015 19:57:10 +1300
+Subject: [PATCH] Add Elytra
+
+
+diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
+index 0fb2605..bc930d1 100644
+--- a/src/main/java/org/bukkit/Material.java
++++ b/src/main/java/org/bukkit/Material.java
+@@ -443,6 +443,7 @@ public enum Material {
+     JUNGLE_DOOR_ITEM(429),
+     ACACIA_DOOR_ITEM(430),
+     DARK_OAK_DOOR_ITEM(431),
++    ELYTRA(443),
+     GOLD_RECORD(2256, 1),
+     GREEN_RECORD(2257, 1),
+     RECORD_3(2258, 1),
+-- 
+2.7.4
+

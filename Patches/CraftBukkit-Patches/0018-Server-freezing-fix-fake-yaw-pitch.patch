@@ -1,0 +1,68 @@
+From 76027e46da8c636f0c59912ce06379373880862c Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Fri, 27 Nov 2015 22:26:34 +1300
+Subject: [PATCH] Server freezing, fix fake yaw/pitch
+
+
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index 2a4f819..721d0e6 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -5,6 +5,7 @@ import java.util.List;
+ import java.util.Random;
+ import java.util.UUID;
+ import java.util.concurrent.Callable;
++import com.google.common.primitives.Doubles;
+ 
+ // CraftBukkit start
+ import org.bukkit.Bukkit;
+@@ -151,6 +152,12 @@ public abstract class Entity implements ICommandListener {
+     public void setFakeHead(boolean fakeHead)
+     {
+         _fakeHead = fakeHead;
++
++        if (!isFakeHead())
++        {
++            this.fakeYaw = yaw;
++            this.fakePitch = pitch;
++        }
+     }
+     
+     public boolean isSilent()
+@@ -1022,9 +1029,18 @@ public abstract class Entity implements ICommandListener {
+         this.lastX = this.locX = d0;
+         this.lastY = this.locY = d1;
+         this.lastZ = this.locZ = d2;
+-        this.lastYaw = this.yaw = fakeYaw = f;
+-        this.lastPitch = this.pitch = fakePitch = f1;
++        this.lastYaw = this.yaw = f;
++        this.lastPitch = this.pitch = f1;
++
++        if (!isFakeHead())
++        {
++            this.fakeYaw = yaw;
++            this.fakePitch = pitch;
++        }
+ 
++        if (!Doubles.isFinite(locX) || !Doubles.isFinite(locY) || !Doubles.isFinite(locZ))
++            Thread.dumpStack();
++        
+         if (this instanceof EntityLiving)
+             ((EntityLiving) this).aK = f;
+ 
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index 5edef3e..d3b1586 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -208,7 +208,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+ 
+     public void a(PacketPlayInFlying packetplayinflying) {
+         PlayerConnectionUtils.ensureMainThread(packetplayinflying, this, this.player.u());
+-        if (this.b(packetplayinflying)) {
++        if (this.b(packetplayinflying) || !Doubles.isFinite(player.locX) || !Doubles.isFinite(player.locY) || !Doubles.isFinite(player.locZ)) {
+             this.disconnect("Invalid move packet received");
+         } else {
+             WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
+-- 
+2.7.4
+

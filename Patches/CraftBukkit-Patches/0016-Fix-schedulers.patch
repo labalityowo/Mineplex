@@ -1,0 +1,37 @@
+From e1d672bf80a66283809f25f925121487cc02e040 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Wed, 11 Nov 2015 11:43:17 +1300
+Subject: [PATCH] Fix schedulers
+
+
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 1d29ae7..55e2afd 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -705,6 +705,11 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
+     }
+ 
+     public void B() {
++        SpigotTimings.schedulerTimer.startTiming(); // Spigot
++        // CraftBukkit start
++        this.server.getScheduler().mainThreadHeartbeat(this.ticks);
++        SpigotTimings.schedulerTimer.stopTiming(); // Spigot
++
+         this.methodProfiler.a("jobs");
+         Queue queue = this.j;
+ 
+@@ -718,11 +723,6 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
+ 
+         this.methodProfiler.c("levels");
+ 
+-        SpigotTimings.schedulerTimer.startTiming(); // Spigot
+-        // CraftBukkit start
+-        this.server.getScheduler().mainThreadHeartbeat(this.ticks);
+-        SpigotTimings.schedulerTimer.stopTiming(); // Spigot
+-
+         // Run tasks that are waiting on processing
+         SpigotTimings.processQueueTimer.startTiming(); // Spigot
+         while (!processQueue.isEmpty()) {
+-- 
+2.7.4
+

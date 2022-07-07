@@ -1,0 +1,31 @@
+From 4c5177323b3556b7c6616ddd5bfa854a0b1b7e3c Mon Sep 17 00:00:00 2001
+From: md_5 <git@md-5.net>
+Date: Mon, 15 Feb 2016 09:56:14 +1100
+Subject: [PATCH] Update groupId
+
+
+diff --git a/pom.xml b/pom.xml
+index 91627ff..c1d1fb7 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -1,7 +1,7 @@
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+-    <groupId>org.spigotmc</groupId>
++    <groupId>com.mineplex</groupId>
+     <artifactId>spigot</artifactId>
+     <packaging>jar</packaging>
+     <version>1.8.8-R0.1-SNAPSHOT</version>
+@@ -34,7 +34,7 @@
+             <version>3.0.3</version>
+         </dependency>
+         <dependency>
+-            <groupId>org.spigotmc</groupId>
++            <groupId>com.mineplex</groupId>
+             <artifactId>spigot-api</artifactId>
+             <version>${project.version}</version>
+             <type>jar</type>
+-- 
+2.7.4
+

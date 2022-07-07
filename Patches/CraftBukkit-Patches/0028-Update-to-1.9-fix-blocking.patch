@@ -1,0 +1,60 @@
+From 6e5d8f23968f7b24c084816f2b55edfbc99e820f Mon Sep 17 00:00:00 2001
+From: git <libraryaddict115@yahoo.co.nz>
+Date: Tue, 1 Mar 2016 09:29:32 +1300
+Subject: [PATCH] Update to 1.9, fix blocking
+
+
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index 51ca1f3..c6d3183 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -1755,6 +1755,14 @@ public abstract class Entity implements ICommandListener {
+     }
+ 
+     public void f(boolean flag) {
++        if (this instanceof EntityPlayer)
++        {
++            EntityPlayer player = (EntityPlayer) this;
++            
++            if (player.playerConnection.networkManager.getVersion() != 47 && player.bS() && player.getHeldItem().getItem().e(player.getHeldItem()) == EnumAnimation.BLOCK)
++                return;
++        }
++
+         this.b(4, flag);
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/EntityHuman.java b/src/main/java/net/minecraft/server/EntityHuman.java
+index 743df69..998ea69 100644
+--- a/src/main/java/net/minecraft/server/EntityHuman.java
++++ b/src/main/java/net/minecraft/server/EntityHuman.java
+@@ -124,8 +124,13 @@ public abstract class EntityHuman extends EntityLiving {
+ 
+     }
+ 
++    public ItemStack getHeldItem()
++    {
++        return this.g;
++    }
++
+     public boolean isBlocking() {
+-        return this.bS() && this.g.getItem().e(this.g) == EnumAnimation.BLOCK;
++        return ((EntityPlayer) this).playerConnection.networkManager.getVersion() == 47 && this.bS() && this.g.getItem().e(this.g) == EnumAnimation.BLOCK;
+     }
+ 
+     public void t_() {
+diff --git a/src/main/java/net/minecraft/server/HandshakeListener.java b/src/main/java/net/minecraft/server/HandshakeListener.java
+index fae7922..7d12515 100644
+--- a/src/main/java/net/minecraft/server/HandshakeListener.java
++++ b/src/main/java/net/minecraft/server/HandshakeListener.java
+@@ -25,7 +25,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
+         
+             int version = packethandshakinginsetprotocol.b();
+             //System.out.print(version);
+-            boolean supported = version == 47 || version >= 104;
++            boolean supported = version == 47 || version == 107;
+             
+ 			if (supported)
+             {
+-- 
+2.7.4
+

@@ -1,0 +1,137 @@
+From 08847caa91ab71f3a67bbb4bef1ebd00acac6f6a Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Sun, 22 Nov 2015 14:41:11 +1300
+Subject: [PATCH] EntityDismountEvent & teleport crash fix
+
+
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index 81ca499..2a4f819 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -1591,7 +1591,11 @@ public abstract class Entity implements ICommandListener {
+                     }
+                 }
+                 // CraftBukkit end
+-                pluginManager.callEvent( new org.spigotmc.event.entity.EntityDismountEvent( this.getBukkitEntity(), this.vehicle.getBukkitEntity() ) ); // Spigot
++                org.spigotmc.event.entity.EntityDismountEvent event = new org.spigotmc.event.entity.EntityDismountEvent( this.getBukkitEntity(), this.vehicle.getBukkitEntity() ); // Spigot
++                pluginManager.callEvent(event); // Spigot
++                if (event.isCancelled() || vehicle != originalVehicle) {
++                    return;
++                }
+                 this.setPositionRotation(this.vehicle.locX, this.vehicle.getBoundingBox().b + (double) this.vehicle.length, this.vehicle.locZ, this.yaw, this.pitch);
+                 this.vehicle.passenger = null;
+             }
+@@ -1599,44 +1603,44 @@ public abstract class Entity implements ICommandListener {
+             this.vehicle = null;
+         } else {
+             // CraftBukkit start
+-            if ((this.bukkitEntity instanceof LivingEntity) && (entity.getBukkitEntity() instanceof Vehicle) && entity.world.isChunkLoaded((int) entity.locX >> 4, (int) entity.locZ >> 4, true)) {
++            if (entity.world.isChunkLoaded((int) entity.locX >> 4, (int) entity.locZ >> 4, true)) {
+                 // It's possible to move from one vehicle to another.  We need to check if they're already in a vehicle, and fire an exit event if they are.
+                 VehicleExitEvent exitEvent = null;
++                org.spigotmc.event.entity.EntityDismountEvent exitEvent1 = null;
+                 if (this.vehicle != null) {
+-                    exitEvent = new VehicleExitEvent((Vehicle) this.vehicle.getBukkitEntity(), (LivingEntity) this.bukkitEntity);
+-                    pluginManager.callEvent(exitEvent);
++                    if ((this.bukkitEntity instanceof LivingEntity) && (entity.getBukkitEntity() instanceof Vehicle)) {
++                        exitEvent = new VehicleExitEvent((Vehicle) this.vehicle.getBukkitEntity(), (LivingEntity) this.bukkitEntity);
++                        pluginManager.callEvent(exitEvent);
++
++                        if (exitEvent.isCancelled() || this.vehicle != originalVehicle || (this.vehicle != null && this.vehicle.passenger != originalPassenger)) {
++                            return;
++                        }
++                    }
++                    exitEvent1 = new org.spigotmc.event.entity.EntityDismountEvent(this.vehicle.getBukkitEntity(), this.bukkitEntity);
++                    pluginManager.callEvent(exitEvent1);
+ 
+-                    if (exitEvent.isCancelled() || this.vehicle != originalVehicle || (this.vehicle != null && this.vehicle.passenger != originalPassenger)) {
++                    if (exitEvent1.isCancelled() || this.vehicle != originalVehicle || (this.vehicle != null && this.vehicle.passenger != originalPassenger)) {
+                         return;
+                     }
+                 }
+ 
+-                VehicleEnterEvent event = new VehicleEnterEvent((Vehicle) entity.getBukkitEntity(), this.bukkitEntity);
+-                pluginManager.callEvent(event);
++                if ((this.bukkitEntity instanceof LivingEntity) && (entity.getBukkitEntity() instanceof Vehicle)) {
++                    VehicleEnterEvent event = new VehicleEnterEvent((Vehicle) entity.getBukkitEntity(), this.bukkitEntity);
++                    pluginManager.callEvent(event);
+ 
+-                // If a plugin messes with the vehicle or the vehicle's passenger
+-                if (event.isCancelled() || this.vehicle != originalVehicle || (this.vehicle != null && this.vehicle.passenger != originalPassenger)) {
+-                    // If we only cancelled the enterevent then we need to put the player in a decent position.
+-                    if (exitEvent != null && this.vehicle == originalVehicle && this.vehicle != null && this.vehicle.passenger == originalPassenger) {
+-                        this.setPositionRotation(this.vehicle.locX, this.vehicle.getBoundingBox().b + (double) this.vehicle.length, this.vehicle.locZ, this.yaw, this.pitch);
+-                        this.vehicle.passenger = null;
+-                        this.vehicle = null;
++                    // If a plugin messes with the vehicle or the vehicle's passenger
++                    if (event.isCancelled() || this.vehicle != originalVehicle || (this.vehicle != null && this.vehicle.passenger != originalPassenger)) {
++                        // If we only cancelled the enterevent then we need to put the player in a decent position.
++                        if (exitEvent != null && this.vehicle == originalVehicle && this.vehicle != null && this.vehicle.passenger == originalPassenger) {
++                            this.setPositionRotation(this.vehicle.locX, this.vehicle.getBoundingBox().b + (double) this.vehicle.length, this.vehicle.locZ, this.yaw, this.pitch);
++                            this.vehicle.passenger = null;
++                            this.vehicle = null;
++                        }
++                        return;
+                     }
+-                    return;
+                 }
+             }
+             // CraftBukkit end
+-            // Spigot Start
+-            if ( entity.world.isChunkLoaded( (int) entity.locX >> 4, (int) entity.locZ >> 4, true ) )
+-            {
+-                org.spigotmc.event.entity.EntityMountEvent event = new org.spigotmc.event.entity.EntityMountEvent( this.getBukkitEntity(), entity.getBukkitEntity() );
+-                pluginManager.callEvent( event );
+-                if ( event.isCancelled() )
+-                {
+-                    return;
+-                }
+-            }
+-            // Spigot End
+ 
+             if (this.vehicle != null) {
+                 this.vehicle.passenger = null;
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index f75b0b1..19fc521 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -1725,6 +1725,13 @@ public abstract class EntityLiving extends Entity {
+                     return;
+                 }
+             }
++
++            org.spigotmc.event.entity.EntityDismountEvent event = new org.spigotmc.event.entity.EntityDismountEvent(this.vehicle.getBukkitEntity(), (LivingEntity) this.bukkitEntity);
++            getBukkitEntity().getServer().getPluginManager().callEvent(event);
++
++            if (event.isCancelled() || vehicle != originalVehicle) {
++                return;
++            }
+             // CraftBukkit end
+             org.bukkit.Bukkit.getPluginManager().callEvent( new org.spigotmc.event.entity.EntityDismountEvent( this.getBukkitEntity(), this.vehicle.getBukkitEntity() ) ); // Spigot
+             
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index efbf1a8..ad53590 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1,6 +1,7 @@
+ package org.bukkit.craftbukkit.entity;
+ 
+ import com.google.common.base.Preconditions;
++import com.google.common.primitives.Doubles;
+ import java.util.ArrayList;
+ import java.util.Collection;
+ import java.util.List;
+@@ -233,6 +234,10 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+ 
+         // If this entity is riding another entity, we must dismount before teleporting.
+         entity.mount(null);
++        if (!Doubles.isFinite(location.getX()) || !Doubles.isFinite(location.getY()) || !Doubles.isFinite(location.getZ())) {
++            Thread.dumpStack();
++            return false;
++        }
+ 
+         // Spigot start
+         if (!location.getWorld().equals(getWorld())) {
+-- 
+2.7.4
+

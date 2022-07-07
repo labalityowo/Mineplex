@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.0.0.xsd">
+	<!-- Configure the database connection here -->
+	<jdbc>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<url>jdbc:mysql://10.35.74.133:3306</url>
+		<user>MonetaryPulitzer</user>
+		<password>MaprebruvUsw6Fre</password>
+	</jdbc>
+
+	<generator>
+		<!-- The default code generator. You can override this one, to generate
+			your own code style Defaults to org.jooq.util.DefaultGenerator -->
+		<name>org.jooq.util.DefaultGenerator</name>
+
+        <strategy>
+            <name>mineplex.jooq.AsInDatabaseStrategy</name>
+        </strategy>
+
+		<database>
+			<!-- The database type. The format here is: org.util.[database].[database]Database -->
+			<name>org.jooq.util.mysql.MySQLDatabase</name>
+
+			<!-- The database schema (or in the absence of schema support, in your
+				RDBMS this can be the owner, user, database name) to be generated -->
+			<inputSchema>Account</inputSchema>
+
+			<!-- All elements that are generated from your schema (A Java regular
+				expression. Use the pipe to separate several expressions) Watch out for case-sensitivity.
+				Depending on your database, this might be important! -->
+			<includes>.*</includes>
+
+			<!-- All elements that are excluded from your schema (A Java regular expression.
+				Use the pipe to separate several expressions). Excludes match before includes -->
+			<excludes></excludes>
+		</database>
+
+		<target>
+			<!-- The destination package of your generated classes (within the destination
+				directory) -->
+			<packageName>mineplex.database</packageName>
+
+			<!-- The destination directory of your generated classes -->
+			<directory>./src</directory>
+		</target>
+	</generator>
+</configuration>

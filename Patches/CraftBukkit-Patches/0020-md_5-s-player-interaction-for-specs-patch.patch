@@ -1,0 +1,31 @@
+From fd52634ee952e6c24f5d874d4130abae2524ac39 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Fri, 29 Jan 2016 16:59:00 +1300
+Subject: [PATCH] md_5's player interaction for specs patch
+
+
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index d3b1586..6fd49b3 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -1206,6 +1206,17 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+         if (movingobjectposition == null || movingobjectposition.type != MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+             CraftEventFactory.callPlayerInteractEvent(this.player, Action.LEFT_CLICK_AIR, this.player.inventory.getItemInHand());
+         }
++        // Spigot start
++        else if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK
++                && (player.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.ADVENTURE || player.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.SPECTATOR)) {
++            // RIGHT_CLICK_BLOCK sets this flag
++            if (player.playerInteractManager.firedInteract) {
++                player.playerInteractManager.firedInteract = false;
++            } else {
++                CraftEventFactory.callPlayerInteractEvent(this.player, Action.LEFT_CLICK_BLOCK, movingobjectposition.a(), movingobjectposition.direction, player.inventory.getItemInHand(), true);
++            }
++        }
++        // Spigot end
+ 
+         // Arm swing animation
+         PlayerAnimationEvent event = new PlayerAnimationEvent(this.getPlayer());
+-- 
+2.7.4
+

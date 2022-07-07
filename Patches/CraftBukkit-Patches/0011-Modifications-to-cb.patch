@@ -1,0 +1,1618 @@
+From a50aa59123b6a4b164fe368c83dbdd426dba0f6e Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Sun, 8 Nov 2015 17:57:05 +1300
+Subject: [PATCH] Modifications to cb
+
+
+diff --git a/src/main/java/net/minecraft/server/ControllerLook.java b/src/main/java/net/minecraft/server/ControllerLook.java
+index 1538ca6..7b91286 100644
+--- a/src/main/java/net/minecraft/server/ControllerLook.java
++++ b/src/main/java/net/minecraft/server/ControllerLook.java
+@@ -5,19 +5,19 @@ public class ControllerLook
+   private EntityInsentient a;
+   private float b;
+   private float c;
+-  private boolean d;
++  public boolean d;
+   private double e;
+   private double f;
+   private double g;
+   private boolean _allowInput = true;
+   private boolean _resetPitch = true;
+   
+-  public boolean isPitchReset()
++  public boolean isResetPitch()
+   {
+       return _resetPitch;
+   }
+   
+-  public boolean setPitchReset(boolean resetPitch)
++  public void setResetPitch(boolean resetPitch)
+   {
+       _resetPitch = resetPitch;
+   }
+@@ -66,7 +66,7 @@ public class ControllerLook
+ 
+   public void a() {
+     if (isResetPitch())
+-    this.a.pitch = 0.0F;
++        this.a.pitch = 0.0F;
+ 
+     if (this.d) {
+       this.d = false;
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index 8660762..81ca499 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -61,6 +61,8 @@ public abstract class Entity implements ICommandListener {
+     public double motZ;
+     public float yaw;
+     public float pitch;
++    public float fakeYaw;
++    public float fakePitch;
+     public float lastYaw;
+     public float lastPitch;
+     private AxisAlignedBB boundingBox;
+@@ -139,6 +141,17 @@ public abstract class Entity implements ICommandListener {
+ 
+     private boolean _silent;
+     private boolean _invisible;
++    private boolean _fakeHead;
++
++    public boolean isFakeHead()
++    {
++        return _fakeHead;
++    }
++
++    public void setFakeHead(boolean fakeHead)
++    {
++        _fakeHead = fakeHead;
++    }
+     
+     public boolean isSilent()
+     {
+@@ -1009,8 +1022,8 @@ public abstract class Entity implements ICommandListener {
+         this.lastX = this.locX = d0;
+         this.lastY = this.locY = d1;
+         this.lastZ = this.locZ = d2;
+-        this.lastYaw = this.yaw = f;
+-        this.lastPitch = this.pitch = f1;
++        this.lastYaw = this.yaw = fakeYaw = f;
++        this.lastPitch = this.pitch = fakePitch = f1;
+ 
+         if (this instanceof EntityLiving)
+             ((EntityLiving) this).aK = f;
+diff --git a/src/main/java/net/minecraft/server/EntityInsentient.java b/src/main/java/net/minecraft/server/EntityInsentient.java
+index c2ef000..b7647bc 100644
+--- a/src/main/java/net/minecraft/server/EntityInsentient.java
++++ b/src/main/java/net/minecraft/server/EntityInsentient.java
+@@ -512,7 +512,6 @@ public abstract class EntityInsentient extends EntityLiving {
+         this.world.methodProfiler.a("move");
+         this.moveController.c();
+         this.world.methodProfiler.c("look");
+-        if (!isVegetatedHead())
+         this.lookController.a();
+         this.world.methodProfiler.c("jump");
+         this.g.b();
+@@ -543,8 +542,6 @@ public abstract class EntityInsentient extends EntityLiving {
+         float f2 = (float) (MathHelper.b(d1, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
+         float f3 = (float) (-(MathHelper.b(d2, d3) * 180.0D / 3.1415927410125732D));
+ 
+-        if (isVegetatedHead())
+-            return;
+         this.pitch = this.b(this.pitch, f3, f1);
+         this.yaw = this.b(this.yaw, f2, f);
+     }
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index e384c2c..f75b0b1 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -113,18 +113,6 @@ public abstract class EntityLiving extends Entity {
+         _ghost = ghost;
+     }
+ 
+-    private boolean _vegetateHead;
+-
+-    public boolean isHeadVegetated()
+-    {
+-        return _vegetateHead;
+-    }
+-
+-    public void setHeadVegetated(boolean vegetateHead)
+-    {
+-        _vegetateHead = vegetateHead;
+-    }
+-
+     public EntityLiving(World world) {
+         super(world);
+         this.initAttributes();
+@@ -1509,8 +1497,6 @@ public abstract class EntityLiving extends Entity {
+ 
+         SpigotTimings.timerEntityBaseTick.stopTiming(); // Spigot
+         this.m();
+-        if (isVegetatedHead())
+-            return;
+         SpigotTimings.timerEntityTickRest.startTiming(); // Spigot
+         double d0 = this.locX - this.lastX;
+         double d1 = this.locZ - this.lastZ;
+@@ -1621,7 +1607,6 @@ public abstract class EntityLiving extends Entity {
+             this.pitch = (float) ((double) this.pitch + (this.bh - (double) this.pitch) / (double) this.bc);
+             --this.bc;
+             this.setPosition(d0, d1, d2);
+-            if (!isHeadVegetated())
+             this.setYawPitch(this.yaw, this.pitch);
+         } else if (!this.bM()) {
+             this.motX *= 0.98D;
+diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+index f0149bf..3fb3205 100644
+--- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
++++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+@@ -49,9 +49,9 @@ public class EntityTrackerEntry {
+         this.xLoc = MathHelper.floor(entity.locX * 32.0D);
+         this.yLoc = MathHelper.floor(entity.locY * 32.0D);
+         this.zLoc = MathHelper.floor(entity.locZ * 32.0D);
+-        this.yRot = MathHelper.d(entity.yaw * 256.0F / 360.0F);
+-        this.xRot = MathHelper.d(entity.pitch * 256.0F / 360.0F);
+-        this.i = MathHelper.d(entity.getHeadRotation() * 256.0F / 360.0F);
++        this.yRot = MathHelper.d((tracker.isFakeHead() ? tracker.fakeYaw : this.tracker.yaw) * 256.0F / 360.0F);
++        this.xRot = MathHelper.d((tracker.isFakeHead() ? tracker.fakePitch : this.tracker.pitch) * 256.0F / 360.0F);
++        this.i = MathHelper.d((tracker.isFakeHead() ? tracker.fakeYaw : this.tracker.getHeadRotation()) * 256.0F / 360.0F);
+         this.y = entity.onGround;
+     }
+ 
+@@ -112,8 +112,8 @@ public class EntityTrackerEntry {
+                 i = MathHelper.floor(this.tracker.locX * 32.0D);
+                 j = MathHelper.floor(this.tracker.locY * 32.0D);
+                 int k = MathHelper.floor(this.tracker.locZ * 32.0D);
+-                int l = MathHelper.d(this.tracker.yaw * 256.0F / 360.0F);
+-                int i1 = MathHelper.d(this.tracker.pitch * 256.0F / 360.0F);
++                int l = MathHelper.d((tracker.isFakeHead() ? tracker.fakeYaw : this.tracker.yaw) * 256.0F / 360.0F);
++                int i1 = MathHelper.d((tracker.isFakeHead() ? tracker.fakePitch : this.tracker.pitch) * 256.0F / 360.0F);
+                 int j1 = i - this.xLoc;
+                 int k1 = j - this.yLoc;
+                 int l1 = k - this.zLoc;
+@@ -192,8 +192,8 @@ public class EntityTrackerEntry {
+ 
+                 this.x = false;
+             } else {
+-                i = MathHelper.d(this.tracker.yaw * 256.0F / 360.0F);
+-                j = MathHelper.d(this.tracker.pitch * 256.0F / 360.0F);
++                i = MathHelper.d((tracker.isFakeHead() ? tracker.fakeYaw : this.tracker.yaw) * 256.0F / 360.0F);
++                j = MathHelper.d((tracker.isFakeHead() ? tracker.fakePitch : this.tracker.pitch) * 256.0F / 360.0F);
+                 boolean flag2 = Math.abs(i - this.yRot) >= 4 || Math.abs(j - this.xRot) >= 4;
+ 
+                 if (flag2) {
+@@ -209,7 +209,7 @@ public class EntityTrackerEntry {
+                 this.x = true;
+             }
+ 
+-            i = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
++            i = MathHelper.d((tracker.isFakeHead() ? tracker.fakeYaw : this.tracker.getHeadRotation()) * 256.0F / 360.0F);
+             if (Math.abs(i - this.i) >= 4) {
+                 this.broadcast(new PacketPlayOutEntityHeadRotation(this.tracker, (byte) i));
+                 this.i = i;
+@@ -387,7 +387,7 @@ public class EntityTrackerEntry {
+                     }
+ 
+                     // CraftBukkit start - Fix for nonsensical head yaw
+-                    this.i = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
++                    this.i = MathHelper.d((tracker.isFakeHead() ? tracker.fakeYaw : this.tracker.getHeadRotation()) * 256.0F / 360.0F);
+                     this.broadcast(new PacketPlayOutEntityHeadRotation(this.tracker, (byte) i));
+                     // CraftBukkit end
+ 
+@@ -449,7 +449,7 @@ public class EntityTrackerEntry {
+         } else if (this.tracker instanceof EntityBoat) {
+             return new PacketPlayOutSpawnEntity(this.tracker, 1);
+         } else if (this.tracker instanceof IAnimal) {
+-            this.i = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
++            this.i = MathHelper.d((tracker.isFakeHead() ? tracker.fakeYaw : this.tracker.getHeadRotation()) * 256.0F / 360.0F);
+             return new PacketPlayOutSpawnEntityLiving((EntityLiving) this.tracker);
+         } else if (this.tracker instanceof EntityFishingHook) {
+             EntityHuman entityhuman = ((EntityFishingHook) this.tracker).owner;
+diff --git a/src/main/java/net/minecraft/server/PacketPlayInAbilities.java b/src/main/java/net/minecraft/server/PacketPlayInAbilities.java
+new file mode 100644
+index 0000000..6ff5716
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayInAbilities.java
+@@ -0,0 +1,109 @@
++package net.minecraft.server;
++
++import java.io.IOException;
++
++public class PacketPlayInAbilities
++  implements Packet<PacketListenerPlayIn>
++{
++  private boolean a;
++  private boolean b;
++  private boolean c;
++  private boolean d;
++  private float e;
++  private float f;
++
++  public PacketPlayInAbilities()
++  {
++  }
++
++  public PacketPlayInAbilities(PlayerAbilities paramPlayerAbilities)
++  {
++    a(paramPlayerAbilities.isInvulnerable);
++    b(paramPlayerAbilities.isFlying);
++    c(paramPlayerAbilities.canFly);
++    d(paramPlayerAbilities.canInstantlyBuild);
++    a(paramPlayerAbilities.a());
++    b(paramPlayerAbilities.b());
++  }
++
++  public void a(PacketDataSerializer paramPacketDataSerializer) throws IOException
++  {
++    int i = paramPacketDataSerializer.readByte();
++
++    a((i & 0x1) > 0);
++    b((i & 0x2) > 0);
++    c((i & 0x4) > 0);
++    d((i & 0x8) > 0);
++    a(paramPacketDataSerializer.readFloat());
++    b(paramPacketDataSerializer.readFloat());
++  }
++
++  public void b(PacketDataSerializer paramPacketDataSerializer) throws IOException
++  {
++    int i = 0;
++
++    if (a()) {
++      i = (byte)(i | 0x1);
++    }
++    if (isFlying()) {
++      i = (byte)(i | 0x2);
++    }
++    if (c()) {
++      i = (byte)(i | 0x4);
++    }
++    if (d()) {
++      i = (byte)(i | 0x8);
++    }
++
++    paramPacketDataSerializer.writeByte(i);
++    paramPacketDataSerializer.writeFloat(this.e);
++    paramPacketDataSerializer.writeFloat(this.f);
++  }
++
++  public void a(PacketListenerPlayIn paramPacketListenerPlayIn)
++  {
++    paramPacketListenerPlayIn.a(this);
++  }
++
++  public boolean a() {
++    return this.a;
++  }
++
++  public void a(boolean paramBoolean) {
++    this.a = paramBoolean;
++  }
++
++  public boolean isFlying() {
++    return this.b;
++  }
++
++  public void b(boolean paramBoolean) {
++    this.b = paramBoolean;
++  }
++
++  public boolean c() {
++    return this.c;
++  }
++
++  public void c(boolean paramBoolean) {
++    this.c = paramBoolean;
++  }
++
++  public boolean d() {
++    return this.d;
++  }
++
++  public void d(boolean paramBoolean) {
++    this.d = paramBoolean;
++  }
++
++  public void a(float paramFloat)
++  {
++    this.e = paramFloat;
++  }
++
++  public void b(float paramFloat)
++  {
++    this.f = paramFloat;
++  }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/PacketPlayInBlockDig.java b/src/main/java/net/minecraft/server/PacketPlayInBlockDig.java
+new file mode 100644
+index 0000000..3032d20
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayInBlockDig.java
+@@ -0,0 +1,48 @@
++package net.minecraft.server;
++
++import java.io.IOException;
++
++public class PacketPlayInBlockDig
++  implements Packet<PacketListenerPlayIn>
++{
++  public BlockPosition a;
++  public EnumDirection b;
++  public EnumPlayerDigType c;
++
++  public void a(PacketDataSerializer paramPacketDataSerializer)
++    throws IOException
++  {
++    this.c = ((EnumPlayerDigType)paramPacketDataSerializer.a(EnumPlayerDigType.class));
++    this.a = paramPacketDataSerializer.c();
++    this.b = EnumDirection.fromType1(paramPacketDataSerializer.readUnsignedByte());
++  }
++
++  public void b(PacketDataSerializer paramPacketDataSerializer) throws IOException
++  {
++    paramPacketDataSerializer.a(this.c);
++    paramPacketDataSerializer.a(this.a);
++    paramPacketDataSerializer.writeByte(this.b.a());
++  }
++
++  public void a(PacketListenerPlayIn paramPacketListenerPlayIn)
++  {
++    paramPacketListenerPlayIn.a(this);
++  }
++
++  public BlockPosition a() {
++    return this.a;
++  }
++
++  public EnumDirection b() {
++    return this.b;
++  }
++
++  public EnumPlayerDigType c() {
++    return this.c;
++  }
++
++  public static enum EnumPlayerDigType
++  {
++      START_DESTROY_BLOCK, ABORT_DESTROY_BLOCK, STOP_DESTROY_BLOCK, DROP_ALL_ITEMS, DROP_ITEM, RELEASE_USE_ITEM;
++  }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/PacketPlayInEntityAction.java b/src/main/java/net/minecraft/server/PacketPlayInEntityAction.java
+new file mode 100644
+index 0000000..4c0acc9
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayInEntityAction.java
+@@ -0,0 +1,57 @@
++package net.minecraft.server;
++
++import java.io.IOException;
++
++public class PacketPlayInEntityAction
++    implements Packet
++{
++    public enum EnumPlayerAction
++    {
++
++        START_SNEAKING, STOP_SNEAKING, STOP_SLEEPING, START_SPRINTING, STOP_SPRINTING, RIDING_JUMP, OPEN_INVENTORY;
++    }
++
++    public int a;
++    public EnumPlayerAction animation;
++    public int c;
++    
++    public PacketPlayInEntityAction()
++    {
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.e();
++        animation = (EnumPlayerAction)packetdataserializer.a(EnumPlayerAction.class);
++        c = packetdataserializer.e();
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.b(a);
++        packetdataserializer.a(animation);
++        packetdataserializer.b(c);
++    }
++
++    public void a(PacketListenerPlayIn packetlistenerplayin)
++    {
++        packetlistenerplayin.a(this);
++    }
++
++    public EnumPlayerAction b()
++    {
++        return animation;
++    }
++
++    public int c()
++    {
++        return c;
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayIn)packetlistener);
++    }
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayInFlying.java b/src/main/java/net/minecraft/server/PacketPlayInFlying.java
+new file mode 100644
+index 0000000..7c2c930
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayInFlying.java
+@@ -0,0 +1,145 @@
++package net.minecraft.server;
++
++import java.io.IOException;
++
++public class PacketPlayInFlying
++  implements Packet<PacketListenerPlayIn>
++{
++  public double x;
++  public double y;
++  public double z;
++  public float yaw;
++  public float pitch;
++  public boolean f;
++  public boolean hasPos;
++  public boolean hasLook;
++
++  public void a(PacketListenerPlayIn paramPacketListenerPlayIn)
++  {
++    paramPacketListenerPlayIn.a(this);
++  }
++
++  public void a(PacketDataSerializer paramPacketDataSerializer) throws IOException
++  {
++    this.f = (paramPacketDataSerializer.readUnsignedByte() != 0);
++  }
++
++  public void b(PacketDataSerializer paramPacketDataSerializer) throws IOException
++  {
++    paramPacketDataSerializer.writeByte(this.f ? 1 : 0);
++  }
++
++  public double a() {
++    return this.x;
++  }
++
++  public double b() {
++    return this.y;
++  }
++
++  public double c() {
++    return this.z;
++  }
++
++  public float d() {
++    return this.yaw;
++  }
++
++  public float e() {
++    return this.pitch;
++  }
++
++  public boolean f() {
++    return this.f;
++  }
++
++  public boolean g() {
++    return this.hasPos;
++  }
++
++  public boolean h() {
++    return this.hasLook;
++  }
++
++  public void a(boolean paramBoolean) {
++    this.hasPos = paramBoolean;
++  }
++
++  public static class PacketPlayInLook extends PacketPlayInFlying
++  {
++    public PacketPlayInLook()
++    {
++      this.hasLook = true;
++    }
++
++    public void a(PacketDataSerializer paramPacketDataSerializer)
++      throws IOException
++    {
++      this.yaw = paramPacketDataSerializer.readFloat();
++      this.pitch = paramPacketDataSerializer.readFloat();
++      super.a(paramPacketDataSerializer);
++    }
++
++    public void b(PacketDataSerializer paramPacketDataSerializer) throws IOException
++    {
++      paramPacketDataSerializer.writeFloat(this.yaw);
++      paramPacketDataSerializer.writeFloat(this.pitch);
++      super.b(paramPacketDataSerializer);
++    }
++  }
++
++  public static class PacketPlayInPosition extends PacketPlayInFlying
++  {
++    public PacketPlayInPosition()
++    {
++      this.hasPos = true;
++    }
++
++    public void a(PacketDataSerializer paramPacketDataSerializer)
++      throws IOException
++    {
++      this.x = paramPacketDataSerializer.readDouble();
++      this.y = paramPacketDataSerializer.readDouble();
++      this.z = paramPacketDataSerializer.readDouble();
++      super.a(paramPacketDataSerializer);
++    }
++
++    public void b(PacketDataSerializer paramPacketDataSerializer) throws IOException
++    {
++      paramPacketDataSerializer.writeDouble(this.x);
++      paramPacketDataSerializer.writeDouble(this.y);
++      paramPacketDataSerializer.writeDouble(this.z);
++      super.b(paramPacketDataSerializer);
++    }
++  }
++
++  public static class PacketPlayInPositionLook extends PacketPlayInFlying
++  {
++    public PacketPlayInPositionLook()
++    {
++      this.hasPos = true;
++      this.hasLook = true;
++    }
++
++    public void a(PacketDataSerializer paramPacketDataSerializer)
++      throws IOException
++    {
++      this.x = paramPacketDataSerializer.readDouble();
++      this.y = paramPacketDataSerializer.readDouble();
++      this.z = paramPacketDataSerializer.readDouble();
++      this.yaw = paramPacketDataSerializer.readFloat();
++      this.pitch = paramPacketDataSerializer.readFloat();
++      super.a(paramPacketDataSerializer);
++    }
++
++    public void b(PacketDataSerializer paramPacketDataSerializer) throws IOException
++    {
++      paramPacketDataSerializer.writeDouble(this.x);
++      paramPacketDataSerializer.writeDouble(this.y);
++      paramPacketDataSerializer.writeDouble(this.z);
++      paramPacketDataSerializer.writeFloat(this.yaw);
++      paramPacketDataSerializer.writeFloat(this.pitch);
++      super.b(paramPacketDataSerializer);
++    }
++  }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutBlockAction.java b/src/main/java/net/minecraft/server/PacketPlayOutBlockAction.java
+new file mode 100644
+index 0000000..ba98f41
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutBlockAction.java
+@@ -0,0 +1,45 @@
++package net.minecraft.server;
++
++import java.io.IOException;
++
++public class PacketPlayOutBlockAction
++  implements Packet<PacketListenerPlayOut>
++{
++  public BlockPosition a;
++  public int b;
++  public int c;
++  public Block d;
++
++  public PacketPlayOutBlockAction()
++  {
++  }
++
++  public PacketPlayOutBlockAction(BlockPosition paramBlockPosition, Block paramBlock, int paramInt1, int paramInt2)
++  {
++    this.a = paramBlockPosition;
++    this.b = paramInt1;
++    this.c = paramInt2;
++    this.d = paramBlock;
++  }
++
++  public void a(PacketDataSerializer paramPacketDataSerializer) throws IOException
++  {
++    this.a = paramPacketDataSerializer.c();
++    this.b = paramPacketDataSerializer.readUnsignedByte();
++    this.c = paramPacketDataSerializer.readUnsignedByte();
++    this.d = Block.getById(paramPacketDataSerializer.e() & 0xFFF);
++  }
++
++  public void b(PacketDataSerializer paramPacketDataSerializer) throws IOException
++  {
++    paramPacketDataSerializer.a(this.a);
++    paramPacketDataSerializer.writeByte(this.b);
++    paramPacketDataSerializer.writeByte(this.c);
++    paramPacketDataSerializer.b(Block.getId(this.d) & 0xFFF);
++  }
++
++  public void a(PacketListenerPlayOut paramPacketListenerPlayOut)
++  {
++    paramPacketListenerPlayOut.a(this);
++  }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutBlockBreakAnimation.java b/src/main/java/net/minecraft/server/PacketPlayOutBlockBreakAnimation.java
+new file mode 100644
+index 0000000..4330ad3
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutBlockBreakAnimation.java
+@@ -0,0 +1,58 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, PacketDataSerializer, PacketListenerPlayOut, BlockPosition, 
++//            PacketListener
++
++public class PacketPlayOutBlockBreakAnimation
++    implements Packet
++{
++
++    public PacketPlayOutBlockBreakAnimation()
++    {
++    }
++
++    public PacketPlayOutBlockBreakAnimation(int i, BlockPosition blockposition, int j)
++    {
++        a = i;
++        b = blockposition;
++        c = j;
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.e();
++        b = packetdataserializer.c();
++        c = packetdataserializer.readUnsignedByte();
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.b(a);
++        packetdataserializer.a(b);
++        packetdataserializer.writeByte(c);
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++
++    public int a;
++    public BlockPosition b;
++    public int c;
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutBlockChange.java b/src/main/java/net/minecraft/server/PacketPlayOutBlockChange.java
+new file mode 100644
+index 0000000..604a035
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutBlockChange.java
+@@ -0,0 +1,55 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, World, PacketDataSerializer, Block, 
++//            RegistryID, IBlockData, PacketListenerPlayOut, BlockPosition, 
++//            PacketListener
++
++public class PacketPlayOutBlockChange
++    implements Packet
++{
++
++    public PacketPlayOutBlockChange()
++    {
++    }
++
++    public PacketPlayOutBlockChange(World world, BlockPosition blockposition)
++    {
++        a = blockposition;
++        block = world.getType(blockposition);
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.c();
++        block = (IBlockData)Block.d.a(packetdataserializer.e());
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.a(a);
++        packetdataserializer.b(Block.d.b(block));
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++
++    public BlockPosition a;
++    public IBlockData block;
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutEntityHeadRotation.java b/src/main/java/net/minecraft/server/PacketPlayOutEntityHeadRotation.java
+new file mode 100644
+index 0000000..631f66c
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutEntityHeadRotation.java
+@@ -0,0 +1,54 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, Entity, PacketDataSerializer, PacketListenerPlayOut, 
++//            PacketListener
++
++public class PacketPlayOutEntityHeadRotation
++    implements Packet
++{
++
++    public PacketPlayOutEntityHeadRotation()
++    {
++    }
++
++    public PacketPlayOutEntityHeadRotation(Entity entity, byte byte0)
++    {
++        a = entity.getId();
++        b = byte0;
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.e();
++        b = packetdataserializer.readByte();
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.b(a);
++        packetdataserializer.writeByte(b);
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++
++    public int a;
++    public byte b;
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java b/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java
+index 786047c..4730b34 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java
+@@ -17,8 +17,8 @@ public class PacketPlayOutEntityTeleport implements Packet<PacketListenerPlayOut
+         this.b = MathHelper.floor(entity.locX * 32.0D);
+         this.c = MathHelper.floor(entity.locY * 32.0D);
+         this.d = MathHelper.floor(entity.locZ * 32.0D);
+-        this.e = (byte) ((int) (entity.yaw * 256.0F / 360.0F));
+-        this.f = (byte) ((int) (entity.pitch * 256.0F / 360.0F));
++        this.e = (byte) ((int) ((entity.isFakeHead() ? entity.fakeYaw : entity.yaw) * 256.0F / 360.0F));
++        this.f = (byte) ((int) ((entity.isFakeHead() ? entity.fakePitch : entity.pitch) * 256.0F / 360.0F));
+         this.g = entity.onGround;
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutLogin.java b/src/main/java/net/minecraft/server/PacketPlayOutLogin.java
+new file mode 100644
+index 0000000..462a198
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutLogin.java
+@@ -0,0 +1,85 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, WorldSettings, PacketDataSerializer, EnumDifficulty, 
++//            WorldType, PacketListenerPlayOut, PacketListener
++
++public class PacketPlayOutLogin
++    implements Packet
++{
++
++    public PacketPlayOutLogin()
++    {
++    }
++
++    public PacketPlayOutLogin(int i, WorldSettings.EnumGamemode enumgamemode, boolean flag, int j, EnumDifficulty enumdifficulty, int k, WorldType worldtype, 
++            boolean flag1)
++    {
++        a = i;
++        d = j;
++        e = enumdifficulty;
++        c = enumgamemode;
++        f = k;
++        b = flag;
++        g = worldtype;
++        h = flag1;
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.readInt();
++        int i = packetdataserializer.readUnsignedByte();
++        b = (i & 8) == 8;
++        i &= -9;
++        c = WorldSettings.EnumGamemode.getById(i);
++        d = packetdataserializer.readByte();
++        e = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
++        f = packetdataserializer.readUnsignedByte();
++        g = WorldType.getType(packetdataserializer.c(16));
++        if(g == null)
++            g = WorldType.NORMAL;
++        h = packetdataserializer.readBoolean();
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.writeInt(a);
++        int i = c.getId();
++        if(b)
++            i |= 8;
++        packetdataserializer.writeByte(i);
++        packetdataserializer.writeByte(d);
++        packetdataserializer.writeByte(e.a());
++        packetdataserializer.writeByte(f);
++        packetdataserializer.a(g.name());
++        packetdataserializer.writeBoolean(h);
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++
++    public int a;
++    public boolean b;
++    public WorldSettings.EnumGamemode c;
++    public int d;
++    public EnumDifficulty e;
++    public int f;
++    public WorldType g;
++    public boolean h;
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutMultiBlockChange.java b/src/main/java/net/minecraft/server/PacketPlayOutMultiBlockChange.java
+new file mode 100644
+index 0000000..44c226f
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutMultiBlockChange.java
+@@ -0,0 +1,79 @@
++package net.minecraft.server;
++
++import java.io.IOException;
++
++public class PacketPlayOutMultiBlockChange
++  implements Packet<PacketListenerPlayOut>
++{
++  public ChunkCoordIntPair a;
++  public MultiBlockChangeInfo[] b;
++
++  public PacketPlayOutMultiBlockChange()
++  {
++  }
++
++  public PacketPlayOutMultiBlockChange(int paramInt, short[] paramArrayOfShort, Chunk paramChunk)
++  {
++    this.a = new ChunkCoordIntPair(paramChunk.locX, paramChunk.locZ);
++
++    this.b = new MultiBlockChangeInfo[paramInt];
++    for (int i = 0; i < this.b.length; i++)
++      this.b[i] = new MultiBlockChangeInfo(paramArrayOfShort[i], paramChunk);
++  }
++
++  public void a(PacketDataSerializer paramPacketDataSerializer)
++    throws IOException
++  {
++    this.a = new ChunkCoordIntPair(paramPacketDataSerializer.readInt(), paramPacketDataSerializer.readInt());
++    this.b = new MultiBlockChangeInfo[paramPacketDataSerializer.e()];
++
++    for (int i = 0; i < this.b.length; i++)
++      this.b[i] = new MultiBlockChangeInfo(paramPacketDataSerializer.readShort(), (IBlockData)Block.d.a(paramPacketDataSerializer.e()));
++  }
++
++  public void b(PacketDataSerializer paramPacketDataSerializer)
++    throws IOException
++  {
++    paramPacketDataSerializer.writeInt(this.a.x);
++    paramPacketDataSerializer.writeInt(this.a.z);
++    paramPacketDataSerializer.b(this.b.length);
++    for (MultiBlockChangeInfo localMultiBlockChangeInfo : this.b) {
++      paramPacketDataSerializer.writeShort(localMultiBlockChangeInfo.b());
++      paramPacketDataSerializer.b(Block.d.b(localMultiBlockChangeInfo.c()));
++    }
++  }
++
++  public void a(PacketListenerPlayOut paramPacketListenerPlayOut)
++  {
++    paramPacketListenerPlayOut.a(this);
++  }
++
++  public class MultiBlockChangeInfo
++  {
++    public final short b;
++    public final IBlockData c;
++
++    public MultiBlockChangeInfo(short paramIBlockData, IBlockData arg3)
++    {
++      this.b = paramIBlockData;
++      this.c = arg3;
++    }
++
++    public MultiBlockChangeInfo(short paramChunk, Chunk arg3) {
++      this.b = paramChunk;
++      this.c = arg3.getBlockData(a());
++    }
++
++    public BlockPosition a() {
++            return new BlockPosition(b >> 12 & 0xf, b & 0xff, b >> 8 & 0xf);
++    }
++
++    public short b() {
++      return this.b;
++    }
++
++    public IBlockData c() {
++      return this.c;
++    }
++  }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java b/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java
+index 23fa49d..277d1f2 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java
+@@ -25,8 +25,8 @@ public class PacketPlayOutNamedEntitySpawn implements Packet<PacketListenerPlayO
+         this.c = MathHelper.floor(entityhuman.locX * 32.0D);
+         this.d = MathHelper.floor(entityhuman.locY * 32.0D);
+         this.e = MathHelper.floor(entityhuman.locZ * 32.0D);
+-        this.f = (byte) ((int) (entityhuman.yaw * 256.0F / 360.0F));
+-        this.g = (byte) ((int) (entityhuman.pitch * 256.0F / 360.0F));
++        this.f = (byte) ((int) ((entityhuman.isFakeHead() ? entityhuman.fakeYaw : entityhuman.yaw) * 256.0F / 360.0F));
++        this.g = (byte) ((int) ((entityhuman.isFakeHead() ? entityhuman.fakePitch : entityhuman.pitch) * 256.0F / 360.0F));
+         ItemStack itemstack = entityhuman.inventory.getItemInHand();
+ 
+         this.h = itemstack == null ? 0 : Item.getId(itemstack.getItem());
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutRespawn.java b/src/main/java/net/minecraft/server/PacketPlayOutRespawn.java
+new file mode 100644
+index 0000000..61f7cd1
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutRespawn.java
+@@ -0,0 +1,64 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, WorldSettings, PacketListenerPlayOut, PacketDataSerializer, 
++//            EnumDifficulty, WorldType, PacketListener
++
++public class PacketPlayOutRespawn
++    implements Packet
++{
++
++    public PacketPlayOutRespawn()
++    {
++    }
++
++    public PacketPlayOutRespawn(int i, EnumDifficulty enumdifficulty, WorldType worldtype, WorldSettings.EnumGamemode enumgamemode)
++    {
++        a = i;
++        b = enumdifficulty;
++        c = enumgamemode;
++        d = worldtype;
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.readInt();
++        b = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
++        c = WorldSettings.EnumGamemode.getById(packetdataserializer.readUnsignedByte());
++        d = WorldType.getType(packetdataserializer.c(16));
++        if(d == null)
++            d = WorldType.NORMAL;
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.writeInt(a);
++        packetdataserializer.writeByte(b.a());
++        packetdataserializer.writeByte(c.getId());
++        packetdataserializer.a(d.name());
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++
++    public int a;
++    public EnumDifficulty b;
++    public WorldSettings.EnumGamemode c;
++    public WorldType d;
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntity.java b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntity.java
+index d34f59b..56eeff6 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntity.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntity.java
+@@ -27,8 +27,8 @@ public class PacketPlayOutSpawnEntity implements Packet<PacketListenerPlayOut> {
+         this.b = MathHelper.floor(entity.locX * 32.0D);
+         this.c = MathHelper.floor(entity.locY * 32.0D);
+         this.d = MathHelper.floor(entity.locZ * 32.0D);
+-        this.h = MathHelper.d(entity.pitch * 256.0F / 360.0F);
+-        this.i = MathHelper.d(entity.yaw * 256.0F / 360.0F);
++        this.h = MathHelper.d((entity.isFakeHead() ? entity.fakePitch : entity.pitch) * 256.0F / 360.0F);
++        this.i = MathHelper.d((entity.isFakeHead() ? entity.fakeYaw : entity.yaw) * 256.0F / 360.0F);
+         this.j = i;
+         this.k = j;
+         if (j > 0) {
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityExperienceOrb.java b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityExperienceOrb.java
+new file mode 100644
+index 0000000..4f2b03e
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityExperienceOrb.java
+@@ -0,0 +1,66 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, EntityExperienceOrb, MathHelper, PacketDataSerializer, 
++//            PacketListenerPlayOut, PacketListener
++
++public class PacketPlayOutSpawnEntityExperienceOrb
++    implements Packet
++{
++
++    public PacketPlayOutSpawnEntityExperienceOrb()
++    {
++    }
++
++    public PacketPlayOutSpawnEntityExperienceOrb(EntityExperienceOrb entityexperienceorb)
++    {
++        a = entityexperienceorb.getId();
++        b = MathHelper.floor(entityexperienceorb.locX * 32D);
++        c = MathHelper.floor(entityexperienceorb.locY * 32D);
++        d = MathHelper.floor(entityexperienceorb.locZ * 32D);
++        e = entityexperienceorb.j();
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.e();
++        b = packetdataserializer.readInt();
++        c = packetdataserializer.readInt();
++        d = packetdataserializer.readInt();
++        e = packetdataserializer.readShort();
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.b(a);
++        packetdataserializer.writeInt(b);
++        packetdataserializer.writeInt(c);
++        packetdataserializer.writeInt(d);
++        packetdataserializer.writeShort(e);
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++
++    public int a;
++    public int b;
++    public int c;
++    public int d;
++    public int e;
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityLiving.java b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityLiving.java
+index 61aa281..286ad09 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityLiving.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityLiving.java
+@@ -27,9 +27,9 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
+         this.c = MathHelper.floor(entityliving.locX * 32.0D);
+         this.d = MathHelper.floor(entityliving.locY * 32.0D);
+         this.e = MathHelper.floor(entityliving.locZ * 32.0D);
+-        this.i = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
+-        this.j = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
+-        this.k = (byte) ((int) (entityliving.aK * 256.0F / 360.0F));
++        this.i = (byte) ((int) ((entityliving.isFakeHead() ? entityliving.fakeYaw : entityliving.yaw) * 256.0F / 360.0F));
++        this.j = (byte) ((int) ((entityliving.isFakeHead() ? entityliving.fakePitch : entityliving.pitch) * 256.0F / 360.0F));
++        this.k = (byte) ((int) ((entityliving.isFakeHead() ? entityliving.fakeYaw : entityliving.yaw)* 256.0F / 360.0F));
+         double d0 = 3.9D;
+         double d1 = entityliving.motX;
+         double d2 = entityliving.motY;
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityPainting.java b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityPainting.java
+new file mode 100644
+index 0000000..53b62db
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityPainting.java
+@@ -0,0 +1,62 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, EntityPainting, PacketDataSerializer, EnumDirection, 
++//            PacketListenerPlayOut, BlockPosition, PacketListener
++
++public class PacketPlayOutSpawnEntityPainting
++    implements Packet
++{
++
++    public PacketPlayOutSpawnEntityPainting()
++    {
++    }
++
++    public PacketPlayOutSpawnEntityPainting(EntityPainting entitypainting)
++    {
++        a = entitypainting.getId();
++        b = entitypainting.getBlockPosition();
++        c = entitypainting.direction;
++        d = entitypainting.art.B;
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.e();
++        d = packetdataserializer.c(EntityPainting.EnumArt.A);
++        b = packetdataserializer.c();
++        c = EnumDirection.fromType2(packetdataserializer.readUnsignedByte());
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.b(a);
++        packetdataserializer.a(d);
++        packetdataserializer.a(b);
++        packetdataserializer.writeByte(c.b());
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++
++    public int a;
++    public BlockPosition b;
++    public EnumDirection c;
++    public String d;
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityWeather.java b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityWeather.java
+new file mode 100644
+index 0000000..2ce95fa
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityWeather.java
+@@ -0,0 +1,67 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, Entity, MathHelper, EntityLightning, 
++//            PacketDataSerializer, PacketListenerPlayOut, PacketListener
++
++public class PacketPlayOutSpawnEntityWeather
++    implements Packet
++{
++
++    public PacketPlayOutSpawnEntityWeather()
++    {
++    }
++
++    public PacketPlayOutSpawnEntityWeather(Entity entity)
++    {
++        a = entity.getId();
++        b = MathHelper.floor(entity.locX * 32D);
++        c = MathHelper.floor(entity.locY * 32D);
++        d = MathHelper.floor(entity.locZ * 32D);
++        if(entity instanceof EntityLightning)
++            e = 1;
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.e();
++        e = packetdataserializer.readByte();
++        b = packetdataserializer.readInt();
++        c = packetdataserializer.readInt();
++        d = packetdataserializer.readInt();
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.b(a);
++        packetdataserializer.writeByte(e);
++        packetdataserializer.writeInt(b);
++        packetdataserializer.writeInt(c);
++        packetdataserializer.writeInt(d);
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++
++    public int a;
++    public int b;
++    public int c;
++    public int d;
++    public int e;
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutTileEntityData.java b/src/main/java/net/minecraft/server/PacketPlayOutTileEntityData.java
+new file mode 100644
+index 0000000..ebcbc93
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutTileEntityData.java
+@@ -0,0 +1,58 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, PacketDataSerializer, PacketListenerPlayOut, BlockPosition, 
++//            NBTTagCompound, PacketListener
++
++public class PacketPlayOutTileEntityData
++    implements Packet
++{
++
++    public BlockPosition a;
++    public int b;
++    public NBTTagCompound c;
++
++    public PacketPlayOutTileEntityData()
++    {
++    }
++
++    public PacketPlayOutTileEntityData(BlockPosition blockposition, int i, NBTTagCompound nbttagcompound)
++    {
++        a = blockposition;
++        b = i;
++        c = nbttagcompound;
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.c();
++        b = packetdataserializer.readUnsignedByte();
++        c = packetdataserializer.h();
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.a(a);
++        packetdataserializer.writeByte((byte)b);
++        packetdataserializer.a(c);
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutUpdateEntityNBT.java b/src/main/java/net/minecraft/server/PacketPlayOutUpdateEntityNBT.java
+new file mode 100644
+index 0000000..f9cf1d0
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutUpdateEntityNBT.java
+@@ -0,0 +1,53 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, PacketDataSerializer, PacketListenerPlayOut, NBTTagCompound, 
++//            PacketListener
++
++public class PacketPlayOutUpdateEntityNBT
++    implements Packet
++{
++    public int a;
++    public NBTTagCompound b;
++
++    public PacketPlayOutUpdateEntityNBT()
++    {
++    }
++
++    public PacketPlayOutUpdateEntityNBT(int i, NBTTagCompound nbttagcompound)
++    {
++        a = i;
++        b = nbttagcompound;
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.e();
++        b = packetdataserializer.h();
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.b(a);
++        packetdataserializer.a(b);
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutUpdateSign.java b/src/main/java/net/minecraft/server/PacketPlayOutUpdateSign.java
+new file mode 100644
+index 0000000..ebf08f6
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutUpdateSign.java
+@@ -0,0 +1,63 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, IChatBaseComponent, PacketDataSerializer, PacketListenerPlayOut, 
++//            World, BlockPosition, PacketListener
++
++public class PacketPlayOutUpdateSign
++    implements Packet
++{
++
++    public PacketPlayOutUpdateSign()
++    {
++    }
++
++    public PacketPlayOutUpdateSign(World world, BlockPosition blockposition, IChatBaseComponent aichatbasecomponent[])
++    {
++        a = world;
++        b = blockposition;
++        c = (new IChatBaseComponent[] {
++            aichatbasecomponent[0], aichatbasecomponent[1], aichatbasecomponent[2], aichatbasecomponent[3]
++        });
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        b = packetdataserializer.c();
++        c = new IChatBaseComponent[4];
++        for(int i = 0; i < 4; i++)
++            c[i] = packetdataserializer.d();
++
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.a(b);
++        for(int i = 0; i < 4; i++)
++            packetdataserializer.a(c[i]);
++
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++
++    public World a;
++    public BlockPosition b;
++    public IChatBaseComponent c[];
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutWorldEvent.java b/src/main/java/net/minecraft/server/PacketPlayOutWorldEvent.java
+new file mode 100644
+index 0000000..fdf0e10
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutWorldEvent.java
+@@ -0,0 +1,61 @@
++// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
++// Jad home page: http://www.kpdus.com/jad.html
++// Decompiler options: packimports(3) 
++// Source File Name:   SourceFile
++
++package net.minecraft.server;
++
++import java.io.IOException;
++
++// Referenced classes of package net.minecraft.server.v1_8_R3:
++//            Packet, PacketDataSerializer, PacketListenerPlayOut, BlockPosition, 
++//            PacketListener
++
++public class PacketPlayOutWorldEvent
++    implements Packet
++{
++    public int a;
++    public BlockPosition b;
++    public int c;
++    public boolean d;
++
++    public PacketPlayOutWorldEvent()
++    {
++    }
++
++    public PacketPlayOutWorldEvent(int i, BlockPosition blockposition, int j, boolean flag)
++    {
++        a = i;
++        b = blockposition;
++        c = j;
++        d = flag;
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        a = packetdataserializer.readInt();
++        b = packetdataserializer.c();
++        c = packetdataserializer.readInt();
++        d = packetdataserializer.readBoolean();
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++        throws IOException
++    {
++        packetdataserializer.writeInt(a);
++        packetdataserializer.a(b);
++        packetdataserializer.writeInt(c);
++        packetdataserializer.writeBoolean(d);
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++}
+-- 
+2.7.4
+

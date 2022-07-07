@@ -1,0 +1,26 @@
+From c97267c98bac90ee24f0bb7bfa710a58f3c990af Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Tue, 12 Jan 2016 19:56:07 +1300
+Subject: [PATCH] Sound and vehicle fixes
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftSound.java b/src/main/java/org/bukkit/craftbukkit/CraftSound.java
+index 0cc8f9b..dd07600 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftSound.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftSound.java
+@@ -14,9 +14,9 @@ public class CraftSound {
+         set(AMBIENCE_RAIN, "ambient.weather.rain");
+         set(AMBIENCE_THUNDER, "ambient.weather.thunder");
+         // Damage
+-        set(HURT_FLESH, "game.neutral.hurt");
+-        set(FALL_BIG, "game.neutral.hurt.fall.big");
+-        set(FALL_SMALL, "game.neutral.hurt.fall.small");
++        set(HURT_FLESH, "game.player.hurt");
++        set(FALL_BIG, "game.player.hurt.fall.big");
++        set(FALL_SMALL, "game.player.hurt.fall.small");
+         // Dig Sounds
+         set(DIG_WOOL, "dig.cloth");
+         set(DIG_GRASS, "dig.grass");
+-- 
+2.7.4
+

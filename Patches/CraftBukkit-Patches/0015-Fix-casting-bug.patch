@@ -1,0 +1,64 @@
+From 838463c93cd7f0b29814507cab9e7c3465e75bbb Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Wed, 11 Nov 2015 00:21:54 +1300
+Subject: [PATCH] Fix casting bug
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index 60e8584..746961e 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -76,32 +76,44 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+ 
+     public boolean shouldBreakLeash()
+     {
+-        return ((EntityInsentient) getHandle()).shouldBreakLeash();
++        if (getHandle() instanceof EntityInsentient)
++            return ((EntityInsentient) getHandle()).shouldBreakLeash();
++
++        return false;
+     }
+ 
+     public void setShouldBreakLeash(boolean shouldBreakLeash)
+     {
+-        ((EntityInsentient) getHandle()).setShouldBreakLeash(shouldBreakLeash);
++        if (getHandle() instanceof EntityInsentient)
++            ((EntityInsentient) getHandle()).setShouldBreakLeash(shouldBreakLeash);
+     }
+ 
+     public boolean shouldPullWhileLeashed()
+     {
+-        return ((EntityInsentient) getHandle()).shouldPullWhileLeashed();
++        if (getHandle() instanceof EntityInsentient)
++            return ((EntityInsentient) getHandle()).shouldPullWhileLeashed();
++
++        return false;
+     }
+ 
+     public void setPullWhileLeashed(boolean pullWhileLeashed)
+     {
+-        ((EntityInsentient) getHandle()).setPullWhileLeashed(pullWhileLeashed);
++        if (getHandle() instanceof EntityInsentient)
++            ((EntityInsentient) getHandle()).setPullWhileLeashed(pullWhileLeashed);
+     }
+ 
+     public boolean isVegetated()
+     {
+-        return ((EntityInsentient) getHandle()).isVegetated();
++        if (getHandle() instanceof EntityInsentient)
++            return ((EntityInsentient) getHandle()).isVegetated();
++
++        return false;
+     }
+ 
+     public void setVegetated(boolean vegetated)
+     {
+-        ((EntityInsentient) getHandle()).setVegetated(vegetated);
++        if (getHandle() instanceof EntityInsentient)
++            ((EntityInsentient) getHandle()).setVegetated(vegetated);
+     }
+ 
+     public boolean isGhost()
+-- 
+2.7.4
+

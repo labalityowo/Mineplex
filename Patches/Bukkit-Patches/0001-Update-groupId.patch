@@ -1,0 +1,22 @@
+From b3c9291331205afc5b78e85435b5daa099813a1b Mon Sep 17 00:00:00 2001
+From: md_5 <git@md-5.net>
+Date: Mon, 15 Feb 2016 09:39:33 +1100
+Subject: [PATCH] Update groupId
+
+
+diff --git a/pom.xml b/pom.xml
+index cb142f2..378fd01 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -9,7 +9,7 @@
+         <version>9</version>
+     </parent>
+ 
+-    <groupId>org.spigotmc</groupId>
++    <groupId>com.mineplex</groupId>
+     <artifactId>spigot-api</artifactId>
+     <version>1.8.8-R0.1-SNAPSHOT</version>
+     <packaging>jar</packaging>
+-- 
+2.7.4
+

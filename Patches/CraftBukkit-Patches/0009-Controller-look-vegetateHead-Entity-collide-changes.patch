@@ -1,0 +1,43 @@
+From 5455de50dc5b6fe4ea5ba5b98b0f9169705a0e65 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Fri, 30 Oct 2015 20:02:58 +1300
+Subject: [PATCH] Controller look vegetateHead, Entity collide changes
+
+
+diff --git a/src/main/java/net/minecraft/server/ControllerLook.java b/src/main/java/net/minecraft/server/ControllerLook.java
+index 2263d5d..f2d7b1e 100644
+--- a/src/main/java/net/minecraft/server/ControllerLook.java
++++ b/src/main/java/net/minecraft/server/ControllerLook.java
+@@ -37,9 +37,15 @@ public class ControllerLook
+     this.d = true;
+   }
+ 
++  public void vegetateHead(boolean vegetate)
++  {
++      _vegeHead = vegetate;
++  }
++  
++  private boolean _vegeHead;
++  
+   public void a() {
+-      if (a.isVegetated())
+-          return;
++      if (_vegeHead)return;
+     this.a.pitch = 0.0F;
+ 
+     if (this.d) {
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index cb9ba53..8660762 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -1087,6 +1087,7 @@ public abstract class Entity implements ICommandListener {
+     int numCollisions = 0; // Spigot
+     public void collide(Entity entity) {
+         if (entity.passenger != this && entity.vehicle != this) {
++            if ((!(entity instanceof EntityLiving) || !((EntityLiving) entity).isGhost()) && (!(this instanceof EntityLiving) || !((EntityLiving) this).isGhost()))
+             if (!entity.noclip && !this.noclip) {
+                 double d0 = entity.locX - this.locX;
+                 double d1 = entity.locZ - this.locZ;
+-- 
+2.7.4
+

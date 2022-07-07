@@ -1,0 +1,82 @@
+From 4374ab4f758cd98b874600ad6c2b5c1474135a93 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Wed, 30 Dec 2015 22:38:30 +1300
+Subject: [PATCH] Some debug and crash fixes
+
+
+diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
+index b1348b9..147295e 100644
+--- a/src/main/java/net/minecraft/server/EntityPlayer.java
++++ b/src/main/java/net/minecraft/server/EntityPlayer.java
+@@ -932,12 +932,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+ 
+     protected void a(MobEffect mobeffect, boolean flag) {
+         super.a(mobeffect, flag);
+-        this.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.getId(), mobeffect));
++        if (this.playerConnection.networkManager.getVersion() > 47 || mobeffect.getEffectId() != 25)
++            this.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.getId(), mobeffect));
+     }
+ 
+     protected void b(MobEffect mobeffect) {
+         super.b(mobeffect);
+-        this.playerConnection.sendPacket(new PacketPlayOutRemoveEntityEffect(this.getId(), mobeffect));
++        if (this.playerConnection.networkManager.getVersion() > 47 || mobeffect.getEffectId() != 25)
++            this.playerConnection.sendPacket(new PacketPlayOutRemoveEntityEffect(this.getId(), mobeffect));
+     }
+ 
+     public void enderTeleportTo(double d0, double d1, double d2) {
+diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+index 39f0b73..e5c947f 100644
+--- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
++++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+@@ -428,7 +428,8 @@ public class EntityTrackerEntry {
+                         while (iterator.hasNext()) {
+                             MobEffect mobeffect = (MobEffect) iterator.next();
+ 
+-                            entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.tracker.getId(), mobeffect));
++                            if (entityplayer.playerConnection.networkManager.getVersion() > 47 || mobeffect.getEffectId() != 25)
++                                entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.tracker.getId(), mobeffect));
+                         }
+                     }
+                 }
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutMapChunkBulk.java b/src/main/java/net/minecraft/server/PacketPlayOutMapChunkBulk.java
+index ef51cd4..54c1ec9 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutMapChunkBulk.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutMapChunkBulk.java
+@@ -14,7 +14,7 @@ public class PacketPlayOutMapChunkBulk implements Packet<PacketListenerPlayOut>
+ 
+     public PacketPlayOutMapChunkBulk() {}
+ 
+-    public PacketPlayOutMapChunkBulk(List<Chunk> list) {Thread.dumpStack();
++    public PacketPlayOutMapChunkBulk(List<Chunk> list) {
+         int i = list.size();
+         mapChunks = list;
+ 
+diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
+index 8d826df..b50db37 100644
+--- a/src/main/java/net/minecraft/server/PlayerList.java
++++ b/src/main/java/net/minecraft/server/PlayerList.java
+@@ -168,7 +168,8 @@ public abstract class PlayerList {
+         while (iterator.hasNext()) {
+             MobEffect mobeffect = (MobEffect) iterator.next();
+ 
+-            playerconnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), mobeffect));
++            if (playerconnection.networkManager.getVersion() > 47 || mobeffect.getEffectId() != 25)
++                playerconnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), mobeffect));
+         }
+ 
+         entityplayer.syncInventory();
+@@ -615,7 +616,9 @@ public abstract class PlayerList {
+         entityplayer.updateAbilities();
+         for (Object o1 : entityplayer.getEffects()) {
+             MobEffect mobEffect = (MobEffect) o1;
+-            entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), mobEffect));
++            
++            if (entityplayer.playerConnection.networkManager.getVersion() > 47 || mobEffect.getEffectId() != 25)
++                entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), mobEffect));
+         }
+         // entityplayer1.syncInventory();
+         // CraftBukkit end
+-- 
+2.7.4
+

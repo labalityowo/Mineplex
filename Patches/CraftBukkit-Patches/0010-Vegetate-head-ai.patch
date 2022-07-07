@@ -1,0 +1,139 @@
+From 9f6ec15bfe47f1860d878212035f477b5b253c63 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Tue, 3 Nov 2015 21:21:02 +1300
+Subject: [PATCH] Vegetate head ai
+
+
+diff --git a/src/main/java/net/minecraft/server/ControllerLook.java b/src/main/java/net/minecraft/server/ControllerLook.java
+index f2d7b1e..1538ca6 100644
+--- a/src/main/java/net/minecraft/server/ControllerLook.java
++++ b/src/main/java/net/minecraft/server/ControllerLook.java
+@@ -9,6 +9,28 @@ public class ControllerLook
+   private double e;
+   private double f;
+   private double g;
++  private boolean _allowInput = true;
++  private boolean _resetPitch = true;
++  
++  public boolean isPitchReset()
++  {
++      return _resetPitch;
++  }
++  
++  public boolean setPitchReset(boolean resetPitch)
++  {
++      _resetPitch = resetPitch;
++  }
++
++  public boolean isAllowInput()
++  {
++      return _allowInput;
++  }
++  
++  public void setAllowInput(boolean allowInput)
++  {
++      _allowInput = allowInput;
++  }
+ 
+   public ControllerLook(EntityInsentient paramEntityInsentient)
+   {
+@@ -16,6 +38,9 @@ public class ControllerLook
+   }
+ 
+   public void a(Entity paramEntity, float paramFloat1, float paramFloat2) {
++    
++    if (!isAllowInput())
++        return;
+     this.e = paramEntity.locX;
+     if ((paramEntity instanceof EntityLiving))
+       this.f = (paramEntity.locY + paramEntity.getHeadHeight());
+@@ -29,6 +54,8 @@ public class ControllerLook
+   }
+ 
+   public void a(double paramDouble1, double paramDouble2, double paramDouble3, float paramFloat1, float paramFloat2) {
++    if (!isAllowInput())
++        return;
+     this.e = paramDouble1;
+     this.f = paramDouble2;
+     this.g = paramDouble3;
+@@ -37,15 +64,8 @@ public class ControllerLook
+     this.d = true;
+   }
+ 
+-  public void vegetateHead(boolean vegetate)
+-  {
+-      _vegeHead = vegetate;
+-  }
+-  
+-  private boolean _vegeHead;
+-  
+   public void a() {
+-      if (_vegeHead)return;
++    if (isResetPitch())
+     this.a.pitch = 0.0F;
+ 
+     if (this.d) {
+diff --git a/src/main/java/net/minecraft/server/EntityInsentient.java b/src/main/java/net/minecraft/server/EntityInsentient.java
+index b7647bc..c2ef000 100644
+--- a/src/main/java/net/minecraft/server/EntityInsentient.java
++++ b/src/main/java/net/minecraft/server/EntityInsentient.java
+@@ -512,6 +512,7 @@ public abstract class EntityInsentient extends EntityLiving {
+         this.world.methodProfiler.a("move");
+         this.moveController.c();
+         this.world.methodProfiler.c("look");
++        if (!isVegetatedHead())
+         this.lookController.a();
+         this.world.methodProfiler.c("jump");
+         this.g.b();
+@@ -542,6 +543,8 @@ public abstract class EntityInsentient extends EntityLiving {
+         float f2 = (float) (MathHelper.b(d1, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
+         float f3 = (float) (-(MathHelper.b(d2, d3) * 180.0D / 3.1415927410125732D));
+ 
++        if (isVegetatedHead())
++            return;
+         this.pitch = this.b(this.pitch, f3, f1);
+         this.yaw = this.b(this.yaw, f2, f);
+     }
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index f75b0b1..e384c2c 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -113,6 +113,18 @@ public abstract class EntityLiving extends Entity {
+         _ghost = ghost;
+     }
+ 
++    private boolean _vegetateHead;
++
++    public boolean isHeadVegetated()
++    {
++        return _vegetateHead;
++    }
++
++    public void setHeadVegetated(boolean vegetateHead)
++    {
++        _vegetateHead = vegetateHead;
++    }
++
+     public EntityLiving(World world) {
+         super(world);
+         this.initAttributes();
+@@ -1497,6 +1509,8 @@ public abstract class EntityLiving extends Entity {
+ 
+         SpigotTimings.timerEntityBaseTick.stopTiming(); // Spigot
+         this.m();
++        if (isVegetatedHead())
++            return;
+         SpigotTimings.timerEntityTickRest.startTiming(); // Spigot
+         double d0 = this.locX - this.lastX;
+         double d1 = this.locZ - this.lastZ;
+@@ -1607,6 +1621,7 @@ public abstract class EntityLiving extends Entity {
+             this.pitch = (float) ((double) this.pitch + (this.bh - (double) this.pitch) / (double) this.bc);
+             --this.bc;
+             this.setPosition(d0, d1, d2);
++            if (!isHeadVegetated())
+             this.setYawPitch(this.yaw, this.pitch);
+         } else if (!this.bM()) {
+             this.motX *= 0.98D;
+-- 
+2.7.4
+

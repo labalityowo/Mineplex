@@ -1,0 +1,3 @@
+name: MineKart
+main: nautilus.game.minekart.MineKart
+version: 1.0

@@ -1,0 +1,4 @@
+name: Clans
+main: mineplex.game.clans.Clans
+version: 1.0
+loadbefore: [MineplexAnticheat]

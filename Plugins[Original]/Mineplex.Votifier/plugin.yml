@@ -1,0 +1,3 @@
+name: MineplexVotifier
+main: mineplex.votifier.Votifier
+version: 0.1

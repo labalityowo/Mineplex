@@ -1,0 +1,353 @@
+From 1da9bcc60b080e3b068aff9202dbe7823d1abe64 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Fri, 23 Oct 2015 21:22:05 +1300
+Subject: [PATCH] Packet listener changes
+
+
+diff --git a/src/main/java/com/mineplex/spigot/IPacketVerifier.java b/src/main/java/com/mineplex/spigot/IPacketVerifier.java
+new file mode 100644
+index 0000000..f86dfd1
+--- /dev/null
++++ b/src/main/java/com/mineplex/spigot/IPacketVerifier.java
+@@ -0,0 +1,8 @@
++package com.mineplex.spigot;
++
++import net.minecraft.server.Packet;
++
++public interface IPacketVerifier
++{
++    public boolean handlePacket(Packet packet);
++}
+\ No newline at end of file
+diff --git a/src/main/java/com/mineplex/spigot/PacketProcessor.java b/src/main/java/com/mineplex/spigot/PacketProcessor.java
+new file mode 100644
+index 0000000..5695899
+--- /dev/null
++++ b/src/main/java/com/mineplex/spigot/PacketProcessor.java
+@@ -0,0 +1,250 @@
++package com.mineplex.spigot;
++
++import java.util.ArrayList;
++import java.util.List;
++import java.util.HashMap;
++import io.netty.util.concurrent.GenericFutureListener;
++
++import net.minecraft.server.NetworkManager;
++import net.minecraft.server.IChatBaseComponent;
++
++import net.minecraft.server.Packet;
++import net.minecraft.server.PacketListenerPlayIn;
++import net.minecraft.server.IUpdatePlayerListBox;
++import net.minecraft.server.PlayerConnection;
++import net.minecraft.server.PacketPlayInChat;
++import net.minecraft.server.PacketPlayInTabComplete;
++import net.minecraft.server.PacketPlayInClientCommand;
++import net.minecraft.server.PacketPlayInSettings;
++import net.minecraft.server.PacketPlayInTransaction;
++import net.minecraft.server.PacketPlayInEnchantItem;
++import net.minecraft.server.PacketPlayInWindowClick;
++import net.minecraft.server.PacketPlayInCloseWindow;
++import net.minecraft.server.PacketPlayInCustomPayload;
++import net.minecraft.server.PacketPlayInUseEntity;
++import net.minecraft.server.PacketPlayInKeepAlive;
++import net.minecraft.server.PacketPlayInFlying;
++import net.minecraft.server.PacketPlayInAbilities;
++import net.minecraft.server.PacketPlayInBlockDig;
++import net.minecraft.server.PacketPlayInEntityAction;
++import net.minecraft.server.PacketPlayInSteerVehicle;
++import net.minecraft.server.PacketPlayInHeldItemSlot;
++import net.minecraft.server.PacketPlayInSetCreativeSlot;
++import net.minecraft.server.PacketPlayInUpdateSign;
++import net.minecraft.server.PacketPlayInBlockPlace;
++import net.minecraft.server.PacketPlayInSpectate;
++import net.minecraft.server.PacketPlayInResourcePackStatus;
++import net.minecraft.server.PacketPlayInArmAnimation;
++
++public class PacketProcessor implements PacketListenerPlayIn, IUpdatePlayerListBox
++{
++    private IPacketVerifier _packetVerifier;
++    private PlayerConnection _packetListener;
++    private static volatile HashMap<Class, Boolean> _listenedPackets = new HashMap<Class, Boolean>();
++
++    public PacketProcessor(PlayerConnection packetListener)
++    {
++        _packetListener = packetListener;
++    }
++
++    public void setPacketVerifier(IPacketVerifier verifier)
++    {
++        _packetVerifier = verifier;
++    }
++
++    public void c()
++    {
++        _packetListener.c();
++    }
++    
++    public static void addPacket(Class packetClass, boolean forceMainThread)
++    {
++        _listenedPackets.put(packetClass, forceMainThread);
++    }
++
++    public static void removePacket(Class packetClass)
++    {
++        _listenedPackets.remove(packetClass);
++    }
++
++    public void processOutgoingPacket(Packet packet, NetworkManager networkManager)
++    {
++        if (!_listenedPackets.containsKey(packet.getClass()))
++        {
++            networkManager.handle(packet);
++            return;
++        }
++ 
++        boolean addDefaultPacket = true;
++
++        if (_packetVerifier != null)
++        {
++            if (!_packetVerifier.handlePacket(packet))
++            {
++                addDefaultPacket = false;
++            }
++        }
++
++        if (addDefaultPacket)
++        {
++            networkManager.handle(packet);
++        }
++    }
++
++    public void processIncomingPacket(final Packet packet)
++    {
++        if (!_listenedPackets.containsKey(packet.getClass()))
++        {
++            packet.a(_packetListener);
++            return;
++        }
++
++        if (!_packetListener.player.u().isMainThread() && _listenedPackets.get(packet.getClass()))
++        {
++            _packetListener.player.u().postToMainThread(new Runnable()
++            {
++                public void run()
++                {
++                    processIncomingPacket(packet);
++                }
++            });
++
++            return;
++        }
++
++        boolean addDefaultPacket = true;
++
++        if (_packetVerifier != null)
++        {
++            if (!_packetVerifier.handlePacket(packet))
++            {
++                addDefaultPacket = false;
++            }
++        }
++
++        if (addDefaultPacket)
++        {
++            packet.a(_packetListener);
++        }
++    }
++
++    public void a(PacketPlayInChat packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInTabComplete packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInClientCommand packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInSettings packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInTransaction packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInEnchantItem packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInWindowClick packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInCloseWindow packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInCustomPayload packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInUseEntity packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInKeepAlive packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInFlying packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInAbilities packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInBlockDig packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInEntityAction packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInSteerVehicle packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInHeldItemSlot packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInSetCreativeSlot packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInUpdateSign packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInBlockPlace packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInSpectate packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInResourcePackStatus packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(PacketPlayInArmAnimation packet)
++    {
++        processIncomingPacket(packet);
++    }
++
++    public void a(IChatBaseComponent packet)
++    {
++        _packetListener.a(packet);
++    }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/NetworkManager.java b/src/main/java/net/minecraft/server/NetworkManager.java
+index 9d23c6c..83a600c 100644
+--- a/src/main/java/net/minecraft/server/NetworkManager.java
++++ b/src/main/java/net/minecraft/server/NetworkManager.java
+@@ -27,6 +27,8 @@ import org.apache.logging.log4j.Logger;
+ import org.apache.logging.log4j.Marker;
+ import org.apache.logging.log4j.MarkerManager;
+ 
++import com.mineplex.spigot.PacketProcessor;
++
+ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
+ 
+     private static final Logger g = LogManager.getLogger();
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index 5740e49..5edef3e 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -62,6 +62,8 @@ import org.bukkit.inventory.InventoryView;
+ import org.bukkit.util.NumberConversions;
+ // CraftBukkit end
+ 
++import com.mineplex.spigot.PacketProcessor;
++
+ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerListBox {
+ 
+     private static final Logger c = LogManager.getLogger();
+@@ -87,15 +89,20 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+     private boolean checkMovement = true;
+     private boolean processedDisconnect; // CraftBukkit - added
+ 
++    public PacketProcessor PacketVerifier;
++
+     public PlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
+         this.minecraftServer = minecraftserver;
+         this.networkManager = networkmanager;
+-        networkmanager.a((PacketListener) this);
+         this.player = entityplayer;
+         entityplayer.playerConnection = this;
+ 
+         // CraftBukkit start - add fields and methods
+         this.server = minecraftserver.server;
++
++
++        PacketVerifier = new PacketProcessor(this);
++        networkmanager.a(PacketVerifier);
+     }
+ 
+     private final org.bukkit.craftbukkit.CraftServer server;
+@@ -904,7 +911,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+         // CraftBukkit end
+ 
+         try {
+-            this.networkManager.handle(packet);
++            PacketVerifier.processOutgoingPacket(packet, networkManager);
+         } catch (Throwable throwable) {
+             CrashReport crashreport = CrashReport.a(throwable, "Sending packet");
+             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Packet being sent");
+@@ -1408,9 +1415,12 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+         if (this.player.dead) return; // CraftBukkit
+         PlayerConnectionUtils.ensureMainThread(packetplayinclosewindow, this, this.player.u());
+ 
+-        CraftEventFactory.handleInventoryCloseEvent(this.player); // CraftBukkit
++        if (packetplayinclosewindow.id == player.activeContainer.windowId)
++        {
++            CraftEventFactory.handleInventoryCloseEvent(this.player); // CraftBukkit
+ 
+-        this.player.p();
++            this.player.p();
++        }
+     }
+ 
+     public void a(PacketPlayInWindowClick packetplayinwindowclick) {
+-- 
+2.7.4
+

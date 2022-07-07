@@ -1,0 +1,29 @@
+From 6e7c7edf9e6144385bc909b17dd14539d8ac98d6 Mon Sep 17 00:00:00 2001
+From: md_5 <git@md-5.net>
+Date: Mon, 25 Apr 2016 10:36:56 +1000
+Subject: [PATCH] Fix TnT Datawatcher
+
+
+diff --git a/src/main/java/net/minecraft/server/EntityTNTPrimed.java b/src/main/java/net/minecraft/server/EntityTNTPrimed.java
+index 9b13620..4f4511f 100644
+--- a/src/main/java/net/minecraft/server/EntityTNTPrimed.java
++++ b/src/main/java/net/minecraft/server/EntityTNTPrimed.java
+@@ -97,13 +97,13 @@ public class EntityTNTPrimed extends Entity {
+ 
+     protected void a(NBTTagCompound nbttagcompound) {
+         this.fuseTicks = nbttagcompound.getByte("Fuse");
+-        datawatcher.a(24, 0, META_FUSE, fuseTicks);
++        datawatcher.watch(24, 0, META_FUSE, fuseTicks);
+     }
+ 
+     public void setFuseTicks(int newTicks)
+     {
+         fuseTicks = newTicks;
+-        datawatcher.a(24, 0, META_FUSE, fuseTicks);
++        datawatcher.watch(24, 0, META_FUSE, fuseTicks);
+     }
+ 
+     public EntityLiving getSource() {
+-- 
+2.7.4
+

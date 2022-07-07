@@ -1,0 +1,119 @@
+From 9d2015fe106bc67d93ea1d9a80d057f1bfad0fd0 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Mon, 9 Nov 2015 00:07:26 +1300
+Subject: [PATCH] Add IEntitySelector, have isGhost() return the same as
+ isSpectator()
+
+
+diff --git a/src/main/java/net/minecraft/server/IEntitySelector.java b/src/main/java/net/minecraft/server/IEntitySelector.java
+new file mode 100644
+index 0000000..1536600
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/IEntitySelector.java
+@@ -0,0 +1,103 @@
++package net.minecraft.server;
++
++import com.google.common.base.Predicate;
++
++public final class IEntitySelector
++{
++    public static class EntitySelectorEquipable
++        implements Predicate
++    {
++
++        public boolean a(Entity entity)
++        {
++            if(!entity.isAlive())
++                return false;
++            if(!(entity instanceof EntityLiving))
++                return false;
++            EntityLiving entityliving = (EntityLiving)entity;
++            if(entityliving.getEquipment(EntityInsentient.c(a)) != null)
++                return false;
++            if(entityliving instanceof EntityInsentient)
++                return ((EntityInsentient)entityliving).bY();
++            if(entityliving instanceof EntityArmorStand)
++                return true;
++            return entityliving instanceof EntityHuman;
++        }
++
++        public boolean apply(Object obj)
++        {
++            return a((Entity)obj);
++        }
++
++        private final ItemStack a;
++
++        public EntitySelectorEquipable(ItemStack itemstack)
++        {
++            a = itemstack;
++        }
++    }
++
++
++    public static final Predicate a = new Predicate() {
++
++        public boolean a(Entity entity)
++        {
++            return entity.isAlive();
++        }
++
++        public boolean apply(Object obj)
++        {
++            return a((Entity)obj);
++        }
++
++    }
++;
++    public static final Predicate b = new Predicate() {
++
++        public boolean a(Entity entity)
++        {
++            return entity.isAlive() && entity.passenger == null && entity.vehicle == null;
++        }
++
++        public boolean apply(Object obj)
++        {
++            return a((Entity)obj);
++        }
++
++    }
++;
++    public static final Predicate c = new Predicate() {
++
++        public boolean a(Entity entity)
++        {
++            return (entity instanceof IInventory) && entity.isAlive();
++        }
++
++        public boolean apply(Object obj)
++        {
++            return a((Entity)obj);
++        }
++
++    }
++;
++    public static final Predicate d = new Predicate() {
++
++        public boolean a(Entity entity)
++        {
++            if (entity instanceof EntityLiving && ((EntityLiving) entity).isGhost())
++            {
++                return false;
++            }
++
++            return !(entity instanceof EntityHuman) || !((EntityHuman)entity).isSpectator();
++        }
++
++        public boolean apply(Object obj)
++        {
++            return a((Entity)obj);
++        }
++
++    }
++;
++
++}
+-- 
+2.7.4
+

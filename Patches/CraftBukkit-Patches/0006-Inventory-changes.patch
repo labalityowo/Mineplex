@@ -1,0 +1,70 @@
+From bf6cbe47c5b1ab50e4ceb7a98b25975b90ae92c2 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Fri, 23 Oct 2015 21:22:36 +1300
+Subject: [PATCH] Inventory changes
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryCustom.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryCustom.java
+index e99b8cc..428836c 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryCustom.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryCustom.java
+@@ -32,7 +32,7 @@ public class CraftInventoryCustom extends CraftInventory {
+         super(new MinecraftInventory(owner, size, title));
+     }
+ 
+-    static class MinecraftInventory implements IInventory {
++    public static class MinecraftInventory implements IInventory {
+         private final ItemStack[] items;
+         private int maxStack = MAX_STACK;
+         private final List<HumanEntity> viewers;
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+index 23f05f4..fdaf026 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+@@ -26,7 +26,7 @@ import net.minecraft.server.NBTTagString;
+ import org.bukkit.craftbukkit.util.CraftChatMessage;
+ 
+ @DelegateDeserialization(ItemStack.class)
+-public final class CraftItemStack extends ItemStack {
++public class CraftItemStack extends ItemStack {
+ 
+     public static net.minecraft.server.ItemStack asNMSCopy(ItemStack original) {
+         if (original instanceof CraftItemStack) {
+@@ -95,26 +95,30 @@ public final class CraftItemStack extends ItemStack {
+     /**
+      * Mirror
+      */
+-    private CraftItemStack(net.minecraft.server.ItemStack item) {
++    protected CraftItemStack(net.minecraft.server.ItemStack item) {
+         this.handle = item;
+     }
+ 
+-    private CraftItemStack(ItemStack item) {
++    protected CraftItemStack(ItemStack item) {
+         this(item.getTypeId(), item.getAmount(), item.getDurability(), item.hasItemMeta() ? item.getItemMeta() : null);
+     }
+ 
+-    private CraftItemStack(Material type, int amount, short durability, ItemMeta itemMeta) {
++    protected CraftItemStack(Material type, int amount, short durability, ItemMeta itemMeta) {
+         setType(type);
+         setAmount(amount);
+         setDurability(durability);
+         setItemMeta(itemMeta);
+     }
+ 
+-    private CraftItemStack(int typeId, int amount, short durability, ItemMeta itemMeta) {
++    protected CraftItemStack(int typeId, int amount, short durability, ItemMeta itemMeta) {
+         this(Material.getMaterial(typeId), amount, durability, itemMeta);
+ 
+     }
+ 
++    public net.minecraft.server.ItemStack getHandle() {
++        return handle;
++    }
++
+     @Override
+     public int getTypeId() {
+         return handle != null ? CraftMagicNumbers.getId(handle.getItem()) : 0;
+-- 
+2.7.4
+

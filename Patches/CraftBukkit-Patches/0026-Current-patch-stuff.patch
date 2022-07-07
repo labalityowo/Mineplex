@@ -1,0 +1,267 @@
+From 7c7c941e8a0275a063065f592d57db5bdc103db8 Mon Sep 17 00:00:00 2001
+From: git <libraryaddict115@yahoo.co.nz>
+Date: Thu, 25 Feb 2016 18:20:02 +1300
+Subject: [PATCH] Current patch stuff
+
+
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index 41eede5..40d4232 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -549,13 +549,13 @@ public abstract class EntityLiving extends Entity {
+     protected void B() {
+         if (this.effects.isEmpty()) {
+             this.bj();
+-            this.setInvisible(false);
++            this.setInvisible(isMineplexInvisible());
+         } else {
+             int i = PotionBrewer.a(this.effects.values());
+ 
+             this.datawatcher.watch(8, Byte.valueOf((byte) (PotionBrewer.b(this.effects.values()) ? 1 : 0)), META_AMBIENT_POTION, PotionBrewer.b(this.effects.values()));
+             this.datawatcher.watch(7, Integer.valueOf(i), META_POTION_COLOR, i);
+-            this.setInvisible(this.hasEffect(MobEffectList.INVISIBILITY.id));
++            this.setInvisible(isMineplexInvisible() || this.hasEffect(MobEffectList.INVISIBILITY.id));
+         }
+ 
+     }
+diff --git a/src/main/java/net/minecraft/server/EnumProtocol.java b/src/main/java/net/minecraft/server/EnumProtocol.java
+index f3877e4..0343bf8 100644
+--- a/src/main/java/net/minecraft/server/EnumProtocol.java
++++ b/src/main/java/net/minecraft/server/EnumProtocol.java
+@@ -219,7 +219,11 @@ public enum EnumProtocol
+     public Integer a(EnumProtocolDirection enumprotocoldirection, Packet packet, boolean is1_8)
+     {
+         Entry entry = (Entry) ((BiMap)j.get(enumprotocoldirection)).inverse().get(packet.getClass());
+-        if ((Integer) (is1_8 ? entry.getKey() : entry.getValue()) < 0){System.out.print("Trying to send unsupported " + packet.getClass().getSimpleName());Thread.dumpStack();}
++        if ((Integer) (is1_8 ? entry.getKey() : entry.getValue()) < 0)
++        {
++            System.out.print("Trying to send unsupported " + packet.getClass().getSimpleName());
++            Thread.dumpStack();
++        }
+         return (Integer) (is1_8 ? entry.getKey() : entry.getValue());
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/HandshakeListener.java b/src/main/java/net/minecraft/server/HandshakeListener.java
+index 31e1ea1..f6e8560 100644
+--- a/src/main/java/net/minecraft/server/HandshakeListener.java
++++ b/src/main/java/net/minecraft/server/HandshakeListener.java
+@@ -25,7 +25,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
+         
+             int version = packethandshakinginsetprotocol.b();
+             //System.out.print(version);
+-            boolean supported = version == 47 || version == 94;
++            boolean supported = version == 47 || version == 104;
+             
+ 			if (supported)
+             {
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutEntity.java b/src/main/java/net/minecraft/server/PacketPlayOutEntity.java
+index 702d33d..c3a067e 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutEntity.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutEntity.java
+@@ -5,9 +5,9 @@ import java.io.IOException;
+ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
+ 
+     public int a;
+-    public byte b;
+-    public byte c;
+-    public byte d;
++    public short b;
++    public short c;
++    public short d;
+     public byte e;
+     public byte f;
+     public boolean g;
+@@ -87,9 +87,18 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
+ 
+         public void b(PacketDataSerializer packetdataserializer) throws IOException {
+             super.b(packetdataserializer);
+-            packetdataserializer.writeByte(this.b);
+-            packetdataserializer.writeByte(this.c);
+-            packetdataserializer.writeByte(this.d);
++            if (packetdataserializer.version != 47)
++            {
++                packetdataserializer.writeShort(this.b);
++                packetdataserializer.writeShort(this.c);
++                packetdataserializer.writeShort(this.d);
++            }
++            else
++            { 
++                packetdataserializer.writeByte(this.b);
++                packetdataserializer.writeByte(this.c);
++                packetdataserializer.writeByte(this.d);
++            }
+             packetdataserializer.writeBoolean(this.g);
+         }
+     }
+@@ -123,9 +132,18 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
+ 
+         public void b(PacketDataSerializer packetdataserializer) throws IOException {
+             super.b(packetdataserializer);
+-            packetdataserializer.writeByte(this.b);
+-            packetdataserializer.writeByte(this.c);
+-            packetdataserializer.writeByte(this.d);
++            if (packetdataserializer.version != 47)
++            {
++                packetdataserializer.writeShort(this.b);
++                packetdataserializer.writeShort(this.c);
++                packetdataserializer.writeShort(this.d);
++            }
++            else
++            { 
++                packetdataserializer.writeByte(this.b);
++                packetdataserializer.writeByte(this.c);
++                packetdataserializer.writeByte(this.d);
++            }
+             packetdataserializer.writeByte(this.e);
+             packetdataserializer.writeByte(this.f);
+             packetdataserializer.writeBoolean(this.g);
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java b/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java
+index 4730b34..3fa9fe4 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java
+@@ -44,9 +44,15 @@ public class PacketPlayOutEntityTeleport implements Packet<PacketListenerPlayOut
+ 
+     public void b(PacketDataSerializer packetdataserializer) {
+         packetdataserializer.b(this.a);
++        if (packetdataserializer.version == 47){
+         packetdataserializer.writeInt(this.b);
+         packetdataserializer.writeInt(this.c);
+         packetdataserializer.writeInt(this.d);
++        } else {
++                   packetdataserializer.writeDouble(this.b/32D);
++        packetdataserializer.writeDouble(this.c/32D);
++        packetdataserializer.writeDouble(this.d/32D); 
++        }
+         packetdataserializer.writeByte(this.e);
+         packetdataserializer.writeByte(this.f);
+         packetdataserializer.writeBoolean(this.g);
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java b/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java
+index 340787a..efc9a08 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java
+@@ -48,9 +48,15 @@ public class PacketPlayOutNamedEntitySpawn implements Packet<PacketListenerPlayO
+     public void b(PacketDataSerializer packetdataserializer) throws IOException {
+         packetdataserializer.b(this.a);
+         packetdataserializer.a(this.b);
+-        packetdataserializer.writeInt(this.c);
+-        packetdataserializer.writeInt(this.d);
+-        packetdataserializer.writeInt(this.e);
++        if (packetdataserializer.version != 47){
++            packetdataserializer.writeDouble(this.c/32D);
++            packetdataserializer.writeDouble(this.d/32D);
++            packetdataserializer.writeDouble(this.e/32D);
++        }else {
++            packetdataserializer.writeInt(this.c);
++            packetdataserializer.writeInt(this.d);
++            packetdataserializer.writeInt(this.e);
++        }
+         packetdataserializer.writeByte(this.f);
+         packetdataserializer.writeByte(this.g);
+         if (packetdataserializer.version == 47)
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java b/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java
+index 6c8c8fa..b72b7d7 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java
+@@ -279,6 +279,7 @@ public class PacketPlayOutNamedSoundEffect
+             toPlay = sounds.get(toPlay);
+ 
+         packetdataserializer.a(toPlay);
++        packetdataserializer.b(0);
+         packetdataserializer.writeInt(b);
+         packetdataserializer.writeInt(c);
+         packetdataserializer.writeInt(d);
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntity.java b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntity.java
+index 0c60066..c9de471 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntity.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntity.java
+@@ -93,9 +93,15 @@ public class PacketPlayOutSpawnEntity implements Packet<PacketListenerPlayOut> {
+         if (packetdataserializer.version != 47)
+             packetdataserializer.a(this.uuid);
+         packetdataserializer.writeByte(this.j);
+-        packetdataserializer.writeInt(this.b);
+-        packetdataserializer.writeInt(this.c);
+-        packetdataserializer.writeInt(this.d);
++        if (packetdataserializer.version != 47){
++            packetdataserializer.writeDouble(this.b/32D);
++            packetdataserializer.writeDouble(this.c/32D);
++            packetdataserializer.writeDouble(this.d/32D);
++        }else {
++            packetdataserializer.writeInt(this.b);
++            packetdataserializer.writeInt(this.c);
++            packetdataserializer.writeInt(this.d);
++        }
+         packetdataserializer.writeByte(this.h);
+         packetdataserializer.writeByte(this.i);
+         packetdataserializer.writeInt(this.k);
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityExperienceOrb.java b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityExperienceOrb.java
+index 4f2b03e..0a39433 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityExperienceOrb.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityExperienceOrb.java
+@@ -42,9 +42,15 @@ public class PacketPlayOutSpawnEntityExperienceOrb
+         throws IOException
+     {
+         packetdataserializer.b(a);
+-        packetdataserializer.writeInt(b);
+-        packetdataserializer.writeInt(c);
+-        packetdataserializer.writeInt(d);
++        if (packetdataserializer.version != 47){
++            packetdataserializer.writeDouble(this.b/32D);
++            packetdataserializer.writeDouble(this.c/32D);
++            packetdataserializer.writeDouble(this.d/32D);
++        }else {
++            packetdataserializer.writeInt(this.b);
++            packetdataserializer.writeInt(this.c);
++            packetdataserializer.writeInt(this.d);
++        }
+         packetdataserializer.writeShort(e);
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityLiving.java b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityLiving.java
+index 9da448e..ea7c98b 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityLiving.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityLiving.java
+@@ -88,9 +88,15 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
+         if (packetdataserializer.version != 47)
+             packetdataserializer.a(this.uuid);
+         packetdataserializer.writeByte(this.b & 255);
+-        packetdataserializer.writeInt(this.c);
+-        packetdataserializer.writeInt(this.d);
+-        packetdataserializer.writeInt(this.e);
++            if (packetdataserializer.version != 47){
++            packetdataserializer.writeDouble(this.c/32D);
++            packetdataserializer.writeDouble(this.d/32D);
++            packetdataserializer.writeDouble(this.e/32D);
++        }else {
++            packetdataserializer.writeInt(this.c);
++            packetdataserializer.writeInt(this.d);
++            packetdataserializer.writeInt(this.e);
++        }
+         packetdataserializer.writeByte(this.i);
+         packetdataserializer.writeByte(this.j);
+         packetdataserializer.writeByte(this.k);
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityWeather.java b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityWeather.java
+index 2ce95fa..51a3a21 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityWeather.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSpawnEntityWeather.java
+@@ -44,9 +44,15 @@ public class PacketPlayOutSpawnEntityWeather
+     {
+         packetdataserializer.b(a);
+         packetdataserializer.writeByte(e);
+-        packetdataserializer.writeInt(b);
+-        packetdataserializer.writeInt(c);
+-        packetdataserializer.writeInt(d);
++        if (packetdataserializer.version != 47){
++            packetdataserializer.writeDouble(this.b/32D);
++            packetdataserializer.writeDouble(this.c/32D);
++            packetdataserializer.writeDouble(this.d/32D);
++        }else {
++            packetdataserializer.writeInt(this.b);
++            packetdataserializer.writeInt(this.c);
++            packetdataserializer.writeInt(this.d);
++        }
+     }
+ 
+     public void a(PacketListenerPlayOut packetlistenerplayout)
+-- 
+2.7.4
+

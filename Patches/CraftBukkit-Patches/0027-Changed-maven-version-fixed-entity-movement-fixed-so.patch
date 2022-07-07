@@ -1,0 +1,135 @@
+From 9dfce5478dba231619b0527f28af3640aef5480c Mon Sep 17 00:00:00 2001
+From: git <libraryaddict115@yahoo.co.nz>
+Date: Sun, 28 Feb 2016 00:37:30 +1300
+Subject: [PATCH] Changed maven version, fixed entity movement, fixed sound
+ packet
+
+
+diff --git a/pom.xml b/pom.xml
+index ceb3ec2..a44f7b1 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -4,7 +4,7 @@
+     <groupId>com.mineplex</groupId>
+     <artifactId>spigot</artifactId>
+     <packaging>jar</packaging>
+-    <version>1.8.8-R0.1-SNAPSHOT</version>
++    <version>1.8.8-1.9-SNAPSHOT</version>
+     <name>Spigot</name>
+     <url>http://www.spigotmc.org</url>
+ 
+diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+index e5c947f..9cd9be6 100644
+--- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
++++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+@@ -145,6 +145,7 @@ public class EntityTrackerEntry {
+                 int k1 = j - this.yLoc;
+                 int l1 = k - this.zLoc;
+                 Object object = null;
++                Object object2 = null;
+                 boolean flag = Math.abs(j1) >= 4 || Math.abs(k1) >= 4 || Math.abs(l1) >= 4 || this.m % 60 == 0;
+                 boolean flag1 = Math.abs(l - this.yRot) >= 4 || Math.abs(i1 - this.xRot) >= 4;
+ 
+@@ -163,10 +164,12 @@ public class EntityTrackerEntry {
+ 
+                 if (this.m > 0 || this.tracker instanceof EntityArrow) {
+                     if (j1 >= -128 && j1 < 128 && k1 >= -128 && k1 < 128 && l1 >= -128 && l1 < 128 && this.v <= 400 && !this.x && this.y == this.tracker.onGround) {
++                        object2 = new PacketPlayOutEntityTeleport(this.tracker.getId(), i, j, k, (byte) l, (byte) i1, this.tracker.onGround);
+                         if ((!flag || !flag1) && !(this.tracker instanceof EntityArrow)) {
+                             if (flag) {
+                                 object = new PacketPlayOutEntity.PacketPlayOutRelEntityMove(this.tracker.getId(), (byte) j1, (byte) k1, (byte) l1, this.tracker.onGround);
+                             } else if (flag1) {
++                                object2 = null;
+                                 object = new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) l, (byte) i1, this.tracker.onGround);
+                             }
+                         } else {
+@@ -200,7 +203,15 @@ public class EntityTrackerEntry {
+                 }
+ 
+                 if (object != null) {
+-                    this.broadcast((Packet) object);
++                                
++                    Iterator iterator = this.trackedPlayers.iterator();
++
++                    while (iterator.hasNext()) {
++                        EntityPlayer entityplayer = (EntityPlayer) iterator.next();
++                        Packet packetToSend = object2 == null || entityplayer.playerConnection.networkManager.getVersion() == 47 ? (Packet) object : (Packet) object2;
++
++                        entityplayer.playerConnection.sendPacket(packetToSend);
++                    }
+                 }
+ 
+                 this.b();
+diff --git a/src/main/java/net/minecraft/server/HandshakeListener.java b/src/main/java/net/minecraft/server/HandshakeListener.java
+index f6e8560..fae7922 100644
+--- a/src/main/java/net/minecraft/server/HandshakeListener.java
++++ b/src/main/java/net/minecraft/server/HandshakeListener.java
+@@ -25,7 +25,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
+         
+             int version = packethandshakinginsetprotocol.b();
+             //System.out.print(version);
+-            boolean supported = version == 47 || version == 104;
++            boolean supported = version == 47 || version >= 104;
+             
+ 			if (supported)
+             {
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutEntity.java b/src/main/java/net/minecraft/server/PacketPlayOutEntity.java
+index c3a067e..8436897 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutEntity.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutEntity.java
+@@ -5,9 +5,9 @@ import java.io.IOException;
+ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
+ 
+     public int a;
+-    public short b;
+-    public short c;
+-    public short d;
++    public byte b;
++    public byte c;
++    public byte d;
+     public byte e;
+     public byte f;
+     public boolean g;
+@@ -89,9 +89,9 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
+             super.b(packetdataserializer);
+             if (packetdataserializer.version != 47)
+             {
+-                packetdataserializer.writeShort(this.b);
+-                packetdataserializer.writeShort(this.c);
+-                packetdataserializer.writeShort(this.d);
++                packetdataserializer.writeShort((short) this.b);
++                packetdataserializer.writeShort((short) this.c);
++                packetdataserializer.writeShort((short) this.d);
+             }
+             else
+             { 
+@@ -134,9 +134,9 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
+             super.b(packetdataserializer);
+             if (packetdataserializer.version != 47)
+             {
+-                packetdataserializer.writeShort(this.b);
+-                packetdataserializer.writeShort(this.c);
+-                packetdataserializer.writeShort(this.d);
++                packetdataserializer.writeShort((short) this.b);
++                packetdataserializer.writeShort((short) this.c);
++                packetdataserializer.writeShort((short) this.d);
+             }
+             else
+             { 
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java b/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java
+index b72b7d7..bcfdab9 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java
+@@ -279,7 +279,8 @@ public class PacketPlayOutNamedSoundEffect
+             toPlay = sounds.get(toPlay);
+ 
+         packetdataserializer.a(toPlay);
+-        packetdataserializer.b(0);
++        if (packetdataserializer.version > 47)
++            packetdataserializer.b(0);
+         packetdataserializer.writeInt(b);
+         packetdataserializer.writeInt(c);
+         packetdataserializer.writeInt(d);
+-- 
+2.7.4
+

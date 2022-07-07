@@ -1,0 +1,4 @@
+name: ClansGenerator
+main: mineplex.clansgenerator.ClansGenerator
+version: 1.0
+author: Alex

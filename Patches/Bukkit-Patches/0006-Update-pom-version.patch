@@ -1,0 +1,22 @@
+From c8afa4514a06be8257d3a05e0d261d4051a4dad0 Mon Sep 17 00:00:00 2001
+From: md_5 <git@md-5.net>
+Date: Mon, 25 Apr 2016 10:32:40 +1000
+Subject: [PATCH] Update pom version
+
+
+diff --git a/pom.xml b/pom.xml
+index 378fd01..13a555d 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -11,7 +11,7 @@
+ 
+     <groupId>com.mineplex</groupId>
+     <artifactId>spigot-api</artifactId>
+-    <version>1.8.8-R0.1-SNAPSHOT</version>
++    <version>1.8.8-1.9-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>Spigot-API</name>
+-- 
+2.7.4
+

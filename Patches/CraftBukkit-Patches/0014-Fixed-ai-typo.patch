@@ -1,0 +1,22 @@
+From b1e36dc87d3c5623283c9f461807a65d40538be3 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Mon, 9 Nov 2015 02:41:31 +1300
+Subject: [PATCH] Fixed ai typo
+
+
+diff --git a/src/main/java/net/minecraft/server/IEntitySelector.java b/src/main/java/net/minecraft/server/IEntitySelector.java
+index f86cf48..b4d70ad 100644
+--- a/src/main/java/net/minecraft/server/IEntitySelector.java
++++ b/src/main/java/net/minecraft/server/IEntitySelector.java
+@@ -89,7 +89,7 @@ public final class IEntitySelector
+                 return false;
+             }
+ 
+-            return !(entity instanceof EntityHuman) || !(((EntityHuman)entity).isSpectator() && !((EntityPlayer)entity).spectating);
++            return !(entity instanceof EntityHuman) || !(((EntityHuman)entity).isSpectator() || ((EntityPlayer)entity).spectating);
+         }
+ 
+         public boolean apply(Object obj)
+-- 
+2.7.4
+

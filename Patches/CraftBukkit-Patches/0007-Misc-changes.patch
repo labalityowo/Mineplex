@@ -1,0 +1,277 @@
+From ed2a06418ba178cb6ff227ef1aca14f7b5f951df Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Fri, 23 Oct 2015 21:23:00 +1300
+Subject: [PATCH] Misc changes
+
+
+diff --git a/src/main/java/net/minecraft/server/ControllerLook.java b/src/main/java/net/minecraft/server/ControllerLook.java
+new file mode 100644
+index 0000000..2263d5d
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/ControllerLook.java
+@@ -0,0 +1,101 @@
++package net.minecraft.server;
++
++public class ControllerLook
++{
++  private EntityInsentient a;
++  private float b;
++  private float c;
++  private boolean d;
++  private double e;
++  private double f;
++  private double g;
++
++  public ControllerLook(EntityInsentient paramEntityInsentient)
++  {
++    this.a = paramEntityInsentient;
++  }
++
++  public void a(Entity paramEntity, float paramFloat1, float paramFloat2) {
++    this.e = paramEntity.locX;
++    if ((paramEntity instanceof EntityLiving))
++      this.f = (paramEntity.locY + paramEntity.getHeadHeight());
++    else {
++      this.f = ((paramEntity.getBoundingBox().b + paramEntity.getBoundingBox().e) / 2.0D);
++    }
++    this.g = paramEntity.locZ;
++    this.b = paramFloat1;
++    this.c = paramFloat2;
++    this.d = true;
++  }
++
++  public void a(double paramDouble1, double paramDouble2, double paramDouble3, float paramFloat1, float paramFloat2) {
++    this.e = paramDouble1;
++    this.f = paramDouble2;
++    this.g = paramDouble3;
++    this.b = paramFloat1;
++    this.c = paramFloat2;
++    this.d = true;
++  }
++
++  public void a() {
++      if (a.isVegetated())
++          return;
++    this.a.pitch = 0.0F;
++
++    if (this.d) {
++      this.d = false;
++
++      double d1 = this.e - this.a.locX;
++      double d2 = this.f - (this.a.locY + this.a.getHeadHeight());
++      double d3 = this.g - this.a.locZ;
++      double d4 = MathHelper.sqrt(d1 * d1 + d3 * d3);
++
++      float f1 = (float)(MathHelper.b(d3, d1) * 180.0D / 3.141592741012573D) - 90.0F;
++      float f2 = (float)-(MathHelper.b(d2, d4) * 180.0D / 3.141592741012573D);
++      this.a.pitch = a(this.a.pitch, f2, this.c);
++      this.a.aK = a(this.a.aK, f1, this.b);
++    } else {
++      this.a.aK = a(this.a.aK, this.a.aI, 10.0F);
++    }
++
++    float f3 = MathHelper.g(this.a.aK - this.a.aI);
++
++    if (!this.a.getNavigation().m())
++    {
++      if (f3 < -75.0F) {
++       this.a.aK = (this.a.aI - 75.0F);
++      }
++      if (f3 > 75.0F)
++        this.a.aK = (this.a.aI + 75.0F);
++    }
++  }
++
++  private float a(float paramFloat1, float paramFloat2, float paramFloat3)
++  {
++    float f1 = MathHelper.g(paramFloat2 - paramFloat1);
++    if (f1 > paramFloat3) {
++      f1 = paramFloat3;
++    }
++    if (f1 < -paramFloat3) {
++      f1 = -paramFloat3;
++    }
++    return paramFloat1 + f1;
++  }
++
++  public boolean b() {
++    return this.d;
++  }
++
++  public double e()
++  {
++    return this.e;
++  }
++
++  public double f() {
++    return this.f;
++  }
++
++  public double g() {
++    return this.g;
++  }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
+index c30867d..b86369b 100644
+--- a/src/main/java/net/minecraft/server/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/DedicatedServer.java
+@@ -132,7 +132,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+             System.err.println( "If you do not agree to the above EULA please stop your server and remove this flag immediately." );
+         }
+         // Spigot End
+-        if (!this.p.a() && !eulaAgreed) { // Spigot
++        if (false && !this.p.a() && !eulaAgreed) { // Spigot
+             DedicatedServer.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
+             this.p.b();
+             return false;
+diff --git a/src/main/java/net/minecraft/server/EntityHuman.java b/src/main/java/net/minecraft/server/EntityHuman.java
+index eb54e7f..66c3d0c 100644
+--- a/src/main/java/net/minecraft/server/EntityHuman.java
++++ b/src/main/java/net/minecraft/server/EntityHuman.java
+@@ -133,7 +133,7 @@ public abstract class EntityHuman extends EntityLiving {
+         if (this.g != null) {
+             ItemStack itemstack = this.inventory.getItemInHand();
+ 
+-            if (itemstack == this.g) {
++            if (ItemStack.equals(itemstack, this.g)) {
+                 if (this.h <= 25 && this.h % 4 == 0) {
+                     this.b(itemstack, 5);
+                 }
+diff --git a/src/main/java/net/minecraft/server/TileEntityBeacon.java b/src/main/java/net/minecraft/server/TileEntityBeacon.java
+index 4f280dd..73a288c 100644
+--- a/src/main/java/net/minecraft/server/TileEntityBeacon.java
++++ b/src/main/java/net/minecraft/server/TileEntityBeacon.java
+@@ -59,7 +59,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IUpdatePlay
+         this.A();
+     }
+ 
+-    private void A() {
++    public void A() {
+         if (this.i && this.j > 0 && !this.world.isClientSide && this.k > 0) {
+             double d0 = (double) (this.j * 10 + 10);
+             byte b0 = 0;
+@@ -94,7 +94,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IUpdatePlay
+ 
+     }
+ 
+-    private void B() {
++    public void B() {
+         int i = this.j;
+         int j = this.position.getX();
+         int k = this.position.getY();
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 2759425..f57c785 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -412,7 +412,7 @@ public final class CraftServer implements Server {
+         int delta = Integer.MAX_VALUE;
+         for (Player player : getOnlinePlayers()) {
+             if (player.getName().toLowerCase().startsWith(lowerName)) {
+-                int curDelta = Math.abs(player.getName().length() - lowerName.length());
++                int curDelta = player.getName().length() - lowerName.length();
+                 if (curDelta < delta) {
+                     found = player;
+                     delta = curDelta;
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index 49c7fa6..0cd36e8 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -836,7 +836,7 @@ public class CraftWorld implements World {
+ 
+     public <T> void playEffect(Location loc, Effect effect, T data, int radius) {
+         if (data != null) {
+-            Validate.isTrue(data.getClass().isAssignableFrom(effect.getData()), "Wrong kind of data for this effect!");
++            Validate.isTrue(data.getClass().equals(effect.getData()), "Wrong kind of data for this effect!");
+         } else {
+             Validate.isTrue(effect.getData() == null, "Wrong kind of data for this effect!");
+         }
+@@ -1122,10 +1122,6 @@ public class CraftWorld implements World {
+     public <T extends Entity> T addEntity(net.minecraft.server.Entity entity, SpawnReason reason) throws IllegalArgumentException {
+         Preconditions.checkArgument(entity != null, "Cannot spawn null entity");
+ 
+-        if (entity instanceof EntityInsentient) {
+-            ((EntityInsentient) entity).prepare(getHandle().E(new BlockPosition(entity)), (GroupDataEntity) null);
+-        }
+-
+         world.addEntity(entity, reason);
+         return (T) entity.getBukkitEntity();
+     }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 29082aa..e979f69 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -325,7 +325,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     @Override
+     public <T> void playEffect(Location loc, Effect effect, T data) {
+         if (data != null) {
+-            Validate.isTrue(data.getClass().isAssignableFrom(effect.getData()), "Wrong kind of data for this effect!");
++            Validate.isTrue(data.getClass().equals(effect.getData()), "Wrong kind of data for this effect!");
+         } else {
+             Validate.isTrue(effect.getData() == null, "Wrong kind of data for this effect!");
+         }
+@@ -870,10 +870,15 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+ 
+     @Override
+     public void hidePlayer(Player player) {
++        hidePlayer(player, false, true);
++    }
++
++    public void hidePlayer(Player player, boolean override, boolean hideList)
++    {
+         Validate.notNull(player, "hidden player cannot be null");
+         if (getHandle().playerConnection == null) return;
+         if (equals(player)) return;
+-        if (hiddenPlayers.contains(player.getUniqueId())) return;
++        if (!override && hiddenPlayers.contains(player.getUniqueId())) return;
+         hiddenPlayers.add(player.getUniqueId());
+ 
+         //remove this player from the hidden player's EntityTrackerEntry
+@@ -885,11 +890,17 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         }
+ 
+         //remove the hidden player from this player user list
+-        getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, other));
++        if (hideList)
++            getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, other));
+     }
+ 
+     @Override
+     public void showPlayer(Player player) {
++        showPlayer(player, true);
++    }
++     
++    public void showPlayer(Player player, boolean showList)
++    {
+         Validate.notNull(player, "shown player cannot be null");
+         if (getHandle().playerConnection == null) return;
+         if (equals(player)) return;
+@@ -899,7 +910,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         EntityTracker tracker = ((WorldServer) entity.world).tracker;
+         EntityPlayer other = ((CraftPlayer) player).getHandle();
+ 
+-        getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, other));
++        if (showList)
++            getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, other));
+ 
+         EntityTrackerEntry entry = (EntityTrackerEntry) tracker.trackedEntities.get(other.getId());
+         if (entry != null && !entry.trackedPlayers.contains(getHandle())) {
+@@ -1363,13 +1375,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         @Override
+         public boolean getCollidesWithEntities()
+         {
+-            return getHandle().collidesWithEntities;
++            return !getHandle().spectating;
+         }
+ 
+         @Override
+         public void setCollidesWithEntities(boolean collides)
+         {
+-            getHandle().collidesWithEntities = collides;
++            getHandle().spectating = collides;
+             getHandle().k = collides; // First boolean of Entity
+         }
+ 
+-- 
+2.7.4
+

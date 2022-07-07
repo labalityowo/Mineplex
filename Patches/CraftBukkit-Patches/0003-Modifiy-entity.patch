@@ -1,0 +1,804 @@
+From 90e32385d69e8936969ac3e7e7b2cd52f2d19e28 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Fri, 23 Oct 2015 21:16:07 +1300
+Subject: [PATCH] Modifiy entity
+
+
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index e345dd7..cb9ba53 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -137,6 +137,31 @@ public abstract class Entity implements ICommandListener {
+         this.die();
+     }
+ 
++    private boolean _silent;
++    private boolean _invisible;
++    
++    public boolean isSilent()
++    {
++        return _silent;
++    }
++
++    public void setSilent(boolean silent)
++    {
++        _silent = silent;
++    }
++
++    public boolean isMineplexInvisible()
++    {
++        return _invisible;
++    }
++
++    public void setMineplexInvisible(boolean invisible)
++    {
++        _invisible = invisible;
++
++        setInvisible(isMineplexInvisible() || isInvisible());
++    }
++
+     public Entity(World world) {
+         this.id = Entity.entityCount++;
+         this.j = 1.0D;
+@@ -684,7 +709,9 @@ public abstract class Entity implements ICommandListener {
+                         this.makeSound(this.P(), f, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+                     }
+ 
+-                    this.a(blockposition, block);
++                    if (!isSilent())
++                        this.a(blockposition, block);
++
+                     block.a(this.world, blockposition, this); // CraftBukkit moved from above
+                 }
+             }
+@@ -786,7 +813,7 @@ public abstract class Entity implements ICommandListener {
+     }
+ 
+     public void makeSound(String s, float f, float f1) {
+-        if (!this.R()) {
++        if (!isSilent() && !this.R()) {
+             this.world.makeSound(this, s, f, f1);
+         }
+ 
+@@ -984,6 +1011,10 @@ public abstract class Entity implements ICommandListener {
+         this.lastZ = this.locZ = d2;
+         this.lastYaw = this.yaw = f;
+         this.lastPitch = this.pitch = f1;
++
++        if (this instanceof EntityLiving)
++            ((EntityLiving) this).aK = f;
++
+         double d3 = (double) (this.lastYaw - f);
+ 
+         if (d3 < -180.0D) {
+@@ -1537,7 +1568,7 @@ public abstract class Entity implements ICommandListener {
+         if (entity == null) {
+             if (this.vehicle != null) {
+                 // CraftBukkit start
+-                if ((this.bukkitEntity instanceof LivingEntity) && (this.vehicle.getBukkitEntity() instanceof Vehicle)) {
++                if ((this.bukkitEntity instanceof LivingEntity) && vehicle.getBukkitEntity() instanceof Vehicle) {
+                     VehicleExitEvent event = new VehicleExitEvent((Vehicle) this.vehicle.getBukkitEntity(), (LivingEntity) this.bukkitEntity);
+                     pluginManager.callEvent(event);
+ 
+@@ -1557,7 +1588,7 @@ public abstract class Entity implements ICommandListener {
+             if ((this.bukkitEntity instanceof LivingEntity) && (entity.getBukkitEntity() instanceof Vehicle) && entity.world.isChunkLoaded((int) entity.locX >> 4, (int) entity.locZ >> 4, true)) {
+                 // It's possible to move from one vehicle to another.  We need to check if they're already in a vehicle, and fire an exit event if they are.
+                 VehicleExitEvent exitEvent = null;
+-                if (this.vehicle != null && this.vehicle.getBukkitEntity() instanceof Vehicle) {
++                if (this.vehicle != null) {
+                     exitEvent = new VehicleExitEvent((Vehicle) this.vehicle.getBukkitEntity(), (LivingEntity) this.bukkitEntity);
+                     pluginManager.callEvent(exitEvent);
+ 
+diff --git a/src/main/java/net/minecraft/server/EntityBat.java b/src/main/java/net/minecraft/server/EntityBat.java
+new file mode 100644
+index 0000000..c078fa6
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/EntityBat.java
+@@ -0,0 +1,206 @@
++package net.minecraft.server;
++
++import java.util.Calendar;
++
++public class EntityBat extends EntityAmbient {
++
++    private BlockPosition a;
++    private boolean _vegetated;
++
++    public EntityBat(World world) {
++        super(world);
++        this.setSize(0.5F, 0.9F);
++        this.setAsleep(true);
++
++        _vegetated = false;
++    }
++
++    public void setVegetated(boolean flag) {
++        _vegetated = flag;
++    }
++
++    public boolean isVegetated() {
++        return _vegetated;
++    }
++
++    protected void h() {
++        super.h();
++        this.datawatcher.a(16, new Byte((byte) 0));
++    }
++
++    protected float bB() {
++        return 0.1F;
++    }
++
++    protected float bC() {
++        return super.bC() * 0.95F;
++    }
++
++    protected String z() {
++        return this.isAsleep() && this.random.nextInt(4) != 0 ? null : "mob.bat.idle";
++    }
++
++    protected String bo() {
++        return "mob.bat.hurt";
++    }
++
++    protected String bp() {
++        return "mob.bat.death";
++    }
++
++    public boolean ae() {
++        return false;
++    }
++
++    protected void s(Entity entity) {}
++
++    protected void bL() {}
++
++    protected void initAttributes()
++    {
++        super.initAttributes();
++        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(6.0D);
++    }
++
++    public boolean isAsleep() {
++        return (this.datawatcher.getByte(16) & 1) != 0;
++    }
++
++    public void setAsleep(boolean flag) {
++        byte b0 = this.datawatcher.getByte(16);
++
++        if (flag) {
++            this.datawatcher.watch(16, Byte.valueOf((byte) (b0 | 1)));
++        } else {
++            this.datawatcher.watch(16, Byte.valueOf((byte) (b0 & -2)));
++        }
++
++    }
++
++    public void t_() {
++        super.t_();
++
++        if (isVegetated())
++            return;
++
++        if (this.isAsleep()) {
++            this.motX = this.motY = this.motZ = 0.0D;
++            this.locY = (double) MathHelper.floor(this.locY) + 1.0D - (double) this.length;
++        } else {
++            this.motY *= 0.6000000238418579D;
++        }
++
++    }
++
++    protected void E() {
++        super.E();
++
++        if (isVegetated())
++            return;
++
++        BlockPosition blockposition = new BlockPosition(this);
++        BlockPosition blockposition1 = blockposition.up();
++
++        if (this.isAsleep()) {
++            if (!this.world.getType(blockposition1).getBlock().isOccluding()) {
++                this.setAsleep(false);
++                this.world.a((EntityHuman) null, 1015, blockposition, 0);
++            } else {
++                if (this.random.nextInt(200) == 0) {
++                    this.aK = (float) this.random.nextInt(360);
++                }
++
++                if (this.world.findNearbyPlayer(this, 4.0D) != null) {
++                    this.setAsleep(false);
++                    this.world.a((EntityHuman) null, 1015, blockposition, 0);
++                }
++            }
++        } else {
++            if (this.a != null && (!this.world.isEmpty(this.a) || this.a.getY() < 1)) {
++                this.a = null;
++            }
++
++            if (this.a == null || this.random.nextInt(30) == 0 || this.a.c((double) ((int) this.locX), (double) ((int) this.locY), (double) ((int) this.locZ)) < 4.0D) {
++                this.a = new BlockPosition((int) this.locX + this.random.nextInt(7) - this.random.nextInt(7), (int) this.locY + this.random.nextInt(6) - 2, (int) this.locZ + this.random.nextInt(7) - this.random.nextInt(7));
++            }
++
++            double d0 = (double) this.a.getX() + 0.5D - this.locX;
++            double d1 = (double) this.a.getY() + 0.1D - this.locY;
++            double d2 = (double) this.a.getZ() + 0.5D - this.locZ;
++
++            this.motX += (Math.signum(d0) * 0.5D - this.motX) * 0.10000000149011612D;
++            this.motY += (Math.signum(d1) * 0.699999988079071D - this.motY) * 0.10000000149011612D;
++            this.motZ += (Math.signum(d2) * 0.5D - this.motZ) * 0.10000000149011612D;
++            float f = (float) (MathHelper.b(this.motZ, this.motX) * 180.0D / 3.1415927410125732D) - 90.0F;
++            float f1 = MathHelper.g(f - this.yaw);
++
++            this.ba = 0.5F;
++            this.yaw += f1;
++            if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).getBlock().isOccluding()) {
++                this.setAsleep(true);
++            }
++        }
++
++    }
++
++    protected boolean s_() {
++        return false;
++    }
++
++    public void e(float f, float f1) {}
++
++    protected void a(double d0, boolean flag, Block block, BlockPosition blockposition) {}
++
++    public boolean aI() {
++        return true;
++    }
++
++    public boolean damageEntity(DamageSource damagesource, float f) {
++        if (this.isInvulnerable(damagesource)) {
++            return false;
++        } else {
++            if (!this.world.isClientSide && this.isAsleep()) {
++                this.setAsleep(false);
++            }
++
++            return super.damageEntity(damagesource, f);
++        }
++    }
++
++    public void a(NBTTagCompound nbttagcompound) {
++        super.a(nbttagcompound);
++        this.datawatcher.watch(16, Byte.valueOf(nbttagcompound.getByte("BatFlags")));
++    }
++
++    public void b(NBTTagCompound nbttagcompound) {
++        super.b(nbttagcompound);
++        nbttagcompound.setByte("BatFlags", this.datawatcher.getByte(16));
++    }
++
++    public boolean bR() {
++        BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
++
++        if (blockposition.getY() >= this.world.F()) {
++            return false;
++        } else {
++            int i = this.world.getLightLevel(blockposition);
++            byte b0 = 4;
++
++            if (this.a(this.world.Y())) {
++                b0 = 7;
++            } else if (this.random.nextBoolean()) {
++                return false;
++            }
++
++            return i > this.random.nextInt(b0) ? false : super.bR();
++        }
++    }
++
++    private boolean a(Calendar calendar) {
++        return calendar.get(2) + 1 == 10 && calendar.get(5) >= 20 || calendar.get(2) + 1 == 11 && calendar.get(5) <= 3;
++    }
++
++    public float getHeadHeight() {
++        return this.length / 2.0F;
++    }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/EntityBlaze.java b/src/main/java/net/minecraft/server/EntityBlaze.java
+new file mode 100644
+index 0000000..a759e00
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/EntityBlaze.java
+@@ -0,0 +1,207 @@
++package net.minecraft.server;
++
++public class EntityBlaze extends EntityMonster {
++
++    private float a = 0.5F;
++    private int b;
++
++    public EntityBlaze(World world) {
++        super(world);
++        this.fireProof = true;
++        this.b_ = 10;
++        this.goalSelector.a(4, new EntityBlaze.PathfinderGoalBlazeFireball(this));
++        this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
++        this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
++        this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
++        this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
++        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
++        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
++    }
++
++    protected void initAttributes() {
++        super.initAttributes();
++        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0D);
++        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.23000000417232513D);
++        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(48.0D);
++    }
++
++    protected void h() {
++        super.h();
++        this.datawatcher.a(16, new Byte((byte) 0));
++    }
++
++    protected String z() {
++        return "mob.blaze.breathe";
++    }
++
++    protected String bo() {
++        return "mob.blaze.hit";
++    }
++
++    protected String bp() {
++        return "mob.blaze.death";
++    }
++
++    public float c(float f) {
++        return 1.0F;
++    }
++
++    public void m() {
++        if (!isVegetated() && !this.onGround && this.motY < 0.0D) {
++            this.motY *= 0.6D;
++        }
++
++        if (this.world.isClientSide) {
++            if (this.random.nextInt(24) == 0 && !this.R()) {
++                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, "fire.fire", 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
++            }
++
++            for (int i = 0; i < 2; ++i) {
++                this.world.addParticle(EnumParticle.SMOKE_LARGE, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D, new int[0]);
++            }
++        }
++
++        super.m();
++    }
++
++    protected void E() {
++        if (this.U()) {
++            this.damageEntity(DamageSource.DROWN, 1.0F);
++        }
++
++        --this.b;
++        if (this.b <= 0) {
++            this.b = 100;
++            this.a = 0.5F + (float) this.random.nextGaussian() * 3.0F;
++        }
++
++        EntityLiving entityliving = this.getGoalTarget();
++
++        if (!isVegetated() && entityliving != null && entityliving.locY + (double) entityliving.getHeadHeight() > this.locY + (double) this.getHeadHeight() + (double) this.a) {
++            this.motY += (0.30000001192092896D - this.motY) * 0.30000001192092896D;
++            this.ai = true;
++        }
++
++        super.E();
++    }
++
++    public void e(float f, float f1) {}
++
++    protected Item getLoot() {
++        return Items.BLAZE_ROD;
++    }
++
++    public boolean isBurning() {
++        return this.n();
++    }
++
++    protected void dropDeathLoot(boolean flag, int i) {
++        if (flag) {
++            int j = this.random.nextInt(2 + i);
++
++            for (int k = 0; k < j; ++k) {
++                this.a(Items.BLAZE_ROD, 1);
++            }
++        }
++
++    }
++
++    public boolean n() {
++        return (this.datawatcher.getByte(16) & 1) != 0;
++    }
++
++    public void a(boolean flag) {
++        byte b0 = this.datawatcher.getByte(16);
++
++        if (flag) {
++            b0 = (byte) (b0 | 1);
++        } else {
++            b0 &= -2;
++        }
++
++        this.datawatcher.watch(16, Byte.valueOf(b0));
++    }
++
++    protected boolean n_() {
++        return true;
++    }
++
++    static class PathfinderGoalBlazeFireball extends PathfinderGoal {
++
++        private EntityBlaze a;
++        private int b;
++        private int c;
++
++        public PathfinderGoalBlazeFireball(EntityBlaze entityblaze) {
++            this.a = entityblaze;
++            this.a(3);
++        }
++
++        public boolean a() {
++            EntityLiving entityliving = this.a.getGoalTarget();
++
++            return entityliving != null && entityliving.isAlive();
++        }
++
++        public void c() {
++            this.b = 0;
++        }
++
++        public void d() {
++            this.a.a(false);
++        }
++
++        public void e() {
++            --this.c;
++            EntityLiving entityliving = this.a.getGoalTarget();
++            double d0 = this.a.h(entityliving);
++
++            if (d0 < 4.0D) {
++                if (this.c <= 0) {
++                    this.c = 20;
++                    this.a.r(entityliving);
++                }
++
++                this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
++            } else if (d0 < 256.0D) {
++                double d1 = entityliving.locX - this.a.locX;
++                double d2 = entityliving.getBoundingBox().b + (double) (entityliving.length / 2.0F) - (this.a.locY + (double) (this.a.length / 2.0F));
++                double d3 = entityliving.locZ - this.a.locZ;
++
++                if (this.c <= 0) {
++                    ++this.b;
++                    if (this.b == 1) {
++                        this.c = 60;
++                        this.a.a(true);
++                    } else if (this.b <= 4) {
++                        this.c = 6;
++                    } else {
++                        this.c = 100;
++                        this.b = 0;
++                        this.a.a(false);
++                    }
++
++                    if (this.b > 1) {
++                        float f = MathHelper.c(MathHelper.sqrt(d0)) * 0.5F;
++
++                        this.a.world.a((EntityHuman) null, 1009, new BlockPosition((int) this.a.locX, (int) this.a.locY, (int) this.a.locZ), 0);
++
++                        for (int i = 0; i < 1; ++i) {
++                            EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.a.world, this.a, d1 + this.a.bc().nextGaussian() * (double) f, d2, d3 + this.a.bc().nextGaussian() * (double) f);
++
++                            entitysmallfireball.locY = this.a.locY + (double) (this.a.length / 2.0F) + 0.5D;
++                            this.a.world.addEntity(entitysmallfireball);
++                        }
++                    }
++                }
++
++                this.a.getControllerLook().a(entityliving, 10.0F, 10.0F);
++            } else {
++                this.a.getNavigation().n();
++                this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
++            }
++
++            super.e();
++        }
++    }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/EntityEnderDragon.java b/src/main/java/net/minecraft/server/EntityEnderDragon.java
+index d246ae7..ed7f549 100644
+--- a/src/main/java/net/minecraft/server/EntityEnderDragon.java
++++ b/src/main/java/net/minecraft/server/EntityEnderDragon.java
+@@ -51,6 +51,18 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
+         this.ah = true;
+     }
+ 
++    public void setTargetBlock(int x, int y, int z) {
++        // Mineplex
++        this.a = x;
++        this.b = y;
++        this.c = z;
++        this.target = null;
++    }
++
++    public void setTargetEntity(Entity e) {
++        this.target = e;
++    }
++
+     protected void initAttributes() {
+         super.initAttributes();
+         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(200.0D);
+@@ -170,7 +182,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
+                         this.c += this.random.nextGaussian() * 2.0D;
+                     }
+ 
+-                    if (this.bw || d2 < 100.0D || d2 > 22500.0D || this.positionChanged || this.E) {
++                    if (!isVegetated() && (this.bw || d2 < 100.0D || d2 > 22500.0D || this.positionChanged || this.E)) {
+                         this.cf();
+                     }
+ 
+@@ -253,7 +265,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
+                 this.bs.setPositionRotation(this.locX + (double) (f12 * 4.5F), this.locY + 2.0D, this.locZ + (double) (f11 * 4.5F), 0.0F, 0.0F);
+                 this.bt.t_();
+                 this.bt.setPositionRotation(this.locX - (double) (f12 * 4.5F), this.locY + 2.0D, this.locZ - (double) (f11 * 4.5F), 0.0F, 0.0F);
+-                if (!this.world.isClientSide && this.hurtTicks == 0) {
++                if (!this.world.isClientSide && this.hurtTicks == 0 && !isGhost()) {
+                     this.a(this.world.getEntities(this, this.bs.getBoundingBox().grow(4.0D, 2.0D, 4.0D).c(0.0D, -2.0D, 0.0D)));
+                     this.a(this.world.getEntities(this, this.bt.getBoundingBox().grow(4.0D, 2.0D, 4.0D).c(0.0D, -2.0D, 0.0D)));
+                     this.b(this.world.getEntities(this, this.bn.getBoundingBox().grow(1.0D, 1.0D, 1.0D)));
+diff --git a/src/main/java/net/minecraft/server/EntityFallingBlock.java b/src/main/java/net/minecraft/server/EntityFallingBlock.java
+index 7a42040..d3403a1 100644
+--- a/src/main/java/net/minecraft/server/EntityFallingBlock.java
++++ b/src/main/java/net/minecraft/server/EntityFallingBlock.java
+@@ -17,6 +17,8 @@ public class EntityFallingBlock extends Entity {
+     private float fallHurtAmount = 2.0F;
+     public NBTTagCompound tileEntityData;
+ 
++    public boolean spectating;
++
+     public EntityFallingBlock(World world) {
+         super(world);
+     }
+@@ -42,7 +44,15 @@ public class EntityFallingBlock extends Entity {
+     protected void h() {}
+ 
+     public boolean ad() {
+-        return !this.dead;
++        return !this.dead && !spectating;
++    }
++
++    @Override
++    public boolean damageEntity(DamageSource damagesource, float f)
++    {
++        CraftEventFactory.handleNonLivingEntityDamageEvent(this, damagesource, f);
++
++        return true;
+     }
+ 
+     public void t_() {
+diff --git a/src/main/java/net/minecraft/server/EntityHorse.java b/src/main/java/net/minecraft/server/EntityHorse.java
+index f131419..f293118 100644
+--- a/src/main/java/net/minecraft/server/EntityHorse.java
++++ b/src/main/java/net/minecraft/server/EntityHorse.java
+@@ -125,6 +125,9 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
+     private void c(int i, boolean flag) {
+         int j = this.datawatcher.getInt(16);
+ 
++        if (isVegetated())
++            return;
++
+         if (flag) {
+             this.datawatcher.watch(16, Integer.valueOf(j | i));
+         } else {
+diff --git a/src/main/java/net/minecraft/server/EntityInsentient.java b/src/main/java/net/minecraft/server/EntityInsentient.java
+index a8a327d..b7647bc 100644
+--- a/src/main/java/net/minecraft/server/EntityInsentient.java
++++ b/src/main/java/net/minecraft/server/EntityInsentient.java
+@@ -34,6 +34,10 @@ public abstract class EntityInsentient extends EntityLiving {
+     private Entity bp;
+     private NBTTagCompound bq;
+ 
++    private boolean _vegetated;
++    private boolean _shouldBreakLeash = true;
++    private boolean _pullWhileLeashed = true;
++
+     public EntityInsentient(World world) {
+         super(world);
+         this.goalSelector = new PathfinderGoalSelector(world != null && world.methodProfiler != null ? world.methodProfiler : null);
+@@ -53,6 +57,32 @@ public abstract class EntityInsentient extends EntityLiving {
+         this.persistent = !isTypeNotPersistent();
+         // CraftBukkit end
+     }
++    
++    public void setVegetated(boolean flag) {
++        _vegetated = flag;
++    }
++
++    public void setShouldBreakLeash(boolean shouldBreakLeash)
++    {
++        _shouldBreakLeash = shouldBreakLeash;
++    }
++
++    public void setPullWhileLeashed(boolean pullWhileLeashed)
++    {
++        _pullWhileLeashed = pullWhileLeashed;
++    }
++
++    public boolean isVegetated() {
++        return _vegetated;
++    }
++
++    public boolean shouldBreakLeash() {
++        return shouldBreakLeash();
++    }
++
++    public boolean shouldPullWhileLeashed() {
++        return _pullWhileLeashed;
++    }
+ 
+     protected void initAttributes() {
+         super.initAttributes();
+@@ -148,7 +178,7 @@ public abstract class EntityInsentient extends EntityLiving {
+     public void K() {
+         super.K();
+         this.world.methodProfiler.a("mobBaseTick");
+-        if (this.isAlive() && this.random.nextInt(1000) < this.a_++) {
++        if (!isSilent() && this.isAlive() && this.random.nextInt(1000) < this.a_++) {
+             this.a_ = -this.w();
+             this.x();
+         }
+@@ -770,7 +800,7 @@ public abstract class EntityInsentient extends EntityLiving {
+     }
+ 
+     public final boolean e(EntityHuman entityhuman) {
+-        if (this.cc() && this.getLeashHolder() == entityhuman) {
++        if (this.cc() && this.getLeashHolder() == entityhuman && _shouldBreakLeash) {
+             // CraftBukkit start - fire PlayerUnleashEntityEvent
+             if (CraftEventFactory.callPlayerUnleashEntityEvent(this, entityhuman).isCancelled()) {
+                 ((EntityPlayer) entityhuman).playerConnection.sendPacket(new PacketPlayOutAttachEntity(1, this, this.getLeashHolder()));
+@@ -835,7 +865,7 @@ public abstract class EntityInsentient extends EntityLiving {
+     }
+ 
+     public void unleash(boolean flag, boolean flag1) {
+-        if (this.bo) {
++        if (this.bo && _shouldBreakLeash) {
+             this.bo = false;
+             this.bp = null;
+             if (!this.world.isClientSide && flag1) {
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index f643b29..f75b0b1 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -101,6 +101,18 @@ public abstract class EntityLiving extends Entity {
+         this.damageEntity(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);
+     }
+ 
++    private boolean _ghost;
++    
++    public boolean isGhost()
++    {
++        return _ghost;
++    }
++
++    public void setGhost(boolean ghost)
++    {
++        _ghost = ghost;
++    }
++
+     public EntityLiving(World world) {
+         super(world);
+         this.initAttributes();
+@@ -1784,7 +1796,7 @@ public abstract class EntityLiving extends Entity {
+     }
+ 
+     public boolean ad() {
+-        return !this.dead;
++        return !isGhost() && !this.dead;
+     }
+ 
+     public boolean ae() {
+diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
+index 3810f86..44ac587 100644
+--- a/src/main/java/net/minecraft/server/EntityPlayer.java
++++ b/src/main/java/net/minecraft/server/EntityPlayer.java
+@@ -65,10 +65,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+     // Spigot start
+     public boolean collidesWithEntities = true;
+ 
++    public boolean spectating;
++    
+     @Override
+     public boolean ad()
+     {
+-        return this.collidesWithEntities && super.ad(); // (first !this.isDead near bottom of EntityLiving)
++        return !spectating && this.collidesWithEntities && super.ad(); // (first !this.isDead near bottom of EntityLiving)
+     }
+ 
+     @Override
+diff --git a/src/main/java/net/minecraft/server/EntityTNTPrimed.java b/src/main/java/net/minecraft/server/EntityTNTPrimed.java
+index 2d22327..83e71c1 100644
+--- a/src/main/java/net/minecraft/server/EntityTNTPrimed.java
++++ b/src/main/java/net/minecraft/server/EntityTNTPrimed.java
+@@ -9,6 +9,8 @@ public class EntityTNTPrimed extends Entity {
+     public float yield = 4; // CraftBukkit - add field
+     public boolean isIncendiary = false; // CraftBukkit - add field
+ 
++    public boolean spectating;
++
+     public EntityTNTPrimed(World world) {
+         super(world);
+         this.k = true;
+@@ -37,7 +39,7 @@ public class EntityTNTPrimed extends Entity {
+     }
+ 
+     public boolean ad() {
+-        return !this.dead;
++        return !spectating && !this.dead;
+     }
+ 
+     public void t_() {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index 5317cff..60e8584 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -74,6 +74,46 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+         }
+     }
+ 
++    public boolean shouldBreakLeash()
++    {
++        return ((EntityInsentient) getHandle()).shouldBreakLeash();
++    }
++
++    public void setShouldBreakLeash(boolean shouldBreakLeash)
++    {
++        ((EntityInsentient) getHandle()).setShouldBreakLeash(shouldBreakLeash);
++    }
++
++    public boolean shouldPullWhileLeashed()
++    {
++        return ((EntityInsentient) getHandle()).shouldPullWhileLeashed();
++    }
++
++    public void setPullWhileLeashed(boolean pullWhileLeashed)
++    {
++        ((EntityInsentient) getHandle()).setPullWhileLeashed(pullWhileLeashed);
++    }
++
++    public boolean isVegetated()
++    {
++        return ((EntityInsentient) getHandle()).isVegetated();
++    }
++
++    public void setVegetated(boolean vegetated)
++    {
++        ((EntityInsentient) getHandle()).setVegetated(vegetated);
++    }
++
++    public boolean isGhost()
++    {
++        return getHandle().isGhost();
++    }
++
++    public void setGhost(boolean ghost)
++    {
++        getHandle().setGhost(ghost);
++    }
++
+     public double getHealth() {
+         return Math.min(Math.max(0, getHandle().getHealth()), getMaxHealth());
+     }
+-- 
+2.7.4
+

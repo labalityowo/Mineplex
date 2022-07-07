@@ -1,0 +1,12 @@
+name: EnjinTranslator
+main: mineplex.enjinTranslator.EnjinTranslator
+version: 0.1
+commands:
+  enjin_mineplex:
+    description: Translates enjin commands to mineplex.
+    usage: Don't use it, you get kicked.
+    aliases: 
+  pull:
+    description: Translates enjin commands to mineplex.
+    usage: Don't use it, you get kicked.
+    aliases: 

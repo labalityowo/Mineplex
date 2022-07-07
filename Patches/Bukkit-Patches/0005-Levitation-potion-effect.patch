@@ -1,0 +1,46 @@
+From a465cb15a5aea5c5f70957d5af0fe6b55108bff7 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Wed, 30 Dec 2015 21:05:47 +1300
+Subject: [PATCH] Levitation potion effect
+
+
+diff --git a/src/main/java/org/bukkit/potion/PotionEffectType.java b/src/main/java/org/bukkit/potion/PotionEffectType.java
+index 4919d59..e75aa18 100644
+--- a/src/main/java/org/bukkit/potion/PotionEffectType.java
++++ b/src/main/java/org/bukkit/potion/PotionEffectType.java
+@@ -126,6 +126,11 @@ public abstract class PotionEffectType {
+      */
+     public static final PotionEffectType SATURATION = new PotionEffectTypeWrapper(23);
+ 
++    /**
++     * Slows the fall rate down
++     */
++    public static final PotionEffectType LEVITATION = new PotionEffectTypeWrapper(25);
++
+     private final int id;
+ 
+     protected PotionEffectType(int id) {
+@@ -202,7 +207,7 @@ public abstract class PotionEffectType {
+         return "PotionEffectType[" + id + ", " + getName() + "]";
+     }
+ 
+-    private static final PotionEffectType[] byId = new PotionEffectType[24];
++    private static final PotionEffectType[] byId = new PotionEffectType[26];
+     private static final Map<String, PotionEffectType> byName = new HashMap<String, PotionEffectType>();
+     // will break on updates.
+     private static boolean acceptingNew = true;
+diff --git a/src/main/java/org/bukkit/potion/PotionType.java b/src/main/java/org/bukkit/potion/PotionType.java
+index 6ad9a91..a3dc228 100644
+--- a/src/main/java/org/bukkit/potion/PotionType.java
++++ b/src/main/java/org/bukkit/potion/PotionType.java
+@@ -15,6 +15,7 @@ public enum PotionType {
+     INSTANT_DAMAGE(12, PotionEffectType.HARM, 2),
+     WATER_BREATHING(13, PotionEffectType.WATER_BREATHING, 1),
+     INVISIBILITY(14, PotionEffectType.INVISIBILITY, 1),
++    LEVITATION(15, PotionEffectType.LEVITATION, 1),
+     ;
+ 
+     private final int damageValue, maxLevel;
+-- 
+2.7.4
+

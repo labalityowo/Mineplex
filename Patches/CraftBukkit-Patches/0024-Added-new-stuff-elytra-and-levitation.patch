@@ -1,0 +1,1380 @@
+From 78251d4e835e96e8119c0f0ce87ad915339f5093 Mon Sep 17 00:00:00 2001
+From: libraryaddict <libraryaddict115@yahoo.co.nz>
+Date: Wed, 30 Dec 2015 21:06:12 +1300
+Subject: [PATCH] Added new stuff, elytra and levitation
+
+
+diff --git a/src/main/java/com/mineplex/spigot/MineplexTranslateItem.java b/src/main/java/com/mineplex/spigot/MineplexTranslateItem.java
+index 81954a4..34faf5e 100644
+--- a/src/main/java/com/mineplex/spigot/MineplexTranslateItem.java
++++ b/src/main/java/com/mineplex/spigot/MineplexTranslateItem.java
+@@ -101,7 +101,10 @@ public class MineplexTranslateItem
+ 	{
+ 		if (itemstack == null || itemstack.getItem() == null || serializer.version == 47)
+ 		{
+-			writeItemStack(serializer, itemstack);
++            if (itemstack != null && itemstack.getItem() != null && serializer.version == 47 && Item.getId(itemstack.getItem()) == 443)
++                writeItemStack(serializer, new ItemStack(Item.getById(1)));
++            else
++                writeItemStack(serializer, itemstack);
+ 			return;
+ 		}
+ 
+@@ -145,9 +148,6 @@ public class MineplexTranslateItem
+ 		case 373:
+ 			sendPotion(serializer, itemstack.cloneItemStack());
+ 			return;
+-		case 387:
+-			//sendBook(serializer, itemstack.cloneItemStack());
+-			//return;
+ 		default:
+ 			break;
+ 		}
+@@ -445,117 +445,6 @@ public class MineplexTranslateItem
+ 		potionNames[126] = "minecraft:long_invisibility";
+ 		potionNames[127] = null;
+ 
+-		// b[0] = 0;
+-		// b[1] = 8193;
+-		// b[2] = 8194;
+-		// b[3] = 8195;
+-		// b[4] = 8196;
+-		// b[5] = 8197;
+-		// b[6] = 8198;
+-		// b[8] = 8200;
+-		// b[9] = 8265;
+-		// b[10] = 8202;
+-		// b[11] = 8203;
+-		// b[12] = 8204;
+-		// b[13] = 8205;
+-		// b[14] = 8206;
+-		// b[16] = 8207;
+-		// b[17] = 8193;
+-		// b[18] = 8194;
+-		// b[19] = 8195;
+-		// b[20] = 8196;
+-		// b[21] = 8197;
+-		// b[22] = 8198;
+-		// b[24] = 8200;
+-		// b[25] = 8265;
+-		// b[26] = 8202;
+-		// b[27] = 8203;
+-		// b[28] = 8204;
+-		// b[29] = 8205;
+-		// b[30] = 8206;
+-		// b[32] = "minecraft:thick";
+-		// b[33] = 8225;
+-		// b[34] = 8226;
+-		// b[35] = 8195;
+-		// b[36] = 8228;
+-		// b[37] = 8229;
+-		// b[38] = 8198;
+-		// b[40] = 8200;
+-		// b[41] = 8233;
+-		// b[42] = 8202;
+-		// b[43] = 8235;
+-		// b[44] = 8236;
+-		// b[45] = 8205;
+-		// b[46] = 8206;
+-		// b[49] = 8225;
+-		// b[50] = 8226;
+-		// b[51] = 8195;
+-		// b[52] = 8228;
+-		// b[53] = 8229;
+-		// b[54] = 8198;
+-		// b[56] = 8200;
+-		// b[57] = 8233;
+-		// b[58] = 8202;
+-		// b[59] = 8235;
+-		// b[60] = 8236;
+-		// b[61] = 8205;
+-		// b[62] = 8206;
+-		// b[64] = "minecraft:mundane";
+-		// b[65] = 8257;
+-		// b[66] = 8258;
+-		// b[67] = 8259;
+-		// b[68] = 8260;
+-		// b[69] = 8197;
+-		// b[70] = 8198;
+-		// b[72] = 8264;
+-		// b[73] = 8265;
+-		// b[74] = 8266;
+-		// b[75] = 8267;
+-		// b[76] = 8204;
+-		// b[77] = 8269;
+-		// b[78] = 8270;
+-		// b[80] = "minecraft:awkward";
+-		// b[81] = 8257;
+-		// b[82] = 8258;
+-		// b[83] = 8259;
+-		// b[84] = 8260;
+-		// b[85] = 8197;
+-		// b[86] = 8198;
+-		// b[88] = 8264;
+-		// b[89] = 8265;
+-		// b[90] = 8266;
+-		// b[91] = 8267;
+-		// b[92] = 8204;
+-		// b[93] = 8269;
+-		// b[94] = 8270;
+-		// b[96] = "minecraft:thick";
+-		// b[97] = 8193;
+-		// b[98] = 8194;
+-		// b[99] = 8259;
+-		// b[100] = 8196;
+-		// b[101] = 8229;
+-		// b[102] = 8198;
+-		// b[104] = 8264;
+-		// b[105] = 8265;
+-		// b[106] = 8266;
+-		// b[107] = 8203;
+-		// b[108] = 8236;
+-		// b[109] = 8269;
+-		// b[110] = 8270;
+-		// b[113] = 8193;
+-		// b[114] = 8194;
+-		// b[115] = 8259;
+-		// b[116] = 8196;
+-		// b[117] = 8229;
+-		// b[118] = 8198;
+-		// b[120] = 8264;
+-		// b[121] = 8265;
+-		// b[122] = 8266;
+-		// b[123] = 8203;
+-		// b[124] = 8236;
+-		// b[125] = 8269;
+-		// b[126] = 8270;
+-
+ 		try
+ 		{
+ 			Field field = EntityTypes.class.getDeclaredField("g");
+diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
+index b86369b..4301bc9 100644
+--- a/src/main/java/net/minecraft/server/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/DedicatedServer.java
+@@ -137,6 +137,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+             this.p.b();
+             return false;
+         } else {
++            Item.REGISTRY.a(443, new MinecraftKey("elytra"), new ItemArmor(ItemArmor.EnumArmorMaterial.ELYTRA, 5, 1).c("elytra"));
+             if (this.T()) {
+                 this.c("127.0.0.1");
+             } else {
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index a301af7..51ca1f3 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -1773,6 +1773,50 @@ public abstract class Entity implements ICommandListener {
+ 
+     }
+ 
++    private boolean _canGlideWithoutWings;
++    private boolean _autoWingsFly = true;
++    private float _wingsDeployAt = 1.15F;
++    
++    public void setAutoWingsDeploy(boolean deployWings)
++    {
++        _autoWingsFly = deployWings;
++    }
++    
++    public boolean isAutoWingsDeploy()
++    {
++        return _autoWingsFly;
++    }
++    
++    public float getWingsDeployAt()
++    {
++        return _wingsDeployAt;
++    }
++    
++    public void setWingsDeployAt(float wingsDeployAt)
++    {
++        _wingsDeployAt = wingsDeployAt;
++    }
++
++    public void setGlidableWithoutWings(boolean canGlideWithoutWings)
++    {
++        _canGlideWithoutWings = canGlideWithoutWings;
++    }
++
++    public boolean canGlideWithoutWings()
++    {
++        return _canGlideWithoutWings;
++    }
++
++    public void setGliding(boolean gliding)
++    {
++        b(7, gliding);
++    }
++    
++    public boolean isGliding()
++    {
++        return g(7);
++    }
++
+     public int getAirTicks() {
+         return this.datawatcher.getShort(1);
+     }
+diff --git a/src/main/java/net/minecraft/server/EntityFireworks.java b/src/main/java/net/minecraft/server/EntityFireworks.java
+index c918c5f..41e9275 100644
+--- a/src/main/java/net/minecraft/server/EntityFireworks.java
++++ b/src/main/java/net/minecraft/server/EntityFireworks.java
+@@ -6,7 +6,7 @@ public class EntityFireworks extends Entity {
+ 
+     private int ticksFlown;
+     public int expectedLifespan;
+-    private final DataIndex<Optional<ItemStack>> META_ITEM = DataWatcher.getIndex(EntityFireworks.class, DataType.OPT_ITEMSTACK);
++    public static final DataIndex<Optional<ItemStack>> META_ITEM = DataWatcher.getIndex(EntityFireworks.class, DataType.OPT_ITEMSTACK);
+ 
+     // Spigot Start
+     @Override
+diff --git a/src/main/java/net/minecraft/server/EntityHuman.java b/src/main/java/net/minecraft/server/EntityHuman.java
+index 5294c66..743df69 100644
+--- a/src/main/java/net/minecraft/server/EntityHuman.java
++++ b/src/main/java/net/minecraft/server/EntityHuman.java
+@@ -1226,6 +1226,13 @@ public abstract class EntityHuman extends EntityLiving {
+ 
+     }
+ 
++    public void setGliding(boolean gliding)
++    {
++        super.setGliding(gliding);
++
++        setSize(0.6F, gliding ? 0.4F : 1.8F);
++    }
++
+     public void a(boolean flag, boolean flag1, boolean flag2) {
+         this.setSize(0.6F, 1.8F);
+         IBlockData iblockdata = this.world.getType(this.bx);
+@@ -1688,6 +1695,11 @@ public abstract class EntityHuman extends EntityLiving {
+             f -= 0.08F;
+         }
+ 
++        if (this.isGliding())
++        {
++            f = 0.4f;
++        }
++
+         return f;
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index 710def4..41eede5 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -955,7 +955,7 @@ public abstract class EntityLiving extends Entity {
+ 
+         if (i > 0) {
+             // CraftBukkit start
+-            if (!this.damageEntity(DamageSource.FALL, (float) i)) {
++            if (isGliding() || !this.damageEntity(DamageSource.FALL, (float) i)) {
+                 return;
+             }
+             // CraftBukkit end
+@@ -1667,6 +1667,7 @@ public abstract class EntityLiving extends Entity {
+         this.aZ *= 0.98F;
+         this.ba *= 0.98F;
+         this.bb *= 0.9F;
++        checkWings();
+         SpigotTimings.timerEntityAIMove.startTiming(); // Spigot
+         this.g(this.aZ, this.ba);
+         SpigotTimings.timerEntityAIMove.stopTiming(); // Spigot
+@@ -1681,6 +1682,37 @@ public abstract class EntityLiving extends Entity {
+         this.world.methodProfiler.b();
+     }
+ 
++    private void checkWings()
++    {
++        if (!isAutoWingsDeploy())
++            return;
++
++        boolean gliding = isGliding();
++        
++        if ((!this.onGround || gliding && motX * motX + motZ * motZ > 0.25) && this.fallDistance >= getWingsDeployAt() && (!(this instanceof EntityPlayer) || (((EntityPlayer) this).playerConnection.networkManager.getVersion() != 47 && !((EntityPlayer) this).getBukkitEntity().isFlying())))
++        {
++            ItemStack item = getEquipment()[2];
++
++            if (canGlideWithoutWings() || (item != null && item.getItem().getName().contains("elytra")))
++            {
++                gliding = true;
++            }
++            else
++            {
++                gliding = false;
++            }
++        }
++        else
++        {
++            gliding = false;
++        }
++        
++        if (gliding != isGliding())
++        {
++            setGliding(gliding);
++        }
++    }
++
+     protected void doTick() {}
+ 
+     protected void bL() {
+diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
+index 9c46797..b1348b9 100644
+--- a/src/main/java/net/minecraft/server/EntityPlayer.java
++++ b/src/main/java/net/minecraft/server/EntityPlayer.java
+@@ -247,11 +247,15 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+                     this.playerConnection.sendPacket(new PacketPlayOutMapChunk((Chunk) arraylist.get(0), true, '\uffff'));
+                 } else {
+                     if (playerConnection.networkManager.getVersion() == 47)
+-                    this.playerConnection.sendPacket(new PacketPlayOutMapChunkBulk(arraylist));
+-                else
+-                    for (Chunk chunk1 : (ArrayList<Chunk>) arraylist)
+                     {
+-                        this.playerConnection.sendPacket(new PacketPlayOutMapChunk(chunk1, true, '\uffff'));
++                        this.playerConnection.sendPacket(new PacketPlayOutMapChunkBulk(arraylist));
++                    }
++                    else
++                    {
++                        for (Chunk chunk1 : (ArrayList<Chunk>) arraylist)
++                        {
++                            this.playerConnection.sendPacket(new PacketPlayOutMapChunk(chunk1, true, '\uffff'));
++                        }
+                     }
+                 }
+ 
+diff --git a/src/main/java/net/minecraft/server/EnumProtocol.java b/src/main/java/net/minecraft/server/EnumProtocol.java
+index eb425dc..f3877e4 100644
+--- a/src/main/java/net/minecraft/server/EnumProtocol.java
++++ b/src/main/java/net/minecraft/server/EnumProtocol.java
+@@ -42,7 +42,7 @@ public enum EnumProtocol
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutTileEntityData.class, 53, 9);
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBlockAction.class, 36, 10);
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBlockChange.class, 35, 11);
+-                // Boss bar
++                a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBossBar.class, -1, 12);
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutServerDifficulty.class, 65, 13);
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutTabComplete.class, 58, 14);
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutChat.class, 2, 15);
+@@ -53,7 +53,7 @@ public enum EnumProtocol
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutWindowItems.class, 48, 20);
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutWindowData.class, 49, 21);
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSetSlot.class, 47, 22);
+-                // Set cooldown
++                a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSetCooldown.class, -1, 23);
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCustomPayload.class, 63, 24);
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutNamedSoundEffect.class, 41, 25);
+                 a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutKickDisconnect.class, 64, 26);
+@@ -110,7 +110,7 @@ public enum EnumProtocol
+ 
+ 
+ 
+-                a(EnumProtocolDirection.SERVERBOUND, PacketPlayInArmAnimation.class, 10, 26);
++                a(EnumProtocolDirection.SERVERBOUND, PacketPlayInLeftClick.class, -1, 0);
+                 a(EnumProtocolDirection.SERVERBOUND, PacketPlayInTabComplete.class, 20, 1);
+                 a(EnumProtocolDirection.SERVERBOUND, PacketPlayInChat.class, 1, 2);
+                 a(EnumProtocolDirection.SERVERBOUND, PacketPlayInClientCommand.class, 22, 3);
+@@ -136,7 +136,7 @@ public enum EnumProtocol
+                 a(EnumProtocolDirection.SERVERBOUND, PacketPlayInHeldItemSlot.class, 9, 23);
+                 a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSetCreativeSlot.class, 16, 24);
+                 a(EnumProtocolDirection.SERVERBOUND, PacketPlayInUpdateSign.class, 18, 25);
+-                a(EnumProtocolDirection.SERVERBOUND, PacketPlayInLeftClick.class, -1, 0);
++                a(EnumProtocolDirection.SERVERBOUND, PacketPlayInArmAnimation.class, 10, 26);
+                 a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSpectate.class, 24, 27);
+                 a(EnumProtocolDirection.SERVERBOUND, PacketPlayInBlockPlace.class, 8, 28);
+                 a(EnumProtocolDirection.SERVERBOUND, PacketPlayInRightClick.class, -1, 29);
+diff --git a/src/main/java/net/minecraft/server/HandshakeListener.java b/src/main/java/net/minecraft/server/HandshakeListener.java
+index fa1a1e1..31e1ea1 100644
+--- a/src/main/java/net/minecraft/server/HandshakeListener.java
++++ b/src/main/java/net/minecraft/server/HandshakeListener.java
+@@ -25,7 +25,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
+         
+             int version = packethandshakinginsetprotocol.b();
+             //System.out.print(version);
+-            boolean supported = version == 47 || version == 89 || version == 86;
++            boolean supported = version == 47 || version == 94;
+             
+ 			if (supported)
+             {
+diff --git a/src/main/java/net/minecraft/server/ItemArmor.java b/src/main/java/net/minecraft/server/ItemArmor.java
+index cd77ba5..39043fd 100644
+--- a/src/main/java/net/minecraft/server/ItemArmor.java
++++ b/src/main/java/net/minecraft/server/ItemArmor.java
+@@ -167,7 +167,7 @@ public class ItemArmor extends Item {
+ 
+     public static enum EnumArmorMaterial {
+ 
+-        LEATHER("leather", 5, new int[] { 1, 3, 2, 1}, 15), CHAIN("chainmail", 15, new int[] { 2, 5, 4, 1}, 12), IRON("iron", 15, new int[] { 2, 6, 5, 2}, 9), GOLD("gold", 7, new int[] { 2, 5, 3, 1}, 25), DIAMOND("diamond", 33, new int[] { 3, 8, 6, 3}, 10);
++        LEATHER("leather", 5, new int[] { 1, 3, 2, 1}, 15), CHAIN("chainmail", 15, new int[] { 2, 5, 4, 1}, 12), IRON("iron", 15, new int[] { 2, 6, 5, 2}, 9), GOLD("gold", 7, new int[] { 2, 5, 3, 1}, 25), DIAMOND("diamond", 33, new int[] { 3, 8, 6, 3}, 10), ELYTRA("eltra", 431, new int[] { 1, 1, 1, 1}, 1);
+ 
+         private final String f;
+         private final int g;
+@@ -194,7 +194,7 @@ public class ItemArmor extends Item {
+         }
+ 
+         public Item b() {
+-            return this == ItemArmor.EnumArmorMaterial.LEATHER ? Items.LEATHER : (this == ItemArmor.EnumArmorMaterial.CHAIN ? Items.IRON_INGOT : (this == ItemArmor.EnumArmorMaterial.GOLD ? Items.GOLD_INGOT : (this == ItemArmor.EnumArmorMaterial.IRON ? Items.IRON_INGOT : (this == ItemArmor.EnumArmorMaterial.DIAMOND ? Items.DIAMOND : null))));
++            return this == ItemArmor.EnumArmorMaterial.LEATHER || this == ItemArmor.EnumArmorMaterial.ELYTRA ? Items.LEATHER : (this == ItemArmor.EnumArmorMaterial.CHAIN ? Items.IRON_INGOT : (this == ItemArmor.EnumArmorMaterial.GOLD ? Items.GOLD_INGOT : (this == ItemArmor.EnumArmorMaterial.IRON ? Items.IRON_INGOT : (this == ItemArmor.EnumArmorMaterial.DIAMOND ? Items.DIAMOND : null))));
+         }
+     }
+ }
+diff --git a/src/main/java/net/minecraft/server/ItemBlock.java b/src/main/java/net/minecraft/server/ItemBlock.java
+new file mode 100644
+index 0000000..f680859
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/ItemBlock.java
+@@ -0,0 +1,102 @@
++package net.minecraft.server;
++
++public class ItemBlock extends Item
++{
++  protected final Block a;
++
++  public ItemBlock(Block paramBlock)
++  {
++    this.a = paramBlock;
++  }
++
++  public ItemBlock b(String paramString)
++  {
++    super.c(paramString);
++    return this;
++  }
++
++  public boolean interactWith(ItemStack paramItemStack, EntityHuman paramEntityHuman, World paramWorld, BlockPosition paramBlockPosition, EnumDirection paramEnumDirection, float paramFloat1, float paramFloat2, float paramFloat3)
++  {
++    IBlockData localIBlockData1 = paramWorld.getType(paramBlockPosition);
++    Block localBlock = localIBlockData1.getBlock();
++    if (!localBlock.a(paramWorld, paramBlockPosition)) {
++      paramBlockPosition = paramBlockPosition.shift(paramEnumDirection);
++    }
++
++    if (paramItemStack.count == 0) {
++      return false;
++    }
++    if (!paramEntityHuman.a(paramBlockPosition, paramEnumDirection, paramItemStack)) {
++      return false;
++    }
++
++    if (paramWorld.a(this.a, paramBlockPosition, false, paramEnumDirection, null, paramItemStack)) {
++      int i = filterData(paramItemStack.getData());
++      IBlockData localIBlockData2 = this.a.getPlacedState(paramWorld, paramBlockPosition, paramEnumDirection, paramFloat1, paramFloat2, paramFloat3, i, paramEntityHuman);
++      if (paramWorld.setTypeAndData(paramBlockPosition, localIBlockData2, 3)) {
++        localIBlockData2 = paramWorld.getType(paramBlockPosition);
++
++        if (localIBlockData2.getBlock() == this.a) {
++          a(paramWorld, paramEntityHuman, paramBlockPosition, paramItemStack);
++          this.a.postPlace(paramWorld, paramBlockPosition, localIBlockData2, paramEntityHuman, paramItemStack);
++        }
++
++        for (IWorldAccess access : paramWorld.u)
++        {
++            if (access instanceof WorldManager)
++            ((WorldManager) access).a(this.a.stepSound.getPlaceSound(), paramBlockPosition.getX() + 0.5F, paramBlockPosition.getY() + 0.5F, paramBlockPosition.getZ() + 0.5F, (this.a.stepSound.getVolume1() + 1.0F) / 2.0F, this.a.stepSound.getVolume2() * 0.8F, paramEntityHuman);
++        }
++        paramItemStack.count -= 1;
++      }
++      return true;
++    }
++    return false;
++  }
++
++  public static boolean a(World paramWorld, EntityHuman paramEntityHuman, BlockPosition paramBlockPosition, ItemStack paramItemStack) {
++    MinecraftServer localMinecraftServer = MinecraftServer.getServer();
++    if (localMinecraftServer == null) {
++      return false;
++    }
++    if ((paramItemStack.hasTag()) && (paramItemStack.getTag().hasKeyOfType("BlockEntityTag", 10))) {
++      TileEntity localTileEntity = paramWorld.getTileEntity(paramBlockPosition);
++
++      if (localTileEntity != null) {
++        if ((!paramWorld.isClientSide) && (localTileEntity.F()) && (!localMinecraftServer.getPlayerList().isOp(paramEntityHuman.getProfile()))) {
++          return false;
++        }
++        NBTTagCompound localNBTTagCompound1 = new NBTTagCompound();
++        NBTTagCompound localNBTTagCompound2 = (NBTTagCompound)localNBTTagCompound1.clone();
++        localTileEntity.b(localNBTTagCompound1);
++
++        NBTTagCompound localNBTTagCompound3 = (NBTTagCompound)paramItemStack.getTag().get("BlockEntityTag");
++        localNBTTagCompound1.a(localNBTTagCompound3);
++        localNBTTagCompound1.setInt("x", paramBlockPosition.getX());
++        localNBTTagCompound1.setInt("y", paramBlockPosition.getY());
++        localNBTTagCompound1.setInt("z", paramBlockPosition.getZ());
++
++        if (!localNBTTagCompound1.equals(localNBTTagCompound2)) {
++          localTileEntity.a(localNBTTagCompound1);
++          localTileEntity.update();
++          return true;
++        }
++      }
++    }
++    return false;
++  }
++
++  public String e_(ItemStack paramItemStack)
++  {
++    return this.a.a();
++  }
++
++  public String getName()
++  {
++    return this.a.a();
++  }
++
++  public Block d()
++  {
++    return this.a;
++  }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/MobEffectList.java b/src/main/java/net/minecraft/server/MobEffectList.java
+index 863e9d8..b34cd62 100644
+--- a/src/main/java/net/minecraft/server/MobEffectList.java
++++ b/src/main/java/net/minecraft/server/MobEffectList.java
+@@ -40,6 +40,7 @@ public class MobEffectList {
+     public static final MobEffectList HEALTH_BOOST = (new MobEffectHealthBoost(21, new MinecraftKey("health_boost"), false, 16284963)).c("potion.healthBoost").b(2, 2).a(GenericAttributes.maxHealth, "5D6F0BA2-1186-46AC-B896-C61C5CEE99CC", 4.0D, 0);
+     public static final MobEffectList ABSORBTION = (new MobEffectAbsorption(22, new MinecraftKey("absorption"), false, 2445989)).c("potion.absorption").b(2, 2);
+     public static final MobEffectList SATURATION = (new InstantMobEffect(23, new MinecraftKey("saturation"), false, 16262179)).c("potion.saturation");
++    public static final MobEffectList LEVITATION = (new MobEffectList(25, new MinecraftKey("levitation"), false, 33333)).c("potion.levitation");
+     public static final MobEffectList z = null;
+     public static final MobEffectList A = null;
+     public static final MobEffectList B = null;
+diff --git a/src/main/java/net/minecraft/server/PacketListenerPlayOut.java b/src/main/java/net/minecraft/server/PacketListenerPlayOut.java
+index 361eebb..371ad06 100644
+--- a/src/main/java/net/minecraft/server/PacketListenerPlayOut.java
++++ b/src/main/java/net/minecraft/server/PacketListenerPlayOut.java
+@@ -147,4 +147,8 @@ public abstract interface PacketListenerPlayOut extends PacketListener
+   public abstract void a(PacketPlayOutUnloadChunk paramPacketPlayOutUnloadChunk);
+ 
+   public abstract void a(PacketPlayOutNewAttachEntity paramPacketPlayOutNewAttachEntity);
++
++  public abstract void a(PacketPlayOutBossBar paramPacketPlayOutBossBar);
++
++  public abstract void a(PacketPlayOutSetCooldown paramPacketPlayOutSetCooldown);
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/PacketPlayInBlockDig.java b/src/main/java/net/minecraft/server/PacketPlayInBlockDig.java
+index 3032d20..549e035 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayInBlockDig.java
++++ b/src/main/java/net/minecraft/server/PacketPlayInBlockDig.java
+@@ -43,6 +43,6 @@ public class PacketPlayInBlockDig
+ 
+   public static enum EnumPlayerDigType
+   {
+-      START_DESTROY_BLOCK, ABORT_DESTROY_BLOCK, STOP_DESTROY_BLOCK, DROP_ALL_ITEMS, DROP_ITEM, RELEASE_USE_ITEM;
++      START_DESTROY_BLOCK, ABORT_DESTROY_BLOCK, STOP_DESTROY_BLOCK, DROP_ALL_ITEMS, DROP_ITEM, RELEASE_USE_ITEM, SWAP_HELD_ITEMS;
+   }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutBossBar.java b/src/main/java/net/minecraft/server/PacketPlayOutBossBar.java
+new file mode 100644
+index 0000000..1043327
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutBossBar.java
+@@ -0,0 +1,96 @@
++package net.minecraft.server;
++
++import java.util.UUID;
++import java.io.IOException;
++
++public class PacketPlayOutBossBar
++    implements Packet
++{
++    public UUID uuid;
++    /**
++    * 0 = Add
++    * 1 = Remove
++    * 2 = Update Health
++    * 3 = Update Title
++    * 4 = Update Style
++    * 5 = Update Flags
++    **/
++    public int action;
++    public String title;
++    public float health;
++    /**
++    * 0 = Pinkish
++    * 1 = Cyan
++    * 2 = Red
++    * 3 = Lime
++    * 4 = Yellow
++    * 5 = Purple
++    * 6 = White
++    **/
++    public int color;
++    public int dividers;
++    /**
++    * 0x1 = Darken sky
++    * 0x2 = Dragon Bar
++    **/
++    public byte flags;
++
++    public PacketPlayOutBossBar()
++    {
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++    {
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++    {
++        try {
++            packetdataserializer.a(this.uuid);
++            packetdataserializer.b(this.action);
++            
++            if (this.action == 0)
++            {
++                packetdataserializer.a(org.bukkit.craftbukkit.util.CraftChatMessage.fromString(title)[0]);
++                packetdataserializer.writeFloat(health);
++                packetdataserializer.b(color);
++                packetdataserializer.b(dividers);
++                packetdataserializer.writeByte(flags);
++            }
++            
++            if (action == 2)
++            {
++                packetdataserializer.writeFloat(health);
++            }
++            
++            if (action == 3)
++            {
++                packetdataserializer.a(org.bukkit.craftbukkit.util.CraftChatMessage.fromString(title)[0]);
++            }
++            
++            if (action == 4)
++            {
++                packetdataserializer.b(color);
++                packetdataserializer.b(dividers);
++            }
++            
++            if (action == 5)
++            {
++                packetdataserializer.writeByte(flags);
++            }
++        } catch (IOException ex)
++        {
++            ex.printStackTrace();
++        }
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutMapChunkBulk.java b/src/main/java/net/minecraft/server/PacketPlayOutMapChunkBulk.java
+index 54c1ec9..ef51cd4 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutMapChunkBulk.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutMapChunkBulk.java
+@@ -14,7 +14,7 @@ public class PacketPlayOutMapChunkBulk implements Packet<PacketListenerPlayOut>
+ 
+     public PacketPlayOutMapChunkBulk() {}
+ 
+-    public PacketPlayOutMapChunkBulk(List<Chunk> list) {
++    public PacketPlayOutMapChunkBulk(List<Chunk> list) {Thread.dumpStack();
+         int i = list.size();
+         mapChunks = list;
+ 
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java b/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java
+index d16b0b7..6c8c8fa 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutNamedSoundEffect.java
+@@ -183,7 +183,9 @@ public class PacketPlayOutNamedSoundEffect
+         sounds.put("music.menu", "music.menu");
+         sounds.put("note.bassattack", "block.note.bass");
+         sounds.put("note.bd", "block.note.basedrum");
++        sounds.put("note.baseattack", "block.note.basedrum");
+         sounds.put("note.harp", "block.note.harp");
++        sounds.put("note.pling", "block.note.harp");
+         sounds.put("note.hat", "block.note.hat");
+         sounds.put("note.snare", "block.note.snare");
+         sounds.put("portal.portal", "block.portal.ambient");
+@@ -245,13 +247,12 @@ public class PacketPlayOutNamedSoundEffect
+     {
+         c = 0x7fffffff;
+     }
+-    private static HashMap<String, Long> so = new HashMap<String, Long>();
++
+     public PacketPlayOutNamedSoundEffect(String s, double d1, double d2, double d3, 
+             float f1, float f2)
+     {
+         c = 0x7fffffff;
+         Validate.notNull(s, "name", new Object[0]);
+-     if (!so.containsKey(s) || so.get(s) < System.currentTimeMillis()){so.put(s, System.currentTimeMillis() + 60000);   System.out.print("Sound: " + s);}
+         a = s;
+         b = (int)(d1 * 8D);
+         c = (int)(d2 * 8D);
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutScoreboardTeam.java b/src/main/java/net/minecraft/server/PacketPlayOutScoreboardTeam.java
+index 7ef913f..764dba0 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutScoreboardTeam.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutScoreboardTeam.java
+@@ -86,11 +86,11 @@ public class PacketPlayOutScoreboardTeam
+       paramPacketDataSerializer.a(this.c);
+       paramPacketDataSerializer.a(this.d);
+       paramPacketDataSerializer.writeByte(this.i);
++      paramPacketDataSerializer.a(this.e);
+       if (paramPacketDataSerializer.version != 47)
+       {
+           paramPacketDataSerializer.a(collision);
+       }
+-      paramPacketDataSerializer.a(this.e);
+       paramPacketDataSerializer.writeByte(this.f);
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutSetCooldown.java b/src/main/java/net/minecraft/server/PacketPlayOutSetCooldown.java
+new file mode 100644
+index 0000000..b070cd1
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PacketPlayOutSetCooldown.java
+@@ -0,0 +1,44 @@
++package net.minecraft.server;
++
++public class PacketPlayOutSetCooldown
++    implements Packet
++{
++    public int itemId;
++    public int cooldownTicks;
++
++    public PacketPlayOutSetCooldown()
++    {
++    }
++
++    public PacketPlayOutSetCooldown(int itemId, int cooldownTicks)
++    {
++        this.itemId = itemId;
++        this.cooldownTicks = cooldownTicks;
++    }
++
++    public PacketPlayOutSetCooldown(org.bukkit.Material item, int cooldownTicks)
++    {
++        this.itemId = item.getId();
++        this.cooldownTicks = cooldownTicks;
++    }
++
++    public void a(PacketDataSerializer packetdataserializer)
++    {
++    }
++
++    public void b(PacketDataSerializer packetdataserializer)
++    {
++        packetdataserializer.a(itemId);
++        packetdataserializer.a(cooldownTicks);
++    }
++
++    public void a(PacketListenerPlayOut packetlistenerplayout)
++    {
++        packetlistenerplayout.a(this);
++    }
++
++    public void a(PacketListener packetlistener)
++    {
++        a((PacketListenerPlayOut)packetlistener);
++    }
++}
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutUpdateSign.java b/src/main/java/net/minecraft/server/PacketPlayOutUpdateSign.java
+index 9a3b275..ef18545 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutUpdateSign.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutUpdateSign.java
+@@ -53,14 +53,7 @@ public class PacketPlayOutUpdateSign
+         packetdataserializer.a(b);
+         for(int i = 0; i < 4; i++)
+         {
+-            if (packetdataserializer.version == 47)
+-            {
+-                packetdataserializer.a(c[i]);
+-            }
+-             else
+-            {
+-                packetdataserializer.a(c[i]);
+-            }
++            packetdataserializer.a(c[i]);
+         }
+ 
+     }
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index 43fc802..6372719 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -386,7 +386,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+                         f3 = packetplayinflying.e();
+                     }
+ 
+-                    //this.player.l();
++                    this.player.l();
+                     this.player.setLocation(this.o, this.p, this.q, f2, f3);
+                     if (!this.checkMovement) {
+                         return;
+@@ -445,7 +445,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+ 
+                     AxisAlignedBB axisalignedbb = this.player.getBoundingBox().grow((double) f4, (double) f4, (double) f4).a(0.0D, -0.55D, 0.0D);
+ 
+-                    if (!this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !worldserver.c(axisalignedbb)) {
++                    ItemStack item = this.player.getEquipment()[2];
++
++                    if (!this.player.isGliding() && (item == null || !item.getItem().getName().contains("elytra")) && !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !worldserver.c(axisalignedbb)) {
+                         if (d16 >= -0.03125D) {
+                             ++this.g;
+                             if (this.g > 80) {
+@@ -654,6 +656,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+                 return;
+             }
+ 
++        case 7:
++            this.player.getBukkitEntity().updateInventory();
++            return;
+         default:
+             throw new IllegalArgumentException("Invalid player action");
+         }
+@@ -1456,6 +1461,13 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+                     return;
+                 }
+ 
++                if (this.player.activeContainer == this.player.defaultContainer && packetplayinwindowclick.b() >= this.player.activeContainer.c.size())
++                {
++                    this.player.playerConnection.sendPacket(new PacketPlayOutSetSlot(this.player.activeContainer.windowId, packetplayinwindowclick.b(), null));
++                    player.getBukkitEntity().updateInventory();
++                    return;
++                }
++
+                 InventoryView inventory = this.player.activeContainer.getBukkitView();
+                 SlotType type = CraftInventoryView.getSlotType(inventory, packetplayinwindowclick.b());
+ 
+@@ -2257,6 +2269,12 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+                 ;
+             }
+ 
++            try {
++                PlayerConnection.SyntheticClass_1.a[PacketPlayInBlockDig.EnumPlayerDigType.SWAP_HELD_ITEMS.ordinal()] = 7;
++            } catch (NoSuchFieldError nosuchfielderror15) {
++                ;
++            }
++
+         }
+     }
+     
+@@ -2264,7 +2282,8 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+ 
+     public void a(PacketPlayInUnknownPosition paramPacketPlayInUnknownPosition){System.out.print("Received unknown position");}
+ 
+-    public void a(PacketPlayInLeftClick paramPacketPlayInLeftClick){System.out.print("Received left click");}
++    public void a(PacketPlayInLeftClick paramPacketPlayInLeftClick){//System.out.print("Received left click");
++    }
+ 
+     public void a(PacketPlayInRightClick paramPacketPlayInRightClick)
+     {
+diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
+index da576bc..8d826df 100644
+--- a/src/main/java/net/minecraft/server/PlayerList.java
++++ b/src/main/java/net/minecraft/server/PlayerList.java
+@@ -1032,10 +1032,21 @@ public abstract class PlayerList {
+         this.sendPacketNearby((EntityHuman) null, d0, d1, d2, d3, i, packet);
+     }
+ 
++    public void sendPacketNearby(double d0, double d1, double d2, double d3, int i, Packet packet, Entity entity) {
++        this.sendPacketNearby((EntityHuman) null, d0, d1, d2, d3, i, packet, entity);
++    }
++
+     public void sendPacketNearby(EntityHuman entityhuman, double d0, double d1, double d2, double d3, int i, Packet packet) {
++        this.sendPacketNearby(entityhuman, d0, d1, d2, d3, i, packet, null);
++    }
++
++    public void sendPacketNearby(EntityHuman entityhuman, double d0, double d1, double d2, double d3, int i, Packet packet, Entity dontSendTo) {
+         for (int j = 0; j < this.players.size(); ++j) {
+             EntityPlayer entityplayer = (EntityPlayer) this.players.get(j);
+ 
++            if (entityplayer.playerConnection.networkManager.getVersion() > 47 && dontSendTo == entityplayer)
++                continue;
++
+             // CraftBukkit start - Test if player receiving packet can see the source of the packet
+             if (entityhuman != null && entityhuman instanceof EntityPlayer && !entityplayer.getBukkitEntity().canSee(((EntityPlayer) entityhuman).getBukkitEntity())) {
+                continue;
+diff --git a/src/main/java/net/minecraft/server/PotionBrewer.java b/src/main/java/net/minecraft/server/PotionBrewer.java
+new file mode 100644
+index 0000000..4dcea43
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/PotionBrewer.java
+@@ -0,0 +1,407 @@
++package net.minecraft.server;
++
++import com.google.common.collect.Lists;
++import com.google.common.collect.Maps;
++import java.util.ArrayList;
++import java.util.Collection;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++
++public class PotionBrewer {
++    public static final String a;
++    public static final String b;
++    public static final String c;
++    public static final String d;
++    public static final String e;
++    public static final String f;
++    public static final String g;
++    public static final String h;
++    public static final String i;
++    public static final String j;
++    public static final String k;
++    public static final String l;
++    public static final String m;
++    public static final String n;
++    private static final Map<Integer, String> effectDurations;
++    private static final Map<Integer, String> effectAmplifiers;
++    private static final Map<Integer, Integer> q;
++    private static final String[] appearances;
++
++    public static boolean a(int n, int n2) {
++        return (n & 1 << n2) != 0;
++    }
++
++    private static int c(int n, int n2) {
++        return PotionBrewer.a(n, n2) ? 1 : 0;
++    }
++
++    private static int d(int n, int n2) {
++        return PotionBrewer.a(n, n2) ? 0 : 1;
++    }
++
++    public static int a(int n) {
++        return PotionBrewer.a(n, 5, 4, 3, 2, 1);
++    }
++
++    public static int a(Collection<MobEffect> collection) {
++        int n = 3694022;
++        if (collection == null || collection.isEmpty()) {
++            return n;
++        }
++        float f = 0.0f;
++        float f2 = 0.0f;
++        float f3 = 0.0f;
++        float f4 = 0.0f;
++        for (MobEffect mobEffect : collection) {
++            if (!mobEffect.isShowParticles()) continue;
++            int n2 = MobEffectList.byId[mobEffect.getEffectId()].k();
++            for (int i = 0; i <= mobEffect.getAmplifier(); ++i) {
++                f += (float)(n2 >> 16 & 255) / 255.0f;
++                f2 += (float)(n2 >> 8 & 255) / 255.0f;
++                f3 += (float)(n2 >> 0 & 255) / 255.0f;
++                f4 += 1.0f;
++            }
++        }
++        if (f4 == 0.0f) {
++            return 0;
++        }
++        f = f / f4 * 255.0f;
++        f2 = f2 / f4 * 255.0f;
++        f3 = f3 / f4 * 255.0f;
++        return (int)f << 16 | (int)f2 << 8 | (int)f3;
++    }
++
++    public static boolean b(Collection<MobEffect> collection) {
++        for (MobEffect mobEffect : collection) {
++            if (mobEffect.isAmbient()) continue;
++            return false;
++        }
++        return true;
++    }
++
++    public static String c(int n) {
++        int n2 = PotionBrewer.a(n);
++        return appearances[n2];
++    }
++
++    private static int a(boolean bl, boolean bl2, boolean bl3, int n, int n2, int n3, int n4) {
++        int n5 = 0;
++        if (bl) {
++            n5 = PotionBrewer.d(n4, n2);
++        } else if (n != -1) {
++            if (n == 0 && PotionBrewer.h(n4) == n2) {
++                n5 = 1;
++            } else if (n == 1 && PotionBrewer.h(n4) > n2) {
++                n5 = 1;
++            } else if (n == 2 && PotionBrewer.h(n4) < n2) {
++                n5 = 1;
++            }
++        } else {
++            n5 = PotionBrewer.c(n4, n2);
++        }
++        if (bl2) {
++            n5 *= n3;
++        }
++        if (bl3) {
++            n5 *= -1;
++        }
++        return n5;
++    }
++
++    private static int h(int n) {
++        int n2 = 0;
++        while (n > 0) {
++            n &= n - 1;
++            ++n2;
++        }
++        return n2;
++    }
++
++    private static int a(String string, int n, int n2, int n3) {
++        if (n >= string.length() || n2 < 0 || n >= n2) {
++            return 0;
++        }
++        int n4 = string.indexOf(124, n);
++        if (n4 >= 0 && n4 < n2) {
++            int n5 = PotionBrewer.a(string, n, n4 - 1, n3);
++            if (n5 > 0) {
++                return n5;
++            }
++            int n6 = PotionBrewer.a(string, n4 + 1, n2, n3);
++            if (n6 > 0) {
++                return n6;
++            }
++            return 0;
++        }
++        int n7 = string.indexOf(38, n);
++        if (n7 >= 0 && n7 < n2) {
++            int n8 = PotionBrewer.a(string, n, n7 - 1, n3);
++            if (n8 <= 0) {
++                return 0;
++            }
++            int n9 = PotionBrewer.a(string, n7 + 1, n2, n3);
++            if (n9 <= 0) {
++                return 0;
++            }
++            if (n8 > n9) {
++                return n8;
++            }
++            return n9;
++        }
++        boolean bl = false;
++        boolean bl2 = false;
++        boolean bl3 = false;
++        boolean bl4 = false;
++        boolean bl5 = false;
++        int n10 = -1;
++        int n11 = 0;
++        int n12 = 0;
++        int n13 = 0;
++        for (int i = n; i < n2; ++i) {
++            char c = string.charAt(i);
++            if (c >= '0' && c <= '9') {
++                if (bl) {
++                    n12 = c - 48;
++                    bl2 = true;
++                    continue;
++                }
++                n11 *= 10;
++                n11 += c - 48;
++                bl3 = true;
++                continue;
++            }
++            if (c == '*') {
++                bl = true;
++                continue;
++            }
++            if (c == '!') {
++                if (bl3) {
++                    n13 += PotionBrewer.a(bl4, bl2, bl5, n10, n11, n12, n3);
++                    bl4 = false;
++                    bl5 = false;
++                    bl = false;
++                    bl2 = false;
++                    bl3 = false;
++                    n12 = 0;
++                    n11 = 0;
++                    n10 = -1;
++                }
++                bl4 = true;
++                continue;
++            }
++            if (c == '-') {
++                if (bl3) {
++                    n13 += PotionBrewer.a(bl4, bl2, bl5, n10, n11, n12, n3);
++                    bl4 = false;
++                    bl5 = false;
++                    bl = false;
++                    bl2 = false;
++                    bl3 = false;
++                    n12 = 0;
++                    n11 = 0;
++                    n10 = -1;
++                }
++                bl5 = true;
++                continue;
++            }
++            if (c == '=' || c == '<' || c == '>') {
++                if (bl3) {
++                    n13 += PotionBrewer.a(bl4, bl2, bl5, n10, n11, n12, n3);
++                    bl4 = false;
++                    bl5 = false;
++                    bl = false;
++                    bl2 = false;
++                    bl3 = false;
++                    n12 = 0;
++                    n11 = 0;
++                    n10 = -1;
++                }
++                if (c == '=') {
++                    n10 = 0;
++                    continue;
++                }
++                if (c == '<') {
++                    n10 = 2;
++                    continue;
++                }
++                if (c != '>') continue;
++                n10 = 1;
++                continue;
++            }
++            if (c != '+' || !bl3) continue;
++            n13 += PotionBrewer.a(bl4, bl2, bl5, n10, n11, n12, n3);
++            bl4 = false;
++            bl5 = false;
++            bl = false;
++            bl2 = false;
++            bl3 = false;
++            n12 = 0;
++            n11 = 0;
++            n10 = -1;
++        }
++        if (bl3) {
++            n13 += PotionBrewer.a(bl4, bl2, bl5, n10, n11, n12, n3);
++        }
++        return n13;
++    }
++
++    public static List<MobEffect> getEffects(int n, boolean bl) {
++        ArrayList arrayList = null;
++        for (MobEffectList mobEffectList : MobEffectList.byId) {
++            int n2;
++            String string;
++            if (mobEffectList == null || mobEffectList.j() && !bl || (string = effectDurations.get(mobEffectList.getId())) == null || (n2 = PotionBrewer.a(string, 0, string.length(), n)) <= 0) continue;
++            int n3 = 0;
++            String string2 = effectAmplifiers.get(mobEffectList.getId());
++            if (string2 != null && (n3 = PotionBrewer.a(string2, 0, string2.length(), n)) < 0) {
++                n3 = 0;
++            }
++            if (mobEffectList.isInstant()) {
++                n2 = 1;
++            } else {
++                n2 = 1200 * (n2 * 3 + (n2 - 1) * 2);
++                n2 >>= n3;
++                n2 = (int)Math.round((double)n2 * mobEffectList.getDurationModifier());
++                if ((n & 16384) != 0) {
++                    n2 = (int)Math.round((double)n2 * 0.75 + 0.5);
++                }
++            }
++            if (arrayList == null) {
++                arrayList = Lists.newArrayList();
++            }
++            MobEffect mobEffect = new MobEffect(mobEffectList.getId(), n2, n3);
++            if ((n & 16384) != 0) {
++                mobEffect.setSplash(true);
++            }
++            arrayList.add(mobEffect);
++        }
++        return arrayList;
++    }
++
++    private static int a(int n, int n2, boolean bl, boolean bl2, boolean bl3) {
++        if (bl3) {
++            if (!PotionBrewer.a(n, n2)) {
++                return 0;
++            }
++        } else {
++            n = bl ? (n &= ~ (1 << n2)) : (bl2 ? ((n & 1 << n2) == 0 ? (n |= 1 << n2) : (n &= ~ (1 << n2))) : (n |= 1 << n2));
++        }
++        return n;
++    }
++
++    public static int a(int n, String string) {
++        int n2 = 0;
++        int n3 = string.length();
++        boolean bl = false;
++        boolean bl2 = false;
++        boolean bl3 = false;
++        boolean bl4 = false;
++        int n4 = 0;
++        for (int i = n2; i < n3; ++i) {
++            char c = string.charAt(i);
++            if (c >= '0' && c <= '9') {
++                n4 *= 10;
++                n4 += c - 48;
++                bl = true;
++                continue;
++            }
++            if (c == '!') {
++                if (bl) {
++                    n = PotionBrewer.a(n, n4, bl3, bl2, bl4);
++                    bl4 = false;
++                    bl2 = false;
++                    bl3 = false;
++                    bl = false;
++                    n4 = 0;
++                }
++                bl2 = true;
++                continue;
++            }
++            if (c == '-') {
++                if (bl) {
++                    n = PotionBrewer.a(n, n4, bl3, bl2, bl4);
++                    bl4 = false;
++                    bl2 = false;
++                    bl3 = false;
++                    bl = false;
++                    n4 = 0;
++                }
++                bl3 = true;
++                continue;
++            }
++            if (c == '+') {
++                if (!bl) continue;
++                n = PotionBrewer.a(n, n4, bl3, bl2, bl4);
++                bl4 = false;
++                bl2 = false;
++                bl3 = false;
++                bl = false;
++                n4 = 0;
++                continue;
++            }
++            if (c != '&') continue;
++            if (bl) {
++                n = PotionBrewer.a(n, n4, bl3, bl2, bl4);
++                bl4 = false;
++                bl2 = false;
++                bl3 = false;
++                bl = false;
++                n4 = 0;
++            }
++            bl4 = true;
++        }
++        if (bl) {
++            n = PotionBrewer.a(n, n4, bl3, bl2, bl4);
++        }
++        return n & 32767;
++    }
++
++    public static int a(int n, int n2, int n3, int n4, int n5, int n6) {
++        return (PotionBrewer.a(n, n2) ? 16 : 0) | (PotionBrewer.a(n, n3) ? 8 : 0) | (PotionBrewer.a(n, n4) ? 4 : 0) | (PotionBrewer.a(n, n5) ? 2 : 0) | (PotionBrewer.a(n, n6) ? 1 : 0);
++    }
++
++    static {
++        effectDurations = Maps.newHashMap();
++        effectAmplifiers = Maps.newHashMap();
++        a = null;
++        c = "+0-1-2-3&4-4+13";
++        effectDurations.put(MobEffectList.REGENERATION.getId(), "0 & !1 & !2 & !3 & 0+6");
++        b = "-0+1-2-3&4-4+13";
++        effectDurations.put(MobEffectList.FASTER_MOVEMENT.getId(), "!0 & 1 & !2 & !3 & 1+6");
++        h = "+0+1-2-3&4-4+13";
++        effectDurations.put(MobEffectList.FIRE_RESISTANCE.getId(), "0 & 1 & !2 & !3 & 0+6");
++        f = "+0-1+2-3&4-4+13";
++        effectDurations.put(MobEffectList.HEAL.getId(), "0 & !1 & 2 & !3");
++        d = "-0-1+2-3&4-4+13";
++        effectDurations.put(MobEffectList.POISON.getId(), "!0 & !1 & 2 & !3 & 2+6");
++        e = "-0+3-4+13";
++        effectDurations.put(MobEffectList.WEAKNESS.getId(), "!0 & !1 & !2 & 3 & 3+6");
++        effectDurations.put(MobEffectList.HARM.getId(), "!0 & !1 & 2 & 3");
++        effectDurations.put(MobEffectList.SLOWER_MOVEMENT.getId(), "!0 & 1 & !2 & 3 & 3+6");
++        g = "+0-1-2+3&4-4+13";
++        effectDurations.put(MobEffectList.INCREASE_DAMAGE.getId(), "0 & !1 & !2 & 3 & 3+6");
++        l = "-0+1+2-3+13&4-4";
++        effectDurations.put(MobEffectList.NIGHT_VISION.getId(), "!0 & 1 & 2 & !3 & 2+6");
++        effectDurations.put(MobEffectList.INVISIBILITY.getId(), "!0 & 1 & 2 & 3 & 2+6");
++        m = "+0-1+2+3+13&4-4";
++        effectDurations.put(MobEffectList.WATER_BREATHING.getId(), "0 & !1 & 2 & 3 & 2+6");
++        n = "+0+1-2+3&4-4+13";
++        effectDurations.put(MobEffectList.JUMP.getId(), "0 & 1 & !2 & 3 & 3+6");
++        effectDurations.put(MobEffectList.LEVITATION.getId(), "0 & 1 & !2 & 3 & 3+6");
++        j = "+5-6-7";
++        effectAmplifiers.put(MobEffectList.FASTER_MOVEMENT.getId(), "5");
++        effectAmplifiers.put(MobEffectList.FASTER_DIG.getId(), "5");
++        effectAmplifiers.put(MobEffectList.INCREASE_DAMAGE.getId(), "5");
++        effectAmplifiers.put(MobEffectList.REGENERATION.getId(), "5");
++        effectAmplifiers.put(MobEffectList.HARM.getId(), "5");
++        effectAmplifiers.put(MobEffectList.HEAL.getId(), "5");
++        effectAmplifiers.put(MobEffectList.RESISTANCE.getId(), "5");
++        effectAmplifiers.put(MobEffectList.POISON.getId(), "5");
++        effectAmplifiers.put(MobEffectList.JUMP.getId(), "5");
++        i = "-5+6-7";
++        k = "+14&13-13";
++        q = Maps.newHashMap();
++        appearances = new String[]{"potion.prefix.mundane", "potion.prefix.uninteresting", "potion.prefix.bland", "potion.prefix.clear", "potion.prefix.milky", "potion.prefix.diffuse", "potion.prefix.artless", "potion.prefix.thin", "potion.prefix.awkward", "potion.prefix.flat", "potion.prefix.bulky", "potion.prefix.bungling", "potion.prefix.buttered", "potion.prefix.smooth", "potion.prefix.suave", "potion.prefix.debonair", "potion.prefix.thick", "potion.prefix.elegant", "potion.prefix.fancy", "potion.prefix.charming", "potion.prefix.dashing", "potion.prefix.refined", "potion.prefix.cordial", "potion.prefix.sparkling", "potion.prefix.potent", "potion.prefix.foul", "potion.prefix.odorless", "potion.prefix.rank", "potion.prefix.harsh", "potion.prefix.acrid", "potion.prefix.gross", "potion.prefix.stinky"};
++    }
++}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
+index e61032c..7a00ad3 100644
+--- a/src/main/java/net/minecraft/server/World.java
++++ b/src/main/java/net/minecraft/server/World.java
+@@ -82,7 +82,7 @@ public abstract class World implements IBlockAccess {
+     private int J;
+     public final Random random = new Random();
+     public WorldProvider worldProvider; // CraftBukkit - remove final
+-    protected List<IWorldAccess> u = Lists.newArrayList();
++    public List<IWorldAccess> u = Lists.newArrayList();
+     protected IChunkProvider chunkProvider;
+     protected final IDataManager dataManager;
+     public WorldData worldData; // CraftBukkit - public
+@@ -1349,7 +1349,13 @@ public abstract class World implements IBlockAccess {
+ 
+         for (EntityHuman player : players)
+         {
+-            ((EntityPlayer) player).l();
++            if (((EntityPlayer) player).playerConnection.networkManager.getVersion() == 47)
++                continue;
++
++            PacketPlayInFlying flyingPacket = new PacketPlayInFlying();
++            flyingPacket.f = player.onGround;
++
++            ((EntityPlayer) player).playerConnection.a(flyingPacket);
+         }
+ 
+         for (i = 0; i < this.k.size(); ++i) {
+diff --git a/src/main/java/net/minecraft/server/WorldManager.java b/src/main/java/net/minecraft/server/WorldManager.java
+index 55a2112..5c06ca2 100644
+--- a/src/main/java/net/minecraft/server/WorldManager.java
++++ b/src/main/java/net/minecraft/server/WorldManager.java
+@@ -28,6 +28,11 @@ public class WorldManager implements IWorldAccess {
+         this.a.getPlayerList().sendPacketNearby(d0, d1, d2, f > 1.0F ? (double) (16.0F * f) : 16.0D, this.world.dimension, new PacketPlayOutNamedSoundEffect(s, d0, d1, d2, f, f1));
+     }
+ 
++    public void a(String s, double d0, double d1, double d2, float f, float f1, Entity entity) {
++        // CraftBukkit - this.world.dimension
++        this.a.getPlayerList().sendPacketNearby(d0, d1, d2, f > 1.0F ? (double) (16.0F * f) : 16.0D, this.world.dimension, new PacketPlayOutNamedSoundEffect(s, d0, d1, d2, f, f1), entity);
++    }
++
+     public void a(EntityHuman entityhuman, String s, double d0, double d1, double d2, float f, float f1) {
+         // CraftBukkit - this.world.dimension
+         this.a.getPlayerList().sendPacketNearby(entityhuman, d0, d1, d2, f > 1.0F ? (double) (16.0F * f) : 16.0D, this.world.dimension, new PacketPlayOutNamedSoundEffect(s, d0, d1, d2, f, f1));
+diff --git a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionEffectType.java b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionEffectType.java
+index b59d142..fd64be4 100644
+--- a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionEffectType.java
++++ b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionEffectType.java
+@@ -70,6 +70,8 @@ public class CraftPotionEffectType extends PotionEffectType {
+             return "ABSORPTION";
+         case 23:
+             return "SATURATION";
++        case 25:
++            return "LEVITATION";
+         default:
+             return "UNKNOWN_EFFECT_TYPE_" + handle.id;
+         }
+diff --git a/src/test/java/org/bukkit/support/AbstractTestingBase.java b/src/test/java/org/bukkit/support/AbstractTestingBase.java
+index 3a362b7..f55ddcd 100644
+--- a/src/test/java/org/bukkit/support/AbstractTestingBase.java
++++ b/src/test/java/org/bukkit/support/AbstractTestingBase.java
+@@ -17,6 +17,7 @@ import org.junit.BeforeClass;
+ public abstract class AbstractTestingBase {
+     public static final List<Material> INVALIDATED_MATERIALS = ImmutableList.<Material>builder()
+             .add(
++                    Material.ELYTRA,
+                     Material.BREWING_STAND,
+                     Material.BED_BLOCK,
+                     Material.NETHER_WARTS,
+-- 
+2.7.4
+
